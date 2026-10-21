@@ -1,0 +1,19 @@
+{
+  "verifiedOn": "2026-10-20",
+  "ploverRevision": "3c7c67a4f5d9f6a4d43e24762096fdca5b05ef6d",
+  "main": {
+    "entries": 147424,
+    "sha256": "6570873c7f703ecd39c9870083f643db3475b49462a8db80fe22fe33ac3cfe92",
+    "identicalToPinnedSource": true
+  },
+  "commands": {
+    "entries": 37,
+    "sha256": "71f8b1a96042f7169273318256f7afae97b691313c2a6557366bc04099ce8da8",
+    "identicalToPinnedSource": true
+  },
+  "user": {
+    "entries": 0,
+    "sha256": "8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede"
+  },
+  "note": "Provided default Plover dictionaries were compared locally. Empty user.json is not bundled."
+}

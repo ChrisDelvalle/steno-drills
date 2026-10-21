@@ -20,6 +20,10 @@
       "plover.LICENSE": {
         "path": "LICENSE.txt",
         "sha256": "edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6"
+      },
+      "plover-commands.json": {
+        "path": "plover/assets/commands.json",
+        "sha256": "71f8b1a96042f7169273318256f7afae97b691313c2a6557366bc04099ce8da8"
       }
     }
   },
@@ -34,6 +38,24 @@
       "cmudict.LICENSE": {
         "path": "LICENSE",
         "sha256": "bd4ce8e44170a5f9f481310ca85c51de3c4f851a65e679b40e603b143bd3542a"
+      }
+    }
+  },
+  "exercises": {
+    "repository": "https://github.com/JoshuaGrams/steno-jig",
+    "revision": "40e8af46941b13d0c809029b83087e84a79d3dc9",
+    "files": {
+      "../exercises.json": {
+        "sha256": "8e14e1c1525e6434804c96f42ee2f4fc38d7ed4f31337716829d09930cd54afb"
+      },
+      "../sentences.json": {
+        "sha256": "a505882721626a9f30ca24ad876ced19b8b92ab6b1e6c2f099eef6e7b3638178"
+      },
+      "../quotes.json": {
+        "sha256": "6c863d149d682423b17e56ed7dd6931d8b6e15ad16551653f8eabe47af82a8ca"
+      },
+      "monkeytype.LICENSE": {
+        "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986"
       }
     }
   }

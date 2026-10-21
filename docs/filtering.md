@@ -27,3 +27,22 @@ Personal exclusions apply to automatic practice and restricted lists. Unrestrict
 ## Extending coverage
 
 Add a sound/key rule with a stable concept ID, add positive and negative classifier fixtures, then regenerate the index. Keep ambiguous theory out of automatic practice rather than broadening a base key's meaning. The data build prints coverage, and the Settings page displays it. Source updates are explicit and pinned; no normal build downloads data.
+
+## Practice selections
+
+Practice and Word Bank share a concept selector. **Single keys** selects only position-specific single-key sound concepts. **Starter** uses the original starter defaults. **Skills** follows the current learned profile. **All** explicitly selects all supported rules and briefs; unexplained outlines still do not qualify. **Custom** stores an independent checklist seeded from the previous selection. Changing practice selections never edits learned skills.
+
+Named word lessons and personal lists use this filter by default. Turning off “Filter by concepts” makes their fixed membership unrestricted. Saved filters store criteria and expand with Skills; explicit lists keep their membership. Legacy single-focus filters still work and can be cleared in the selector.
+
+The homepage remembers the exercise source and all exercise parameters, alongside concept selection and session length. Older version 1 backups receive defaults for the new parameters during validation, including three rows, hints above the test, and large hint text and keyboard sizes. Malformed backups remain atomic failures and never replace current data.
+
+
+## Source audit
+
+The Plover main dictionary supplies exact translations, and its default command dictionary takes precedence when extracting literal practice words. Each build checks all 117,902 retained word/outline mappings. Every concept chord must parse in its declared key bank, every brief must translate to its exact named word, and every rule must have an explained single-syllable source example. Unsupported concepts fail the build.
+
+The audit corrected the former be brief from PW (about) to -B (be). The unused final-S-on--F rule had no supporting dictionary examples and was removed; older backups migrate that obsolete selection away. Initial J remains SKWR and final J remains -PBLG. Asterisks in alternative outlines are separate disambiguation rules and are not automatically unlocked by knowing the initial consonant.
+
+The dictionary does not encode phonetic theory or syllable counts. CMUdict and the explicit rules table remain necessary; source matching verifies outlines and translations without guessing theory for unexplained entries.
+
+The vowel labels Short A, Short O, Short E, and Short U follow [Learn Plover’s short-vowel terminology](https://opensteno.org/learn-plover/lesson-1-fingers-and-keys.html). The keys remain A, O, E, and U; existing skill selections do not change.

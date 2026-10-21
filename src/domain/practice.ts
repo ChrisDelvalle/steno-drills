@@ -32,10 +32,35 @@ export function scoreInput(expected: PracticeWord[], input: string, elapsedMs: n
   const correct = completed - missed.length;
   const correctChars = expected.slice(0, completed).reduce((n, target, i) => n + (exact(tokens[i] || '', target.word) ? target.word.length + 1 : 0), 0);
   const minutes = elapsedMs / 60_000;
+  const rawChars = tokens.slice(0, completed).reduce((sum, token) => sum + token.length + 1, 0);
   return {
     tokens, completed, correct, missed, current: Math.min(completed, expected.length - 1),
     done: expected.length > 0 && completed === expected.length,
     wpm: minutes > 0 ? correctChars / 5 / minutes : 0,
+    rawWpm: minutes > 0 ? rawChars / 5 / minutes : 0,
+    correctChars, rawChars,
     accuracy: completed ? correct / completed * 100 : 100,
   };
+}
+
+export interface SpeedSample { seconds: number; wpm: number; raw: number; burst: number; errors: number }
+export interface ErrorSample { seconds: number; count: number }
+export interface TypingEvent { at: number; characters: number }
+export function inputMetrics(expected: PracticeWord[], previous: string, next: string) {
+  let prefix = 0, suffix = 0;
+  while (prefix < previous.length && prefix < next.length && previous[prefix] === next[prefix]) prefix++;
+  while (suffix < previous.length - prefix && suffix < next.length - prefix && previous[previous.length - suffix - 1] === next[next.length - suffix - 1]) suffix++;
+  const before = scoreInput(expected, previous, 0), after = scoreInput(expected, next, 0);
+  const errors = expected.slice(0, after.completed).reduce((count, word, i) => {
+    const newlySubmitted = i >= before.completed || before.tokens[i]?.toLowerCase() !== after.tokens[i]?.toLowerCase();
+    return count + Number(newlySubmitted && word.word.toLowerCase() !== (after.tokens[i] || '').toLowerCase());
+  }, 0);
+  return { inserted: [...next.slice(prefix, next.length - suffix)].length, errors };
+}
+export function burstSpeed(events: TypingEvent[], elapsedMs: number) {
+  return events.filter(e => (elapsedMs <= 1000 ? e.at >= 0 : e.at > elapsedMs - 1000) && e.at <= elapsedMs).reduce((sum, e) => sum + e.characters, 0) * 12;
+}
+export function speedSample(expected: PracticeWord[], input: string, elapsedMs: number, burst = 0, errors = 0): SpeedSample {
+  const score = scoreInput(expected, input, elapsedMs);
+  return { seconds: Math.round(elapsedMs / 100) / 10, wpm: score.wpm, raw: score.rawWpm, burst, errors };
 }

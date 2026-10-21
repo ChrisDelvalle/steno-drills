@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import type { Dictionary, PracticeWord, Profile, WordEntry } from './domain/types';
+import type { Dictionary, HintSize, PracticeWord, Profile, WordEntry } from './domain/types';
 
 export interface SessionConfig {
   title: string;
@@ -10,7 +10,13 @@ export interface SessionConfig {
   duration: number;
   count: number;
   hints: boolean;
+  lines?: number;
+  hintPosition?: 'above' | 'below';
+  hintTextSize?: HintSize;
+  hintKeyboardSize?: HintSize;
   unrestricted: boolean;
+  ordered?: boolean;
+  attribution?: string;
 }
 export interface AppState {
   profile: Profile;
@@ -21,7 +27,6 @@ export interface AppState {
   source: string;
   setSource: (source: string) => void;
   goPractice: (source?: string) => void;
-  startSession: (config: SessionConfig) => void;
   warning: string;
   replaceProfile: (profile: Profile) => void;
 }

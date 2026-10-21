@@ -4,10 +4,12 @@ import { eligibleWords, evaluate, parseWordList } from '../domain/vocabulary';
 import { validateCorrection } from '../domain/profile';
 import { conceptLabel } from '../domain/concepts';
 import { Icon } from '../components';
+import { ExerciseLibrary } from './ExerciseLibrary';
 import type { WordCorrection } from '../domain/types';
 
 export function ExercisesView() {
   const { profile, setProfile, wordMap, words, goPractice } = useApp();
+  const [tab, setTab] = useState(new URLSearchParams(window.location.hash.split('?')[1]).has('word') ? 'lists' : 'library');
   const [editing, setEditing] = useState('');
   const [name, setName] = useState('');
   const [text, setText] = useState('');
@@ -23,6 +25,9 @@ export function ExercisesView() {
     setMessage(`Saved “${list.name}” with ${parsed.length} words.`); setEditing(''); setName(''); setText('');
   };
   return <>
+    <div className="segmented exercise-tabs" aria-label="Exercises">{[['library','Built-in'],['lists','Lists'],['filters','Filters']].map(([id, label]) => <button key={id} aria-pressed={tab === id} onClick={() => setTab(id)}>{label}</button>)}</div>
+    {tab === 'library' && <ExerciseLibrary/>}
+    {tab === 'lists' && <>
     <section className="card">
       <form onSubmit={e => { e.preventDefault(); saveList(); }}><label className="field">List name<input value={name} onChange={e => setName(e.target.value)} placeholder="A to Z · this week’s words" maxLength={80} required/></label><label className="field">Words<textarea value={text} onChange={e => setText(e.target.value)} placeholder={'bad dim name\nfeet like judge'} rows={6} maxLength={100000} required/><span className="field-help">Spaces, commas, or new lines. Duplicates are removed.</span></label>
         {parsed.length > 0 && <div className="list-review"><strong>{parsed.length} words · {available.length} ready</strong><p className="small muted">{parsed.length - available.length} need concepts or review.</p>{unresolved.length > 0 && <p className="small">Not in the dictionary: {unresolved.slice(0, 20).map((w, i) => <span key={w}>{i > 0 ? ', ' : ''}<button type="button" className="text-button" onClick={() => setCorrection(w)}>{w}</button></span>)}{unresolved.length > 20 ? '…' : ''}. Add a correction below.</p>}</div>}
@@ -33,10 +38,14 @@ export function ExercisesView() {
       const ready = list.words.filter(w => { const entry = wordMap.get(w); return entry && evaluate(entry, profile.learned, profile.excluded).eligible; }).length;
       return <article className="card saved-card" key={list.id}><div className="saved-name"><strong>{list.name}</strong><span className="muted small">Word list</span></div><p className="small muted">{list.words.length} words · {ready} ready</p><p className="list-sample">{list.words.slice(0, 8).join(' · ')}{list.words.length > 8 ? ' …' : ''}</p><div className="button-row"><button className="secondary small" onClick={() => goPractice(`list:${list.id}`)}>Practice <Icon name="arrow" size={15}/></button><button className="text-button small" onClick={() => { setEditing(list.id); setName(list.name); setText(list.words.join('\n')); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Edit</button><button className="text-button small" onClick={() => { setProfile(p => ({ ...p, lists: p.lists.filter(l => l.id !== list.id) })); setMessage(`Removed “${list.name}”.`); }}>Remove</button></div></article>;
     })}</div>}</section>
-    <section className="collection-section" aria-label="Saved filters"><div className="panel-toolbar"><a href="#/words" className="text-link">Save a word-bank filter <Icon name="plus" size={16}/></a></div><div className="saved-grid">{profile.exercises.map(exercise => <article className="card saved-card" key={exercise.id}><div className="saved-name"><strong>{exercise.name}</strong><span className="muted small">Saved filter</span></div><p className="small muted">{eligibleWords(words, profile, exercise.filter).length} words ready · {exercise.filter.pool === 'common' ? 'Common' : 'Entire dictionary'}</p><p className="small">{exercise.filter.focus ? conceptLabel(exercise.filter.focus) : 'All learned concepts'} · {exercise.filter.minLength}–{exercise.filter.maxLength} letters</p><div className="button-row"><button className="secondary small" onClick={() => goPractice(`filter:${exercise.id}`)}>Practice <Icon name="arrow" size={15}/></button><button className="text-button small" onClick={() => { setProfile(p => ({ ...p, filter: { ...exercise.filter } })); window.location.hash = '/words'; }}>Edit filters</button><button className="text-button small" onClick={() => setProfile(p => ({ ...p, exercises: p.exercises.filter(e => e.id !== exercise.id) }))}>Remove</button></div></article>)}</div></section>
     <details className="card correction-section" open={Boolean(correction)}><summary>Correct a dictionary entry</summary><CorrectionEditor key={correction} initialWord={correction} onSaved={word => { setCorrection(''); setMessage(`Saved personal metadata for “${word}”.`); }}/>
       {profile.corrections.length > 0 && <div className="correction-list">{profile.corrections.map(c => <div key={c.word}><button className="word-button" onClick={() => setCorrection(c.word)}>{c.word}</button><code>{c.outlines.join(', ')}</code><button className="text-button small" onClick={() => setProfile(p => ({ ...p, corrections: p.corrections.filter(w => w.word !== c.word) }))}>Restore bundled entry</button></div>)}</div>}
     </details>
+    </>}
+    {tab === 'filters' && <>
+    <section className="collection-section" aria-label="Saved filters"><div className="panel-toolbar"><a href="#/words" className="text-link">Save a word-bank filter <Icon name="plus" size={16}/></a></div><div className="saved-grid">{profile.exercises.map(exercise => <article className="card saved-card" key={exercise.id}><div className="saved-name"><strong>{exercise.name}</strong><span className="muted small">Saved filter</span></div><p className="small muted">{eligibleWords(words, profile, exercise.filter).length} words ready · {exercise.filter.pool === 'common' ? 'Common' : 'Entire dictionary'}</p><p className="small">{exercise.filter.focus ? conceptLabel(exercise.filter.focus) : 'All learned concepts'} · {exercise.filter.minLength}–{exercise.filter.maxLength} letters</p><div className="button-row"><button className="secondary small" onClick={() => goPractice(`filter:${exercise.id}`)}>Practice <Icon name="arrow" size={15}/></button><button className="text-button small" onClick={() => { setProfile(p => ({ ...p, filter: { ...exercise.filter } })); window.location.hash = '/words'; }}>Edit filters</button><button className="text-button small" onClick={() => setProfile(p => ({ ...p, exercises: p.exercises.filter(e => e.id !== exercise.id) }))}>Remove</button></div></article>)}</div></section>
+    </>}
+
   </>;
 }
 

@@ -25,8 +25,8 @@ export const concepts: Concept[] = [
     ['tr', 'TR', 'TR', 'T R'], ['dr', 'DR', 'TKR', 'D R'], ['fl', 'FL', 'TPHR', 'F L'],
   ]),
   ...rules('vowel', [
-    ['a', 'A key', 'A', 'AE|AA', true], ['o', 'O key', 'O', 'AA|AO|AH', true],
-    ['e', 'E key', 'E', 'EH', true], ['u', 'U key', 'U', 'AH|UH', true],
+    ['a', 'Short A', 'A', 'AE|AA', true], ['o', 'Short O', 'O', 'AA|AO|AH', true],
+    ['e', 'Short E', 'E', 'EH', true], ['u', 'Short U', 'U', 'AH|UH', true],
     ['short-i', 'Short I', 'EU', 'IH', true], ['long-a', 'Long A', 'AEU', 'EY', true],
     ['long-e', 'Long E', 'AOE', 'IY', true], ['long-i', 'Long I', 'AOEU', 'AY', true],
     ['long-o', 'Long O', 'OE', 'OW'], ['long-u', 'Long U', 'AOU', 'UW'],
@@ -47,7 +47,6 @@ export const concepts: Concept[] = [
     ['final-v', 'Final V using -F', '-F', 'V'],
     ['final-st', 'Final ST using -FT', '-FT', 'S T'],
     ['final-st-f', 'Final ST using -F', '-F', 'S T'],
-    ['final-s-f', 'Final S using -F', '-F', 'S'],
     ['final-z-s', 'Voiced S using -S', '-S', 'Z'],
     ['final-th', 'Final TH using *T', '*T', 'TH'],
     ['final-th-voiced', 'Final TH (voiced)', '*T', 'DH'],
@@ -55,12 +54,17 @@ export const concepts: Concept[] = [
   ...rules('brief', [
     ['the', 'the', '-T', ''], ['of', 'of', '-F', ''], ['to', 'to', 'TO', ''],
     ['in', 'in', 'TPH', ''], ['a', 'a', 'AEU', ''], ['is', 'is', 'S', ''],
-    ['that', 'that', 'THA', ''], ['with', 'with', 'W', ''], ['be', 'be', 'PW', ''],
+    ['that', 'that', 'THA', ''], ['with', 'with', 'W', ''], ['be', 'be', '-B', ''],
     ['by', 'by', 'PWEU', ''], ['he', 'he', 'E', ''],
   ]),
 ];
 export const conceptMap = new Map(concepts.map(c => [c.id, c]));
 export const starterSkills = concepts.filter(c => c.starter).map(c => c.id);
+export const singleKeySkills = concepts.filter(c => !['special', 'brief'].includes(c.bank) && c.keys.replace('-', '').length === 1).map(c => c.id);
+export const conceptBanks = [
+  ['initial', 'Initials'], ['vowel', 'Vowels'], ['final', 'Finals'],
+  ['special', 'Rules'], ['brief', 'Briefs'],
+] as const;
 export const conceptLabel = (id: string) => {
   const c = conceptMap.get(id);
   return c ? `${c.bank === 'special' ? '' : `${c.bank} `}${c.label}` : id;

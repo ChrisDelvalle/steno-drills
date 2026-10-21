@@ -1,4 +1,5 @@
 import { analyzeOutline } from './classifier';
+import { concepts, singleKeySkills, starterSkills } from './concepts';
 import type { Evaluation, Filter, Profile, WordEntry } from './types';
 
 export function evaluate(entry: WordEntry, learned: string[], excluded: string[] = []): Evaluation {
@@ -40,15 +41,25 @@ export function matchesFilter(entry: WordEntry, evaluation: Evaluation, filter: 
 
 export function eligibleWords(words: WordEntry[], profile: Profile, filter: Filter = profile.filter) {
   return words.flatMap(entry => {
-    const matching = evaluateForFocus(entry, profile, filter.focus);
+    const matching = evaluateForFocus(entry, profile, filter.focus, filter);
     return matching.eligible && matchesFilter(entry, matching, filter) ? [{ word: entry.word, outline: matching.outline }] : [];
   });
 }
 
 // Focus may select a different qualifying outline than the default hint.
-export function evaluateForFocus(entry: WordEntry, profile: Profile, focus: string) {
+export function selectedConcepts(filter: Filter, learned: string[]): string[] {
+  switch (filter.concepts?.mode) {
+    case 'single': return singleKeySkills;
+    case 'starter': return starterSkills;
+    case 'all': return concepts.map(c => c.id);
+    case 'custom': return filter.concepts.selected;
+    default: return learned;
+  }
+}
+
+export function evaluateForFocus(entry: WordEntry, profile: Profile, focus: string, filter: Filter = profile.filter) {
   const focused = focus ? { ...entry, outlines: entry.outlines.map(a => ({ ...a, requirements: a.requirements.filter(r => r.includes(focus)) })) } : entry;
-  return evaluate(focused, profile.learned, profile.excluded);
+  return evaluate(focused, selectedConcepts(filter, profile.learned), profile.excluded);
 }
 
 export const parseWordList = (text: string) => [...new Set(text.toLowerCase().split(/[\s,;]+/).map(w => w.replace(/^[^a-z]+|[^a-z]+$/g, '')).filter(w => /^[a-z]+(?:['-][a-z]+)*$/.test(w)))];

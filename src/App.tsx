@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AppContext } from './context';
-import type { SessionConfig } from './context';
 import { loadProfile, saveProfile } from './domain/profile';
 import { applyCorrections } from './domain/vocabulary';
 import type { Dictionary, Profile } from './domain/types';
@@ -10,10 +9,9 @@ import { SkillsView } from './views/Skills';
 import { WordBankView } from './views/WordBank';
 import { ExercisesView } from './views/Exercises';
 import { SettingsView } from './views/Settings';
-import { PracticeSession } from './views/Session';
 
 const navigation = [
-  ['practice', 'Practice', 'practice'], ['skills', 'My Skills', 'skills'], ['words', 'Word Bank', 'words'],
+  ['test-settings', 'Test', 'practice'], ['skills', 'Skills', 'skills'], ['words', 'Word Bank', 'words'],
   ['exercises', 'Exercises', 'exercises'], ['settings', 'Settings', 'settings'],
 ];
 const getRoute = () => {
@@ -27,10 +25,15 @@ export function App() {
   const [writable, setWritable] = useState(loaded.writable);
   const [warning, setWarning] = useState(loaded.warning);
   const [dictionary, setDictionary] = useState<Dictionary | null>(null);
+  const [fontReady, setFontReady] = useState(() => !document.fonts);
   const [loadError, setLoadError] = useState('');
   const [route, setRoute] = useState(getRoute);
-  const [source, setSource] = useState('bank');
-  const [session, setSession] = useState<SessionConfig | null>(null);
+  useEffect(() => {
+    if (!document.fonts) return;
+    document.fonts.load('32px "Roboto Mono"').then(() => setFontReady(true), () => setFontReady(true));
+  }, []);
+  const source = profile.practice.source;
+  const setSource = (source: string) => setProfile(p => ({ ...p, practice: { ...p.practice, source } }));
   useEffect(() => {
     if (source.startsWith('list:') && !profile.lists.some(l => `list:${l.id}` === source)) setSource('bank');
     if (source.startsWith('filter:') && !profile.exercises.some(e => `filter:${e.id}` === source)) setSource('bank');
@@ -51,7 +54,7 @@ export function App() {
     else document.documentElement.dataset.theme = profile.theme;
   }, [profile.theme]);
   useEffect(() => {
-    const change = () => { setRoute(getRoute()); setSession(null); window.scrollTo(0, 0); };
+    const change = () => { setRoute(getRoute()); window.scrollTo(0, 0); };
     window.addEventListener('hashchange', change);
     return () => window.removeEventListener('hashchange', change);
   }, []);
@@ -62,19 +65,18 @@ export function App() {
     setProfile(next); setWritable(true);
     setWarning(saveProfile(() => window.localStorage, next) ? '' : 'The profile is loaded in memory, but browser storage is unavailable. Export a backup before leaving.');
   };
-  if (session) return <PracticeSession config={session} onExit={() => setSession(null)}/>;
-  return <div className="app-shell">
-    <a className="skip-link" href="#main-content" onClick={e => { e.preventDefault(); document.getElementById('main-content')?.focus(); }}>Skip to content</a>
-    <aside className="sidebar">
-      <a className="brand" href="#/practice">Steno Drills</a>
-      <nav aria-label="Main navigation">{navigation.map(([id, label, icon]) => <a key={id} href={`#/${id}`} className={route === id ? 'active' : ''} aria-current={route === id ? 'page' : undefined}><Icon name={icon}/><span>{label}</span></a>)}</nav>
-    </aside>
-    <main id="main-content" className="main-content" tabIndex={-1} aria-label={navigation.find(([id]) => id === route)?.[1]}>
-      {warning && <div className="notice warning" role="status">{warning} <a href="#/settings">Backup & recovery</a></div>}
-      {loadError ? <div className="empty" role="alert"><p>{loadError}</p><button onClick={() => window.location.reload()}>Reload word bank</button></div> : !dictionary ? <div className="loading" role="status">Loading dictionary…</div> :
-        <AppContext.Provider value={{ profile, setProfile, dictionary, words, wordMap, source, setSource, goPractice: (next = 'bank') => { setSource(next); window.location.hash = '/practice'; }, startSession: setSession, warning, replaceProfile }}>
-          {route === 'practice' ? <PracticeView/> : route === 'skills' ? <SkillsView/> : route === 'words' ? <WordBankView/> : route === 'exercises' ? <ExercisesView/> : <SettingsView/>}
-        </AppContext.Provider>}
-    </main>
-  </div>;
+  const closeSettings = () => { window.location.hash = '/practice'; };
+  return <AppContext.Provider value={{ profile, setProfile, dictionary: dictionary!, words, wordMap, source, setSource,
+    goPractice: (next = 'bank') => {
+      if (next.startsWith('drill:')) setProfile(p => ({ ...p, practice: { ...p.practice, source: 'drills', drill: next.slice(6) } }));
+      else setSource(next);
+      window.location.hash = '/test-settings';
+    }, warning, replaceProfile }}>
+    {loadError ? <main className="loading" role="alert"><div><p>{loadError}</p><button onClick={() => window.location.reload()}>Reload</button></div></main> : !dictionary || !fontReady ? <main className="loading" role="status">Loading…</main> :
+      <PracticeView settingsOpen={route !== 'practice'} onSettings={() => { window.location.hash = '/test-settings'; }} onClose={closeSettings}
+        warning={warning}
+        navigation={<nav aria-label="Settings navigation">{navigation.map(([id, label, icon]) => <a key={id} href={`#/${id}`} className={route === id ? 'active' : ''} aria-current={route === id ? 'page' : undefined}><Icon name={icon}/><span>{label}</span></a>)}</nav>}
+        settingsContent={route === 'skills' ? <SkillsView/> : route === 'words' ? <WordBankView/> : route === 'exercises' ? <ExercisesView/> : route === 'settings' ? <SettingsView/> : undefined}/>
+    }
+  </AppContext.Provider>;
 }

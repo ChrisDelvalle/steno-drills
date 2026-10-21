@@ -50,3 +50,53 @@ it('applies personal metadata without mutating bundled entries', () => {
   expect(() => validateCorrection({ ...p.corrections[0], syllables: 2 })).toThrow('does not match');
   expect(parseWordList('Bad dim\nbad')).toEqual(['bad', 'dim']);
 });
+it('migrates old filter defaults and preserves custom selections in backups', () => {
+  const profile = defaultProfile();
+  delete profile.filter.concepts;
+  profile.exercises[0].name = 'Everything I know';
+  const migrated = importBackup(exportBackup(profile));
+  expect(migrated.filter.concepts).toEqual({ mode: 'personal', selected: [] });
+  expect(migrated.exercises[0].name).toBe('Skills');
+  migrated.filter.concepts = { mode: 'custom', selected: ['initial.d','vowel.short-i','final.m'] };
+  expect(importBackup(exportBackup(migrated))).toEqual(migrated);
+});
+it('changes practice concepts independently of learned skills', () => {
+  const p = defaultProfile(); p.filter.pool = 'all'; const learned = [...p.learned];
+  p.learned = [];
+  const words = [makeEntry('dim', ['TKEUPL'], [['D','IH1','M']])];
+  expect(eligibleWords(words, p)).toHaveLength(0);
+  p.filter.concepts = { mode: 'starter', selected: [] };
+  expect(eligibleWords(words, p)).toHaveLength(1);
+  p.filter.concepts = { mode: 'custom', selected: learned.filter(id => id !== 'initial.d') };
+  expect(eligibleWords(words, p)).toHaveLength(0);
+  p.filter.concepts.selected.push('initial.d');
+  expect(eligibleWords(words, p)).toHaveLength(1);
+  expect(p.learned).toEqual([]);
+});
+it('round-trips practice parameters and supplies defaults for older backups', () => {
+  const profile = defaultProfile();
+  profile.practice = { ...profile.practice, source: 'fingers', section: 12, pattern: -1, repeats: 10, quoteLength: 'short', restricted: false };
+  expect(importBackup(exportBackup(profile))).toEqual(profile);
+  const old = JSON.parse(exportBackup(profile)); delete old.profile.practice;
+  expect(importBackup(JSON.stringify(old)).practice.source).toBe('bank');
+  expect(() => importBackup(exportBackup({ ...profile, practice: { ...profile.practice, section: 1000 } }))).toThrow();
+});
+
+it('validates, persists, and migrates line and hint display settings', () => {
+  const profile = defaultProfile();
+  profile.session = { ...profile.session, lines: 6, hintPosition: 'below', hintTextSize: 'extra-large', hintKeyboardSize: 'small' };
+  expect(importBackup(exportBackup(profile)).session).toEqual(profile.session);
+  const old = JSON.parse(exportBackup(profile));
+  for (const key of ['lines', 'hintPosition', 'hintTextSize', 'hintKeyboardSize']) delete old.profile.session[key];
+  expect(importBackup(JSON.stringify(old)).session).toMatchObject({ lines: 3, hintPosition: 'above', hintTextSize: 'large', hintKeyboardSize: 'large' });
+  expect(() => importBackup(exportBackup({ ...profile, session: { ...profile.session, lines: 0 } }))).toThrow();
+});
+it('migrates the unsupported final-S rule out of earlier profiles', () => {
+  const profile = defaultProfile(); profile.learned.push('special.final-s-f');
+  profile.filter.concepts = { mode: 'custom', selected: ['initial.j','special.final-s-f'] };
+  profile.filter.focus = 'special.final-s-f';
+  const migrated = importBackup(exportBackup(profile));
+  expect(migrated.learned).not.toContain('special.final-s-f');
+  expect(migrated.filter.concepts!.selected).toEqual(['initial.j']);
+  expect(migrated.filter.focus).toBe('');
+});

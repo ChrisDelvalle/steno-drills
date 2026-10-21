@@ -15,7 +15,7 @@ for (const [name, repo, branch, path, licensePath] of [
   if (!response.ok) throw new Error(`Cannot resolve ${repo}: ${response.status}`);
   const { sha } = await response.json();
   const files = {};
-  for (const [file, remotePath] of [[`${name}.${name === 'plover' ? 'json' : 'dict'}`, path], [`${name}.LICENSE`, licensePath]]) {
+  for (const [file, remotePath] of [[`${name}.${name === 'plover' ? 'json' : 'dict'}`, path], [`${name}.LICENSE`, licensePath], ...(name === 'plover' ? [['plover-commands.json', 'plover/assets/commands.json']] : [])]) {
     const url = `https://raw.githubusercontent.com/${repo}/${sha}/${remotePath}`;
     const asset = await fetch(url);
     if (!asset.ok) throw new Error(`Cannot download ${url}: ${asset.status}`);

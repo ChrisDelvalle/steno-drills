@@ -23,6 +23,7 @@ export interface WordEntry {
 }
 export interface Dictionary {
   version: 1;
+  conceptExamples?: Record<string, ConceptExample>;
   words: WordEntry[];
   report: {
     entries: number;
@@ -35,6 +36,7 @@ export interface Dictionary {
     unexplained: number;
   };
 }
+export interface ConceptExample { word: string; outline: string }
 export interface WordCorrection {
   word: string;
   outlines: string[];
@@ -47,8 +49,24 @@ export interface Filter {
   focus: string;
   minLength: number;
   maxLength: number;
+  concepts?: { mode: 'personal' | 'single' | 'starter' | 'all' | 'custom'; selected: string[] };
 }
 export interface SavedExercise { id: string; name: string; filter: Filter }
+export interface PracticePreferences {
+  source: string;
+  restricted: boolean;
+  drill: string;
+  mixed: string[];
+  keyboardSet: string;
+  fingerBook: 'duo' | 'technique' | 'custom';
+  section: number;
+  pattern: number;
+  repeats: number;
+  customPatterns: string;
+  quoteLength: 'short' | 'medium' | 'long';
+  symbolVariants: boolean;
+}
+export type HintSize = 'small' | 'medium' | 'large' | 'extra-large';
 export interface Profile {
   version: 1;
   learned: string[];
@@ -59,7 +77,8 @@ export interface Profile {
   filter: Filter;
   theme: 'system' | 'light' | 'dark';
   customText: string;
-  session: { mode: 'timed' | 'count'; duration: number; count: number; hints: boolean };
+  practice: PracticePreferences;
+  session: { mode: 'timed' | 'count'; duration: number; count: number; hints: boolean; lines: number; hintPosition: 'above' | 'below'; hintTextSize: HintSize; hintKeyboardSize: HintSize };
 }
 export interface Evaluation {
   eligible: boolean;

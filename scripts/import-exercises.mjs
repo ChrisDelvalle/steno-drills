@@ -1,0 +1,27 @@
+import { execFileSync } from 'node:child_process';
+import { runInNewContext } from 'node:vm';
+import { writeFileSync } from 'node:fs';
+const revision = execFileSync('git', ['rev-parse', '40e8af4'], { encoding: 'utf8' }).trim();
+const read = path => execFileSync('git', ['show', `${revision}:${path}`], { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
+const context = { TypeJig: { WordSets: {}, wordCombos: combos => combos.flat(Infinity) }, window: {} };
+for (const file of ['word-sets.js', 'learn-plover.js', 'intro.js']) runInNewContext(read(file), context, { timeout: 1000 });
+const sets = context.TypeJig.WordSets;
+const wordSets = Object.fromEntries(Object.entries(sets).filter(([id, value]) => !id.startsWith('NGSL') && Array.isArray(value) && id !== 'LearnPloverOrder' && !['Nouns','Adjectives','TransitiveVerbs'].includes(id)).map(([id, words]) => [id, [...new Set(words.flat(Infinity).map(w => String(w).toLowerCase()))]]));
+for (const [id, words] of Object.entries(sets.LearnPlover)) wordSets[`Learn Plover: ${id}`] = [...new Set(words.flat(Infinity).map(w => String(w).toLowerCase()))];
+for (const [id, words] of Object.entries(sets.Intro)) wordSets[`Intro: ${id}`] = [...new Set(words.flat(Infinity).map(w => String(w).toLowerCase()))];
+const originalFingers = runInNewContext(read('finger-drill-data.js') + '\n dreadedDuo;', {}, { timeout: 1000 });
+// Preserve the missing right-bank dash; leave the ambiguous TWRS typo out.
+const omittedPatterns = ['TWRS/SPHRO'];
+const fingers = originalFingers.map(section => section.filter(pattern => !omittedPatterns.includes(pattern)).map(pattern => pattern.split('/').map(stroke => stroke === 'BGT' ? '-BGT' : stroke).join('/')));
+const technique = runInNewContext(read('stenotype-finger-technique.js') + '\n stenotypeFingerTechnique;', {}, { timeout: 1000 });
+const sentencesContext = { window: {} }; runInNewContext(read('gutenberg-data.js'), sentencesContext, { timeout: 1000 });
+const sentenceGroups = sentencesContext.window.sentences_by_top_100;
+const sentences = [...new Set(sentenceGroups.flatMap(group => group.filter(s => s.trim().split(/\s+/).length >= 4 && s.trim().split(/\s+/).length <= 35).slice(0, 60)))];
+const quoteContext = {}; runInNewContext(read('monkeytype-quote-data.js'), quoteContext, { timeout: 1000 });
+const quotes = quoteContext.monkeytype.quotes.filter(q => q.text.length <= 650).slice(0, 1000).map(({ text, source }) => ({ text, source }));
+const twoKeyText = sets.twoKeySentences.join(' ');
+const output = { revision, wordSets, fingers, technique, twoKeyText, omittedPatterns };
+writeFileSync('data/exercises.json', JSON.stringify(output) + '\n');
+writeFileSync('data/sentences.json', JSON.stringify(sentences) + '\n');
+writeFileSync('data/quotes.json', JSON.stringify(quotes) + '\n');
+console.log(JSON.stringify({ wordSets: Object.keys(wordSets), sections: fingers.length, technique: Object.keys(technique), sentences: sentences.length, quotes: quotes.length }));

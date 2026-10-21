@@ -1,13 +1,15 @@
 import { conceptMap, starterSkills } from './concepts';
 import { parseStroke, phoneSet, syllableCount } from './classifier';
 import type { Filter, Profile, WordCorrection } from './types';
+import { fingerSections, keyboardSets, wordDrills } from './exercises';
 
 export const profileKey = 'steno-drills.profile.v1';
-export const defaultFilter = (): Filter => ({ pool: 'common', focus: '', minLength: 1, maxLength: 30 });
+export const defaultFilter = (): Filter => ({ pool: 'common', focus: '', minLength: 1, maxLength: 30, concepts: { mode: 'personal', selected: [] } });
+export const defaultPractice = (): Profile['practice'] => ({ source: 'bank', restricted: true, drill: 'd-/b-', mixed: ['d-/b-', 'shortAndLongA'], keyboardSet: 'selected', fingerBook: 'duo', section: 0, pattern: 0, repeats: 20, customPatterns: 'EFB/URP', quoteLength: 'medium', symbolVariants: false });
 export const defaultProfile = (): Profile => ({
   version: 1, learned: [...starterSkills], lists: [], corrections: [], excluded: [],
-  exercises: [{ id: 'everything', name: 'Everything I know', filter: defaultFilter() }],
-  filter: defaultFilter(), theme: 'system', customText: '', session: { mode: 'timed', duration: 60, count: 25, hints: true },
+  exercises: [{ id: 'everything', name: 'Skills', filter: defaultFilter() }],
+  filter: defaultFilter(), theme: 'dark', customText: '', practice: defaultPractice(), session: { mode: 'timed', duration: 60, count: 25, hints: false, lines: 3, hintPosition: 'above', hintTextSize: 'large', hintKeyboardSize: 'large' },
 });
 
 const object = (value: unknown): Record<string, unknown> => {
@@ -36,12 +38,17 @@ const learnedConcept = (v: unknown) => {
   if (!conceptMap.has(id)) throw new Error(`Unknown concept: ${id}.`);
   return id;
 };
+// The first release included this unsupported rule without dictionary evidence.
+const conceptList = (v: unknown) => [...new Set(array(v, item => item === 'special.final-s-f' ? item : learnedConcept(item), 500))].filter(id => id !== 'special.final-s-f');
 export function validateFilter(v: unknown): Filter {
   const f = object(v);
   if (f.pool !== 'common' && f.pool !== 'all') throw new Error('Unknown word pool.');
   const minLength = integer(f.minLength, 1, 100), maxLength = integer(f.maxLength, 1, 100);
   if (minLength > maxLength) throw new Error('Minimum word length must not exceed maximum.');
-  return { pool: f.pool, focus: f.focus === '' ? '' : learnedConcept(f.focus), minLength, maxLength };
+  const selection = f.concepts === undefined ? { mode: 'personal', selected: [] } : object(f.concepts);
+  if (!['personal', 'single', 'starter', 'all', 'custom'].includes(String(selection.mode))) throw new Error('Unknown concept selection.');
+  return { pool: f.pool, focus: f.focus === '' || f.focus === 'special.final-s-f' ? '' : learnedConcept(f.focus), minLength, maxLength,
+    concepts: { mode: selection.mode as NonNullable<Filter['concepts']>['mode'], selected: conceptList(selection.selected) } };
 }
 export function validateCorrection(v: unknown): WordCorrection {
   const c = object(v);
@@ -68,7 +75,8 @@ export function validateProfile(v: unknown): Profile {
   }, 100);
   const exercises = array(p.exercises, v => {
     const e = object(v);
-    return { id: string(e.id), name: string(e.name, 80), filter: validateFilter(e.filter) };
+    const name = e.id === 'everything' && ['Everything I know', 'My skills', 'My Skills'].includes(String(e.name)) ? 'Skills' : string(e.name, 80);
+    return { id: string(e.id), name, filter: validateFilter(e.filter) };
   }, 100);
   const corrections = array(p.corrections, validateCorrection);
   for (const ids of [lists.map(l => l.id), exercises.map(e => e.id), corrections.map(c => c.word)]) {
@@ -79,13 +87,40 @@ export function validateProfile(v: unknown): Profile {
   const session = object(p.session);
   if (session.mode !== 'timed' && session.mode !== 'count') throw new Error('Invalid session mode.');
   if (typeof session.hints !== 'boolean') throw new Error('Invalid hints setting.');
-  const duration = integer(session.duration, 30, 300), count = integer(session.count, 10, 500);
-  if (![30, 60, 120, 300].includes(duration) || ![10, 25, 50, 100, 250, 500].includes(count)) throw new Error('Unsupported practice length.');
-  return {
-    version: 1, learned: [...new Set(array(p.learned, learnedConcept, 500))], lists, exercises, corrections,
-    excluded: [...new Set(array(p.excluded, word))], filter: validateFilter(p.filter),
-    theme: p.theme as Profile['theme'], customText: p.customText, session: { mode: session.mode, duration, count, hints: session.hints },
+  const lines = session.lines === undefined ? 3 : integer(session.lines, 3, 8);
+  const hintPosition = session.hintPosition === undefined ? 'above' : session.hintPosition;
+  if (hintPosition !== 'above' && hintPosition !== 'below') throw new Error('Invalid hint position.');
+  const hintSize = (v: unknown): Profile['session']['hintTextSize'] => {
+    if (v === undefined) return 'large';
+    if (v !== 'small' && v !== 'medium' && v !== 'large' && v !== 'extra-large') throw new Error('Invalid hint size.');
+    return v;
   };
+  const hintTextSize = hintSize(session.hintTextSize), hintKeyboardSize = hintSize(session.hintKeyboardSize);
+  const duration = integer(session.duration, 30, 300), count = integer(session.count, 10, 500);
+  if (![30, 60, 90, 120, 300].includes(duration) || ![10, 25, 50, 100, 250, 500].includes(count)) throw new Error('Unsupported practice length.');
+  const practice = p.practice === undefined ? defaultPractice() : validatePractice(p.practice);
+  return {
+    version: 1, learned: conceptList(p.learned), lists, exercises, corrections,
+    excluded: [...new Set(array(p.excluded, word))], filter: validateFilter(p.filter),
+    theme: p.theme as Profile['theme'], customText: p.customText, practice, session: { mode: session.mode, duration, count, hints: session.hints, lines, hintPosition, hintTextSize, hintKeyboardSize },
+  };
+}
+
+function validatePractice(value: unknown): Profile['practice'] {
+  const p = object(value);
+  const choice = <T extends string>(value: unknown, choices: readonly T[]): T => {
+    if (!choices.includes(value as T)) throw new Error('Unknown practice setting.');
+    return value as T;
+  };
+  const boolean = (value: unknown) => { if (typeof value !== 'boolean') throw new Error('Invalid practice option.'); return value; };
+  const source = string(p.source);
+  if (!['bank','drills','chords','fingers','sentences','two-key','quotes','numbers','number-sentences','symbols','text'].includes(source) && !/^(list|filter):.+$/.test(source)) throw new Error('Unknown exercise source.');
+  const drillIds = wordDrills.map(d => d.id);
+  if (typeof p.customPatterns !== 'string' || p.customPatterns.length > 2000) throw new Error('Invalid finger patterns.');
+  return { source, restricted: boolean(p.restricted), drill: choice(p.drill, ['custom', ...drillIds]),
+    mixed: [...new Set(array(p.mixed, id => choice(id, drillIds), 200))], keyboardSet: choice(p.keyboardSet, ['selected', ...Object.keys(keyboardSets)]),
+    fingerBook: choice(p.fingerBook, ['duo','technique','custom']), section: integer(p.section, 0, fingerSections.length - 1), pattern: integer(p.pattern, -1, 500),
+    repeats: integer(p.repeats, 1, 50), customPatterns: p.customPatterns, quoteLength: choice(p.quoteLength, ['short','medium','long']), symbolVariants: boolean(p.symbolVariants) };
 }
 
 export interface StorageLike { getItem(key: string): string | null; setItem(key: string, value: string): void }
