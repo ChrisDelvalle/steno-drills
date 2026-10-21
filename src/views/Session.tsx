@@ -91,7 +91,7 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
         const now = performance.now(), ms = startedAt === null ? 0 : now - startedAt;
         const metrics = inputMetrics(targets, latestInput.current, value);
         if (metrics.inserted) typing.current.push({ at: ms, characters: metrics.inserted });
-        if (metrics.errors) errors.current.push({ seconds: ms / 1000, count: metrics.errors });
+        if (metrics.errors) errors.current.push({ seconds: ms / 1000, count: metrics.errors, mistakes: metrics.mistakes });
         if (startedAt === null && value.trim()) setStartedAt(now);
         latestInput.current = value; setInput(value);
       }}/>

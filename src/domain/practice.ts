@@ -52,18 +52,20 @@ export function hintTargetIndex(expected: PracticeWord[], tokens: string[], curr
 }
 
 export interface SpeedSample { seconds: number; wpm: number; raw: number; burst: number; errors: number }
-export interface ErrorSample { seconds: number; count: number }
+export interface WordMistake { index: number; typed: string; expected: string }
+export interface ErrorSample { seconds: number; count: number; mistakes: WordMistake[] }
 export interface TypingEvent { at: number; characters: number }
 export function inputMetrics(expected: PracticeWord[], previous: string, next: string) {
   let prefix = 0, suffix = 0;
   while (prefix < previous.length && prefix < next.length && previous[prefix] === next[prefix]) prefix++;
   while (suffix < previous.length - prefix && suffix < next.length - prefix && previous[previous.length - suffix - 1] === next[next.length - suffix - 1]) suffix++;
   const before = scoreInput(expected, previous, 0), after = scoreInput(expected, next, 0);
-  const errors = expected.slice(0, after.completed).reduce((count, word, i) => {
+  const mistakes = expected.slice(0, after.completed).flatMap((word, i): WordMistake[] => {
     const newlySubmitted = i >= before.completed || before.tokens[i]?.toLowerCase() !== after.tokens[i]?.toLowerCase();
-    return count + Number(newlySubmitted && word.word.toLowerCase() !== (after.tokens[i] || '').toLowerCase());
-  }, 0);
-  return { inserted: [...next.slice(prefix, next.length - suffix)].length, errors };
+    const typed = after.tokens[i] || '';
+    return newlySubmitted && word.word.toLowerCase() !== typed.toLowerCase() ? [{ index: i, typed, expected: word.word }] : [];
+  });
+  return { inserted: [...next.slice(prefix, next.length - suffix)].length, errors: mistakes.length, mistakes };
 }
 export function burstSpeed(events: TypingEvent[], elapsedMs: number) {
   return events.filter(e => (elapsedMs <= 1000 ? e.at >= 0 : e.at > elapsedMs - 1000) && e.at <= elapsedMs).reduce((sum, e) => sum + e.characters, 0) * 12;

@@ -34,8 +34,17 @@ it('records a mistake once when submitted and records later resubmissions separa
   expect(inputMetrics(expected, 'bad dim ', 'bad dam ').errors).toBe(1);
 });
 it('calculates burst from inserted characters in a rolling second, including Plover replacements', () => {
-  expect(inputMetrics(expected, 'bad', 'bed')).toEqual({ inserted: 1, errors: 0 });
-  expect(inputMetrics(expected, 'bad', 'ba')).toEqual({ inserted: 0, errors: 0 });
+  expect(inputMetrics(expected, 'bad', 'bed')).toEqual({ inserted: 1, errors: 0, mistakes: [] });
+  expect(inputMetrics(expected, 'bad', 'ba')).toEqual({ inserted: 0, errors: 0, mistakes: [] });
   expect(burstSpeed([{ at: 0, characters: 4 }, { at: 500, characters: 3 }], 1000)).toBe(84);
   expect(burstSpeed([{ at: 500, characters: 3 }], 2000)).toBe(0);
+});
+it('captures submitted and expected words at the error event, including replacements and multiple mistakes', () => {
+  const first = inputMetrics(expected, '', 'Bad dAM nope ');
+  expect(first.mistakes).toEqual([{ index: 1, typed: 'dAM', expected: 'dim' }, { index: 2, typed: 'nope', expected: 'name' }]);
+  expect(first.errors).toBe(2);
+  expect(inputMetrics(expected, 'bad dam ', 'bad dam n').mistakes).toEqual([]);
+  expect(inputMetrics(expected, 'bad dam ', 'bad dim ').mistakes).toEqual([]);
+  expect(inputMetrics(expected, 'bad dam ', 'bad dem ').mistakes).toEqual([{ index: 1, typed: 'dem', expected: 'dim' }]);
+  expect(first.mistakes[0].typed).toBe('dAM');
 });
