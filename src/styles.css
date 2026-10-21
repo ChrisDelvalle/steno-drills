@@ -84,9 +84,9 @@ hr { height: 1px; border: 0; background: var(--border); margin: 28px 0; }
 .skills-overview { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 35px; }
 .skill-section { margin-bottom: 35px; }
 .skill-section legend { width: 100%; display: flex; gap: 10px; }
-.skill-section .concept-grid { column-gap: 24px; overflow: hidden; }
-.skill-section .concept { position: relative; }
-.skill-section .concept::after { content: ''; position: absolute; top: -5px; bottom: -5px; right: -12px; width: 1px; background: var(--soft-border); pointer-events: none; }
+.skill-section .concept-grid, .concept-checklist .concept-grid { --concept-column-gap: 24px; column-gap: var(--concept-column-gap); overflow: hidden; }
+.skill-section .concept, .concept-checklist .concept { position: relative; }
+.skill-section .concept::after, .concept-checklist .concept::after { content: ''; position: absolute; top: -5px; bottom: -5px; right: calc(var(--concept-column-gap) / -2); width: 1px; background: var(--soft-border); pointer-events: none; }
 .concept-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(150px,1fr)); gap: 5px 15px; }
 .concept { flex-direction: row; align-items: center; gap: 10px; padding: 10px 7px; border-radius: 6px; }
 .concept:hover { background: var(--accent-soft); }
@@ -180,7 +180,7 @@ summary { width: fit-content; }
 .concept-group { position: relative; margin: 22px 0 0; }
 .concept-group legend { font-size: 13px; margin-bottom: 8px; }
 .concept-group .group-toggle { position: absolute; right: 0; top: -38px; font-size: 12px; color: var(--muted); }
-.concept-checklist .concept-grid { grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 2px 12px; }
+.concept-checklist .concept-grid { --concept-column-gap: 12px; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 2px var(--concept-column-gap); }
 .concept-checklist .concept { font-size: 12px; padding: 8px 4px; }
 .legacy-focus { margin-top: 12px; color: var(--muted); }
 .drill-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 4px 20px; }
@@ -193,7 +193,7 @@ summary { width: fit-content; }
 .exercise-tabs { max-width: 420px; }
 @media (max-width: 700px) {
   .concept-checklist { padding: 12px; }
-  .concept-checklist .concept-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 2px 8px; }
+  .concept-checklist .concept-grid { --concept-column-gap: 8px; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 2px var(--concept-column-gap); }
   .concept-checklist .concept { gap: 6px; }
   .concept-checklist .concept code { font-size: 10px; }
 }
