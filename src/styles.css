@@ -68,12 +68,15 @@ hr { height: 1px; border: 0; background: var(--border); margin: 28px 0; }
 .pool-summary { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 25px 0 15px; font-size: 12px; color: var(--muted); }
 .tag { font-size: 11px; margin-left: auto; color: var(--muted); }
 .start-button { width: 100%; min-height: 40px; padding: 0 16px; margin: 0 0 10px; }
-.steno-keyboard { --key: 18px; display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; }
-.key-row { display: flex; gap: 3px; }
-.steno-key { display: inline-grid; place-items: center; width: var(--key); height: 23px; background: var(--key-bg); color: var(--muted); border: 1px solid var(--border); border-radius: 4px; font: 9px monospace; }
+.steno-keyboard { --key: 18px; --key-gap: 3px; --hand-gap: calc(var(--key) * .4); --vowel-ratio: calc(25 / 18); --keyboard-width: calc(var(--key) * 11 + var(--key-gap) * 8 + var(--hand-gap) * 2); display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0; }
+/* Equal five-key banks keep the asterisks centered despite the shorter initial side. */
+.key-row { --row-key: calc((100% - var(--key-gap) * 8 - var(--hand-gap) * 2) / 11); display: grid; width: var(--keyboard-width); max-width: 100%; grid-template-columns: minmax(0,1fr) var(--row-key) minmax(0,1fr); column-gap: var(--hand-gap); }
+.key-bank { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: var(--key-gap); }
+.initial-keys > :first-child { grid-column: 2; }
+.steno-key { display: inline-grid; place-items: center; width: 100%; height: 23px; background: var(--key-bg); color: var(--muted); border: 1px solid var(--border); border-radius: 4px; font: 9px monospace; }
 .steno-key.pressed { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
-.vowels { gap: 5px; margin-top: 3px; }
-.vowels .steno-key { width: 25px; }
+.vowels { --vowel-gap: 5px; grid-template-columns: repeat(2,calc(var(--row-key) * var(--vowel-ratio))) calc(var(--row-key) + var(--hand-gap) * 2 - var(--vowel-gap) * 2) repeat(2,calc(var(--row-key) * var(--vowel-ratio))); justify-content: center; column-gap: var(--vowel-gap); margin-top: 3px; }
+.vowels > :nth-child(3) { grid-column: 4; }
 .word-chips { display: flex; flex-wrap: wrap; gap: 10px; }
 .word-chips > span { display: inline-flex; align-items: center; gap: 10px; padding: 7px 11px; background: var(--accent-soft); border-radius: 7px; font-size: 12px; }
 .word-chips code { font-size: 10px; color: var(--muted); }
@@ -239,17 +242,16 @@ textarea.practice-capture { position: absolute; inset: 0; width: 100%; height: 1
 .session-shell[data-hint-position='above'] .test-stage { margin-top: max(clamp(90px, calc(40svh - 150px), 500px), calc(var(--hint-height) + 32px)); }
 .hint-slot { height: var(--hint-height); }
 .hint-above { position: absolute; left: 0; right: 0; bottom: calc(100% + 16px); }
-.session-hint { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,min(48%,calc(var(--hint-key-size) * 10 + 27px))) minmax(0,1fr); align-items: center; gap: clamp(8px,2vw,24px); height: 100%; }
+.session-hint { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,min(56%,calc(var(--hint-key-size) * 11.8 + 24px))) minmax(0,1fr); align-items: center; gap: clamp(8px,2vw,24px); height: 100%; }
 .session-hint[data-visible='false'] { visibility: hidden; }
 .session-hint p { grid-column: 1; display: flex; flex-direction: column; align-items: flex-end; text-align: right; gap: 8px; min-width: 0; max-height: 100%; overflow: hidden; font-size: var(--hint-text-size); line-height: 1.3; }
 .session-hint strong, .session-hint code { max-width: 100%; overflow-wrap: anywhere; }
 .session-hint strong { font-weight: 400; }
 .session-hint code { color: var(--accent); font-size: .85em; }
-.session-hint .steno-keyboard { grid-column: 2; width: 100%; align-items: center; }
+.session-hint .steno-keyboard { --key: var(--hint-key-size); --vowel-ratio: 1.1; grid-column: 2; width: 100%; align-items: center; }
 .session-hint .key-row { width: 100%; }
-.session-hint .steno-key { width: auto; height: auto; aspect-ratio: 18 / 23; flex: 1; font-size: var(--hint-key-font); }
-.session-hint .vowels { width: 45%; }
-.session-hint .vowels .steno-key { width: auto; aspect-ratio: 25 / 23; }
+.session-hint .steno-key { height: auto; aspect-ratio: 18 / 23; font-size: var(--hint-key-font); }
+.session-hint .vowels .steno-key { aspect-ratio: 25 / 23; }
 .hint-size-options { margin-top: 20px; }
 .passage-source { text-align: center; margin-top: 10px; font-size: 10px; }
 .test-footer { display: flex; justify-content: center; gap: 28px; margin-top: auto; padding-top: 40px; font-size: 11px; color: var(--muted); }

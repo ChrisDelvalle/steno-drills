@@ -27,7 +27,7 @@ Share in Test settings copies a compact link to a ready test. Links carry suppor
 
 The gear menu contains:
 
-- **Test:** words, named word lessons, raw keys/chords, finger patterns, sentences, quotes, numbers, symbols, and custom text. Choose single keys, starter concepts, Skills, All, or a custom checklist without changing learned skills. Combine named lessons with Custom mix. Hints toggle the outline and keyboard together, before or during practice. Choose 3–8 visible rows, hint position, and independent text and keyboard sizes. Hints default above the test at the large size; the keyboard stays centered and text sits to its left.
+- **Test:** words, named word lessons, raw keys/chords, finger patterns, sentences, quotes, numbers, symbols, and custom text. Choose single keys, starter concepts, Skills, All, or a custom checklist without changing learned skills. Combine named lessons with Custom mix. Hints toggle the outline and keyboard together, before or during practice. Choose 3–8 visible rows, hint position, and independent text and keyboard sizes. Hints default above the test at the large size, with text on the left. The asterisk column and AO/EU gap share the test's centerline, with space separating the initial and final banks.
 - **Skills:** learned initials, vowels, finals, sound rules, and briefs. The starter preset contains single keys and the additional chords from the A to Z use case.
 - **Word Bank:** the full searchable vocabulary table, alternative outlines, exclusions, length filters, and saved dynamic filters.
 - **Exercises:** the restored exercise catalog, personal word lists, saved filters, and outline/pronunciation corrections. Explicit lists keep their membership as skills change.

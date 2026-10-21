@@ -62,8 +62,8 @@ export function StenoKeyboard({ outline = '' }: { outline?: string }) {
   }
   const key = (label: string, id: string) => <span key={id} className={`steno-key ${pressed.has(id) ? 'pressed' : ''}`}>{label}</span>;
   return <div className="steno-keyboard" role="img" aria-label={outline ? `Steno keys for ${outline}` : 'Steno keyboard'}>
-    <div className="key-row">{['S','T','P','H'].map(k => key(k, `left-${k}`))}{key('*', '*')}{['F','P','L','T','D'].map(k => key(k, `right-${k}`))}</div>
-    <div className="key-row">{['S','K','W','R'].map(k => key(k, `left-${k}`))}{key('*', '*')}{['R','B','G','S','Z'].map(k => key(k, `right-${k}`))}</div>
+    <div className="key-row"><div className="key-bank initial-keys">{['S','T','P','H'].map(k => key(k, `left-${k}`))}</div>{key('*', '*')}<div className="key-bank">{['F','P','L','T','D'].map(k => key(k, `right-${k}`))}</div></div>
+    <div className="key-row"><div className="key-bank initial-keys">{['S','K','W','R'].map(k => key(k, `left-${k}`))}</div>{key('*', '*')}<div className="key-bank">{['R','B','G','S','Z'].map(k => key(k, `right-${k}`))}</div></div>
     <div className="key-row vowels">{['A','O','E','U'].map(k => key(k, k))}</div>
   </div>;
 }
