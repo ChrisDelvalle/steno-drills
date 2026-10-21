@@ -1,0 +1,40 @@
+{
+  "ngsl": {
+    "repository": "https://github.com/JoshuaGrams/steno-jig",
+    "revision": "40e8af46941b13d0c809029b83087e84a79d3dc9",
+    "extractedFrom": "word-sets.js:TypeJig.WordSets.NGSL_all_forms",
+    "files": {
+      "ngsl.json": {
+        "sha256": "c86bf53483aa89b99833df307c88ca7376d6549a14529687ca96cbc77d107077"
+      }
+    }
+  },
+  "plover": {
+    "repository": "https://github.com/opensteno/plover",
+    "revision": "3c7c67a4f5d9f6a4d43e24762096fdca5b05ef6d",
+    "files": {
+      "plover.json": {
+        "path": "plover/assets/main.json",
+        "sha256": "6570873c7f703ecd39c9870083f643db3475b49462a8db80fe22fe33ac3cfe92"
+      },
+      "plover.LICENSE": {
+        "path": "LICENSE.txt",
+        "sha256": "edaef632cbb643e4e7a221717a6c441a4c1a7c918e6e4d56debc3d8739b233f6"
+      }
+    }
+  },
+  "cmudict": {
+    "repository": "https://github.com/cmusphinx/cmudict",
+    "revision": "74790861f652b15e4ac49015a90074ad62a27690",
+    "files": {
+      "cmudict.dict": {
+        "path": "cmudict.dict",
+        "sha256": "81917843c7f44ce2b094ac63873c2c7a4cf802040792c455ba3ca406891c3d22"
+      },
+      "cmudict.LICENSE": {
+        "path": "LICENSE",
+        "sha256": "bd4ce8e44170a5f9f481310ca85c51de3c4f851a65e679b40e603b143bd3542a"
+      }
+    }
+  }
+}

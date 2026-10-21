@@ -1,1 +1,13 @@
 .*.swp
+node_modules/
+dist/
+coverage/
+.wrangler/
+.dev.vars
+.dev.vars.*
+.env
+.env.*
+.DS_Store
+public/dictionary.json
+public/sources.lock.json
+public/THIRD_PARTY_NOTICES.txt

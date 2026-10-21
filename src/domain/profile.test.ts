@@ -1,0 +1,52 @@
+import { expect, it } from 'vitest';
+import { defaultProfile, exportBackup, importBackup, loadProfile, profileKey, saveProfile, validateCorrection } from './profile';
+import { applyCorrections, eligibleWords, parseWordList } from './vocabulary';
+import { makeEntry } from './classifier';
+
+it('round-trips lists, dynamic filters, corrections and exclusions', () => {
+  const p = defaultProfile();
+  p.lists.push({ id: 'personal', name: 'Course words', words: ['dim', 'bad'] });
+  p.corrections.push({ word: 'dim', outlines: ['TKEUPL'], pronunciation: 'D IH1 M', syllables: 1 });
+  p.excluded.push('bad'); p.filter.focus = 'initial.d';
+  expect(importBackup(exportBackup(p))).toEqual(p);
+});
+it('rejects invalid backups atomically', () => {
+  const p = defaultProfile();
+  expect(() => importBackup(exportBackup({ ...p, learned: ['made-up'] }))).toThrow('Unknown concept');
+  expect(() => importBackup('{')).toThrow();
+  expect(() => importBackup(JSON.stringify({ app: 'other', version: 1, profile: p }))).toThrow();
+});
+it('retains local profiles and backups created before the app was renamed', () => {
+  const profile = defaultProfile();
+  const legacy = JSON.stringify(profile);
+  const storage = { getItem: (key: string) => key === 'steno-jig.profile.v1' ? legacy : null, setItem: () => {} };
+  expect(loadProfile(() => storage).profile).toEqual(profile);
+  expect(importBackup(JSON.stringify({ app: 'steno-jig', version: 1, profile }))).toEqual(profile);
+  expect(JSON.parse(exportBackup(profile)).app).toBe('steno-drills');
+});
+it('does not overwrite malformed or unavailable storage', () => {
+  let writes = 0;
+  const storage = { getItem: () => '{broken', setItem: () => { writes++; } };
+  const loaded = loadProfile(() => storage);
+  expect(loaded.writable).toBe(false); expect(writes).toBe(0);
+  expect(loadProfile(() => { throw new Error('blocked'); }).writable).toBe(false);
+  expect(saveProfile(() => { throw new Error('quota'); }, defaultProfile())).toBe(false);
+  const good = { getItem: () => null, setItem: (key: string) => { expect(key).toBe(profileKey); } };
+  expect(saveProfile(() => good, defaultProfile())).toBe(true);
+});
+it('keeps explicit list membership stable while saved filters expand with skills', () => {
+  const p = defaultProfile(); p.filter.pool = 'all'; p.learned = p.learned.filter(c => c !== 'initial.d');
+  p.lists = [{ id: 'list', name: 'Fixed', words: ['bad'] }];
+  const words = [makeEntry('dim', ['TKEUPL'], [['D', 'IH1', 'M']])];
+  expect(eligibleWords(words, p)).toHaveLength(0);
+  p.learned.push('initial.d'); expect(eligibleWords(words, p)).toHaveLength(1);
+  expect(p.lists[0].words).toEqual(['bad']);
+});
+it('applies personal metadata without mutating bundled entries', () => {
+  const p = defaultProfile(); const original = makeEntry('dim', ['TKEUPL'], []);
+  p.corrections = [validateCorrection({ word: 'dim', outlines: ['TKEUPL'], syllables: 1, pronunciation: 'D IH1 M' })];
+  const corrected = applyCorrections([original], p);
+  expect(corrected[0].syllables).toEqual([1]); expect(original.syllables).toEqual([]);
+  expect(() => validateCorrection({ ...p.corrections[0], syllables: 2 })).toThrow('does not match');
+  expect(parseWordList('Bad dim\nbad')).toEqual(['bad', 'dim']);
+});

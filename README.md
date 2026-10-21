@@ -1,41 +1,61 @@
-Steno Jig
-=========
+# Steno Drills
 
-This is a little browser-based widget for typing drills. I'm using
-it to teach myself stenotype. It's still early in development, but
-you may find it useful and/or fun. I have it set up with only a
-`gh-pages` branch which means it will show up on the web at:
-https://joshuagrams.github.io/steno-jig/
+A static React/TypeScript app for Plover word practice, learned-concept filtering, and custom exercises.
 
-`index.html` has the basic structure you need to use it: for basic
-exercises you can pass an array of strings (each of which *must*
-be a single word with no leading or trailing whitespace or the
-answer matching won't work).
+## Run locally
 
-If the words represent a static text (i.e. a sequence of words in
-a particular order), that's all you need. If you want to set a
-time limit, you can also pass a number of seconds. If you pass
-`true` as the third argument, the words will be randomized and
-recycled until the time runs out.
+Use Node 24 (`nvm use` reads `.nvmrc`).
 
-I have a bunch of existing word sets in `word-sets.js`. One of
-these sets is the New General Service List: 2800 root words in
-common use, aimed at ESL students. It's organized as a set of root
-words with variations, so I've kept the base set that way, and set
-the code up so that each entry can be an array of words instead of
-just a single word. In this case, it will randomly shuffle the
-entries, and then randomly choose from the words in the current
-entry. But it may be better to use the `NGSL_all_forms` list which
-has been flattened and sorted by frequency.
+```sh
+npm ci
+npm run dev
+```
 
-There are also a bunch of translations in `plover-translations.js` so it
-can display hints for the next word. Many words have more than one set
-of legitimate strokes, and it will show all of them unless you filter
-the given options with `TypeJig.longestTranslations` or
-`TypeJig.shortestTranslations`.
+Open the local URL printed by Vite. Dictionary processing happens automatically before development and production builds, using pinned files already in the repository. No external data services, accounts, or backend are required.
 
------
+```sh
+npm run check   # Generate data, type-check, run tests, verify deterministic data
+npm run build   # Generate data and build static files into dist/
+npm run preview # Serve the production build locally
+```
 
-`numbers.html` has a more complex example which overrides the
-exercise's `nextWord` function to generate a sentence at a time
-and spit out random sentences with lots of numbers in them.
+## Your practice space
+
+- **Practice:** shuffled words, raw keyboard/chord drills, or custom text; timed or count-based sessions with optional outline/keyboard hints. Sessions start on first input and accept Plover backspaces and text replacements.
+- **My Skills:** mark initial sounds, vowels, finals, special rules, and individual briefs as learned. The starter preset contains single keys and the additional chords described in the original A to Z use case.
+- **Word Bank:** inspect Plover outlines, filter common/full vocabulary and focus concepts, change word length, understand exclusions, and save dynamic exercises.
+- **Exercises:** paste named word lists; deduplicate and resolve entries through the dictionary; review unavailable words; add personal outline, syllable, and pronunciation corrections. Lists retain their membership as your skills change.
+- **Settings:** light/dark/system themes, validated backup import/export, source coverage, and personal exclusions.
+
+Your data is saved in this browser. Export a backup before clearing browser storage or moving to another device or domain. An unreadable saved profile is preserved until you explicitly replace it. There is no device synchronization or analytics.
+
+Use normal Plover translated text for words. For raw chord drills, temporarily disable translating dictionaries in Plover so it sends raw outlines, then restore them before word practice. The app checks resulting text; it cannot verify physical chords from translated text. In a practice session, Escape returns to setup and Ctrl/Command+Enter restarts.
+
+## Filtering and coverage
+
+Automatic practice requires an unambiguous one-syllable count and a one-stroke outline whose complete sound/rule analysis uses learned concepts. It does not assume that knowing individual keys implies knowing every chord, or that the same key’s other sound rules have been learned. Briefs unlock explicitly.
+
+At the pinned source revisions: 147,424 Plover entries become 50,734 literal word entries; 2,359 single-syllable words have an explained outline. The starter skills admit 774 words, including **305 common words**. Unknown pronunciation, conflicting syllables, and unsupported theory are kept for inspection, not guessed into beginner practice. Counts are printed by every data build and visible in Settings.
+
+Personal corrections replace metadata locally without altering the sources. Unrestricted custom lists and custom text support broader practice. See [the filtering model](docs/filtering.md) for rules, limits, and how to extend coverage.
+
+## Data and maintenance
+
+The source snapshots, exact upstream commits, license notices, and SHA-256 digests are in [data/sources](data/sources). The existing NGSL frequency list supplies common-vocabulary membership and ranking.
+
+```sh
+npm run data:update # Explicitly download and pin new Plover/CMU revisions
+npm run check       # Review classification behavior and regenerated coverage
+```
+
+Normal builds never download dictionary data. Generated public data and notices are ignored build artifacts. CI runs the same checks and production build from the lockfile. Filtering, scoring, profile validation, app workflows, and real dictionary acceptance fixtures have automated tests.
+
+## Deploy to Cloudflare
+
+Publish `dist` with Cloudflare Workers Static Assets. Use Node 24 and `npm run deploy`; the checked-in Wrangler configuration associates `steno.chrisdelvalle.com` as the Worker’s custom domain. Hash routes work without server rewrites.
+
+See [the deployment guide](docs/cloudflare.md) for exact setup and data-transfer steps. A normal build stays local; the deploy command uploads the site and applies the custom-domain configuration.
+
+## Attribution
+
+Original Steno Jig: [Joshua I. Grams](https://github.com/JoshuaGrams/steno-jig), MIT notice retained in [LICENSE](LICENSE). Plover and CMUdict retain their own licenses; the build publishes `THIRD_PARTY_NOTICES.txt` with full notices and source revisions. See [data documentation](data/README.md).
