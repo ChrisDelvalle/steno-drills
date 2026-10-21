@@ -163,3 +163,54 @@ it('waits for an entire multi-stroke or punctuated target rather than each input
   fireEvent.change(input, { target: { value: 'tablet one,' } }); expect(hint()).toHaveTextContent('dad');
   fireEvent.change(input, { target: { value: 'table' } }); expect(hint()).toHaveTextContent('tablet');
 });
+
+it('hides controls on input and reveals them on pointer activity without interrupting practice', () => {
+  render(<PracticeSession config={config} onExit={() => {}}/>);
+  const session = screen.getByRole('main');
+  const input = screen.getByRole('textbox');
+  const passage = screen.getByLabelText('Practice passage');
+  const actions = screen.getByRole('button', { name: 'Restart' }).parentElement;
+  expect(session).toHaveAttribute('data-controls-hidden', 'false');
+  fireEvent.change(input, { target: { value: 'bad' } });
+  expect(session).toHaveAttribute('data-controls-hidden', 'true');
+  expect(screen.getByRole('link', { name: 'Steno Drills' }).closest('.session-controls')).toBeNull();
+  expect(screen.getByRole('group', { name: 'Hints' }).closest('.session-controls')).toBeNull();
+  expect(screen.getByLabelText('Elapsed time').closest('.session-controls')).toBeNull();
+  expect(passage.closest('.session-controls')).toBeNull();
+  expect(actions).toHaveClass('session-controls');
+  expect(screen.getByRole('button', { name: 'Test settings' })).toHaveClass('session-controls');
+  fireEvent.pointerMove(window);
+  expect(session).toHaveAttribute('data-controls-hidden', 'false');
+  expect(input).toHaveValue('bad');
+  fireEvent.change(input, { target: { value: 'bad d' } });
+  expect(session).toHaveAttribute('data-controls-hidden', 'true');
+  fireEvent.pointerDown(window, { pointerType: 'touch' });
+  expect(session).toHaveAttribute('data-controls-hidden', 'false');
+  fireEvent.change(input, { target: { value: 'bad ' } });
+  expect(session).toHaveAttribute('data-controls-hidden', 'true');
+  expect(screen.getByLabelText('Practice passage')).toBe(passage);
+  expect(screen.getByRole('button', { name: 'Restart' }).parentElement).toBe(actions);
+});
+
+it('reveals controls for keyboard navigation and after restart or completion', () => {
+  const exit = vi.fn();
+  render(<PracticeSession config={config} onExit={exit}/>);
+  const session = screen.getByRole('main');
+  const input = screen.getByRole('textbox');
+  const type = (value: string) => fireEvent.change(input, { target: { value } });
+  type('bad');
+  fireEvent.keyDown(input, { key: 'Tab' });
+  expect(session).toHaveAttribute('data-controls-hidden', 'false');
+  type('bad d');
+  act(() => screen.getByRole('button', { name: 'Test settings' }).focus());
+  expect(session).toHaveAttribute('data-controls-hidden', 'false');
+  type('bad dim');
+  fireEvent.keyDown(input, { key: 'Enter' });
+  expect(session).toHaveAttribute('data-controls-hidden', 'false');
+  expect(input).toHaveValue('');
+  type('bad dim name');
+  expect(screen.getByRole('region', { name: 'Practice results' })).toBeInTheDocument();
+  expect(session).toHaveAttribute('data-controls-hidden', 'false');
+  fireEvent.keyDown(session, { key: 'Escape' });
+  expect(exit).toHaveBeenCalledOnce();
+});

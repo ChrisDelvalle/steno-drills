@@ -17,6 +17,7 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
   const [startedAt, setStartedAt] = useState<number | null>(null);
   const [elapsed, setElapsed] = useState(0);
   const [finished, setFinished] = useState(false);
+  const [controlsHidden, setControlsHidden] = useState(false);
   const [cursor, setCursor] = useState(0);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const resultsRef = useRef<HTMLElement>(null);
@@ -41,11 +42,20 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
   const focus = () => requestAnimationFrame(() => { if (!suspendedRef.current) inputRef.current?.focus(); });
   const reset = (next: SessionConfig = active) => {
     setActive(next); setTargets(makeTargets(next)); setInput(''); latestInput.current = '';
-    setStartedAt(null); setElapsed(0); setFinished(false); setCursor(0); history.current = []; errors.current = []; typing.current = []; focus();
+    setStartedAt(null); setElapsed(0); setFinished(false); setControlsHidden(false); setCursor(0); history.current = []; errors.current = []; typing.current = []; focus();
   };
   useEffect(() => {
     reset(config);
   }, [suspended]);
+  useEffect(() => {
+    const reveal = () => setControlsHidden(false);
+    window.addEventListener('pointermove', reveal, { passive: true });
+    window.addEventListener('pointerdown', reveal, { passive: true });
+    return () => {
+      window.removeEventListener('pointermove', reveal);
+      window.removeEventListener('pointerdown', reveal);
+    };
+  }, []);
   useEffect(() => {
     if (startedAt === null || finished || suspended) return;
     const timer = window.setInterval(() => {
@@ -77,17 +87,21 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     setActive(previous => ({ ...previous, hints })); onOptionsChange?.({ hints }); focus();
   };
   const hint = <div className="session-hint" role="group" aria-label="Hints" aria-hidden={!active.hints} data-visible={active.hints}><p><strong>{current?.word}</strong><code>{current?.outline || 'No dictionary hint'}</code></p><StenoKeyboard outline={current?.outline}/></div>;
-  return <main className={`session-shell${startedAt !== null && !finished ? ' is-typing' : ''}`} aria-label="Practice" data-hint-position={active.hintPosition || 'above'} data-hint-text={active.hintTextSize || 'large'} data-hint-keyboard={active.hintKeyboardSize || 'large'} onKeyDown={e => {
+  return <main className="session-shell" aria-label="Practice" data-controls-hidden={controlsHidden && startedAt !== null && !finished && !suspended} data-hint-position={active.hintPosition || 'above'} data-hint-text={active.hintTextSize || 'large'} data-hint-keyboard={active.hintKeyboardSize || 'large'} onFocusCapture={e => {
+    if (e.target !== inputRef.current) setControlsHidden(false);
+  }} onKeyDown={e => {
     if (suspended || e.nativeEvent.isComposing) return;
+    if (e.key === 'Tab') setControlsHidden(false);
     if (e.key === 'Escape') { e.preventDefault(); onExit(); }
     if (e.key === 'Enter' && !(e.target instanceof HTMLButtonElement) && !(e.target instanceof HTMLAnchorElement)) { e.preventDefault(); reset(); }
   }}>
-    <header className="session-header"><a className="session-brand" href={practiceHref} onClick={e => { e.preventDefault(); reset(); }}>Steno Drills</a><button className="icon-button" aria-label="Test settings" title="Test settings" onClick={onExit}><Icon name="settings"/></button></header>
+    <header className="session-header"><a className="session-brand" href={practiceHref} onClick={e => { e.preventDefault(); reset(); }}>Steno Drills</a><button className="icon-button session-controls" aria-label="Test settings" title="Test settings" onClick={onExit}><Icon name="settings"/></button></header>
     {!finished ? <div className="test-stage">
       {active.hintPosition !== 'below' && <div className="hint-slot hint-above">{hint}</div>}
       <div className="test-status"><span className="session-clock" aria-label={active.mode === 'timed' ? 'Time left' : 'Elapsed time'}>{active.mode === 'timed' ? Math.ceil(remaining / 1000) : Math.floor(elapsed / 1000)}</span></div>
       <PracticeSurface lines={active.lines || 3} targets={targets} input={input} tokens={score.tokens} completed={score.completed} inputRef={inputRef} onHintChange={setCursor} onInput={value => {
         if (/[\r\n]/.test(value)) { reset(); return; }
+        if (value !== latestInput.current) setControlsHidden(true);
         const now = performance.now(), ms = startedAt === null ? 0 : now - startedAt;
         const metrics = inputMetrics(targets, latestInput.current, value);
         if (metrics.inserted) typing.current.push({ at: ms, characters: metrics.inserted });
@@ -95,9 +109,9 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
         if (startedAt === null && value.trim()) setStartedAt(now);
         latestInput.current = value; setInput(value);
       }}/>
-      <div className="test-actions"><button className="icon-button" aria-label="Restart" title="Restart (Enter)" onClick={() => reset()}><Icon name="refresh"/></button><button className="icon-button hint-toggle" aria-label="Hints" title="Hints" aria-pressed={active.hints} onClick={toggleHints}><Icon name="hint"/></button>{startedAt !== null && <button className="text-button small" onClick={finish}>Finish</button>}</div>
+      <div className="test-actions session-controls"><button className="icon-button" aria-label="Restart" title="Restart (Enter)" onClick={() => reset()}><Icon name="refresh"/></button><button className="icon-button hint-toggle" aria-label="Hints" title="Hints" aria-pressed={active.hints} onClick={toggleHints}><Icon name="hint"/></button><button className="text-button small session-finish" disabled={startedAt === null} onClick={finish}>Finish</button></div>
       {active.hintPosition === 'below' && <div className="hint-slot hint-below">{hint}</div>}
-      {active.attribution && <p className="small muted passage-source">{active.attribution}</p>}
+      {active.attribution && <p className="small muted passage-source session-controls">{active.attribution}</p>}
       <span className="sr-only">{score.completed} {active.kind === 'chords' ? 'chords' : 'words'} submitted{active.mode === 'count' ? ` of ${targets.length}` : ''}</span>
     </div> : <section className="session-results" tabIndex={-1} ref={resultsRef} aria-label="Practice results">
       <div className="results-grid"><div><span>{active.kind === 'chords' ? 'chords/min' : 'wpm'}</span><strong>{Math.round(rate)}</strong></div><div><span>word accuracy</span><strong>{Math.round(score.accuracy)}%</strong></div></div>
@@ -106,6 +120,6 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
       {missed.length > 0 && <details className="missed-words"><summary>{missed.length} missed {missed.length === 1 ? 'word' : 'words'}</summary><table><thead><tr><th>Word</th><th>Outline</th></tr></thead><tbody>{missed.map(w => <tr key={w.word}><td>{w.word}</td><td><code>{w.outline || '—'}</code></td></tr>)}</tbody></table><button className="text-button" onClick={() => reset({ ...active, title: 'Missed words', kind: active.kind === 'chords' ? 'chords' : 'words', pool: missed, ordered: false, attribution: undefined, mode: 'count', count: Math.max(10, missed.length) })}>Practice missed words</button></details>}
       <div className="button-row center"><button className="icon-button" aria-label="Restart" title="Restart (Enter)" onClick={() => reset(config)}><Icon name="refresh"/></button></div>
     </section>}
-    <footer className="test-footer"><span><kbd>enter</kbd> restart</span><span><kbd>esc</kbd> settings</span></footer>
+    <footer className="test-footer session-controls"><span><kbd>enter</kbd> restart</span><span><kbd>esc</kbd> settings</span></footer>
   </main>;
 }

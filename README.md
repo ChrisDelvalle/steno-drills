@@ -21,7 +21,7 @@ npm run preview # Serve the production build locally
 
 ## Your practice space
 
-The homepage is a ready-to-type test. Start typing; the clock begins on input. Enter restarts during practice or from results, and Escape opens the gear menu. Test settings are saved locally and restored on the next visit.
+The homepage is a ready-to-type test. Start typing; the clock begins on input. Controls fade out while typing, leaving the logo, hint, timer, and words. Move the pointer, touch the page, or press Tab to reveal the controls. Enter restarts during practice or from results, and Escape opens the gear menu. Test settings are saved locally and restored on the next visit.
 
 Share in Test settings copies a compact link to a ready test. Links carry supported test parameters and explicit concepts, leaving recipients' Skills and appearance unchanged. Shared settings are temporary until Save settings; Exit restores the previous personal test. See [shared tests and the v1 format](docs/sharing.md).
 
