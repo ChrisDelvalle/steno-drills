@@ -1,9 +1,10 @@
-import { Fragment, memo, useLayoutEffect, useRef, useState } from 'react';
+import { Fragment, memo, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { RefObject } from 'react';
 import type { PracticeWord } from '../domain/types';
 import { passageWindow, wrapPassage } from '../domain/passage';
 import type { PassageLine } from '../domain/passage';
-import { hintTargetIndex } from '../domain/practice';
+import { hintTargetIndex, practiceText } from '../domain/practice';
+import { Icon } from '../components';
 
 const MeasureWords = memo(function MeasureWords({ targets }: { targets: PracticeWord[] }) {
   // Match the displayed letter spans exactly: fractional glyph rounding can
@@ -38,19 +39,47 @@ const Word = memo(function Word({ word, typed = '', complete, active, offset, wi
   </span>;
 });
 
-export function PracticeSurface({ targets, input, tokens, completed, onInput, inputRef, lines = 3, onHintChange }: {
+export function PracticeSurface({ targets, input, tokens, completed, onInput, inputRef, lines = 3, onHintChange, questionHints = false, suspended = false }: {
   targets: PracticeWord[]; input: string; tokens: string[]; completed: number;
   onInput: (value: string) => void; inputRef: RefObject<HTMLTextAreaElement | null>; lines?: number;
   onHintChange?: (index: number) => void;
+  questionHints?: boolean; suspended?: boolean;
 }) {
   const [caret, setCaret] = useState(0);
+  const [focused, setFocused] = useState(false);
   const surface = useRef<HTMLDivElement>(null);
   const measure = useRef<HTMLDivElement>(null);
   const [layout, setLayout] = useState<{ rows: PassageLine[]; widths: number[] }>({ rows: [], widths: [] });
-  const prefix = input.slice(0, Math.min(caret, input.length)).trimStart().split(/\s+/);
+  const prefix = practiceText(input.slice(0, Math.min(caret, input.length)), questionHints).trimStart().split(/\s+/);
   const current = Math.min(targets.length - 1, Math.max(0, prefix.length - 1));
   const offset = Math.min([...(prefix.at(-1) || '')].length, [...(targets[current]?.word || '')].length);
   const hintIndex = hintTargetIndex(targets, tokens, current, offset);
+  const unfocused = !focused && !suspended;
+  const syncFocus = () => setFocused(document.hasFocus() && document.activeElement === inputRef.current && document.visibilityState !== 'hidden');
+  const restoreFocus = () => { inputRef.current?.focus(); setCaret(inputRef.current?.selectionStart || 0); };
+  useEffect(() => {
+    const blur = () => setFocused(false);
+    const focusFromKey = (event: KeyboardEvent) => {
+      if (suspended || event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+      if (['Tab', 'Escape', 'Shift', 'Control', 'Alt', 'Meta', 'CapsLock'].includes(event.key)) return;
+      const target = event.target;
+      if (target instanceof HTMLElement && (target.closest('button,a,input,textarea,select,[contenteditable],dialog') || target.tabIndex >= 0)) {
+        if (!target.closest('.practice-focus') || event.key.length !== 1) return;
+      }
+      inputRef.current?.focus();
+    };
+    window.addEventListener('blur', blur);
+    window.addEventListener('focus', syncFocus);
+    window.addEventListener('keydown', focusFromKey);
+    document.addEventListener('visibilitychange', syncFocus);
+    syncFocus();
+    return () => {
+      window.removeEventListener('blur', blur);
+      window.removeEventListener('focus', syncFocus);
+      window.removeEventListener('keydown', focusFromKey);
+      document.removeEventListener('visibilitychange', syncFocus);
+    };
+  }, [inputRef, suspended]);
   useLayoutEffect(() => { onHintChange?.(hintIndex); }, [hintIndex, onHintChange]);
   useLayoutEffect(() => {
     const frame = surface.current, ruler = measure.current;
@@ -73,10 +102,10 @@ export function PracticeSurface({ targets, input, tokens, completed, onInput, in
     return () => observer.disconnect();
   }, [targets]);
   const visible = passageWindow(layout.rows, current, lines);
-  return <div ref={surface} className="practice-surface" onPointerDown={event => {
+  return <div ref={surface} className="practice-surface" data-unfocused={unfocused} onPointerDown={event => {
     if (event.button !== 0) return;
     event.preventDefault(); inputRef.current?.focus();
-    inputRef.current?.setSelectionRange(input.length, input.length); setCaret(input.length);
+    if (!unfocused) { inputRef.current?.setSelectionRange(input.length, input.length); setCaret(input.length); }
   }}>
     <div ref={measure} className="passage-measure" aria-hidden="true"><MeasureWords targets={targets}/></div>
     <div className="target-words" aria-label="Practice passage" style={{ height: `calc(var(--line-height) * ${lines})` }}>
@@ -87,8 +116,9 @@ export function PracticeSurface({ targets, input, tokens, completed, onInput, in
         })}
       </div>)}
     </div>
+    <button type="button" className="practice-focus" aria-label="Focus test" aria-hidden={!unfocused} tabIndex={unfocused ? 0 : -1} onClick={restoreFocus}><Icon name="focus" size={18}/><span>Click or press any key to focus</span></button>
     <label className="sr-only" htmlFor="practice-capture">Practice input</label>
-    <span className="sr-only" id="practice-help">Type the displayed words. Backspace corrects your input. Enter restarts the test. Escape opens settings.</span>
-    <textarea id="practice-capture" ref={inputRef} className="practice-capture" aria-describedby="practice-help" autoCapitalize="off" autoComplete="off" autoCorrect="off" spellCheck={false} value={input} onSelect={e => setCaret(e.currentTarget.selectionStart)} onChange={e => { setCaret(e.target.selectionStart); onInput(e.target.value); }}/>
+    <span className="sr-only" id="practice-help">Type the displayed words. Backspace corrects your input. Enter restarts the test. Escape opens settings.{questionHints && ' Question mark toggles hints (H-F in Plover).'}</span>
+    <textarea id="practice-capture" ref={inputRef} className="practice-capture" aria-describedby="practice-help" autoCapitalize="off" autoComplete="off" autoCorrect="off" spellCheck={false} value={input} onFocus={syncFocus} onBlur={() => setFocused(false)} onSelect={e => setCaret(e.currentTarget.selectionStart)} onChange={e => { setCaret(e.target.selectionStart); onInput(e.target.value); }}/>
   </div>;
 }

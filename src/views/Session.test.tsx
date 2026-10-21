@@ -214,3 +214,97 @@ it('reveals controls for keyboard navigation and after restart or completion', (
   fireEvent.keyDown(session, { key: 'Escape' });
   expect(exit).toHaveBeenCalledOnce();
 });
+
+it('treats question marks as hint commands without changing Plover buffers, timing or scoring', () => {
+  vi.useFakeTimers();
+  const changed = vi.fn();
+  render(<PracticeSession config={{ ...config, questionHints: true }} onExit={() => {}} onOptionsChange={changed}/>);
+  act(() => vi.advanceTimersByTime(20));
+  const input = screen.getByRole('textbox') as HTMLTextAreaElement;
+  const passage = screen.getByLabelText('Practice passage');
+  const word = passage.querySelector('.practice-word');
+  fireEvent.change(input, { target: { value: '?' } });
+  expect(input).toHaveValue('?');
+  expect(screen.queryByRole('group', { name: 'Hints' })).not.toBeInTheDocument();
+  expect(changed).toHaveBeenLastCalledWith({ hints: false });
+  act(() => vi.advanceTimersByTime(2000));
+  expect(screen.getByLabelText('Elapsed time')).toHaveTextContent('0');
+  fireEvent.change(input, { target: { value: '?bad' } });
+  act(() => vi.advanceTimersByTime(1000));
+  fireEvent.change(input, { target: { value: '?bad?' } });
+  expect(screen.getByRole('group', { name: 'Hints' })).toHaveTextContent('dim');
+  expect(screen.getByRole('main')).toHaveAttribute('data-controls-hidden', 'true');
+  expect(passage.querySelector('.practice-word')).toBe(word);
+  expect(passage.querySelector('.word-mistake')).not.toBeInTheDocument();
+  expect(changed).toHaveBeenLastCalledWith({ hints: true });
+  // Plover undo removes its own punctuation; it must not remove a letter or
+  // toggle a second time merely because the old command remains in the buffer.
+  fireEvent.change(input, { target: { value: '?bad' } });
+  fireEvent.change(input, { target: { value: '?bad dam' } });
+  fireEvent.change(input, { target: { value: '?bad dim' } });
+  expect(changed).toHaveBeenCalledTimes(2);
+  expect(input).toHaveValue('?bad dim');
+  expect(screen.getByRole('group', { name: 'Hints' })).toHaveTextContent('name');
+  fireEvent.change(input, { target: { value: '?bad dim name' } });
+  expect(screen.getByRole('region', { name: 'Practice results' })).toHaveTextContent('100%');
+  expect(screen.getByText('0 incorrect')).toBeInTheDocument();
+});
+
+it('keeps question marks literal when an exercise needs punctuation', () => {
+  const changed = vi.fn();
+  render(<PracticeSession config={{ ...config, pool: [{ word: 'why?' }, { word: 'yes' }] }} onExit={() => {}} onOptionsChange={changed}/>);
+  fireEvent.change(screen.getByRole('textbox'), { target: { value: 'why?' } });
+  expect(screen.getByRole('group', { name: 'Hints' })).toBeInTheDocument();
+  expect(changed).not.toHaveBeenCalled();
+  fireEvent.change(screen.getByRole('textbox'), { target: { value: 'why? yes' } });
+  expect(screen.getByRole('region', { name: 'Practice results' })).toHaveTextContent('100%');
+});
+
+it('offers click and keyboard focus recovery without moving words or discarding input or selection', () => {
+  vi.useFakeTimers();
+  render(<PracticeSession config={config} onExit={() => {}}/>);
+  act(() => vi.advanceTimersByTime(20));
+  const input = screen.getByRole('textbox') as HTMLTextAreaElement;
+  expect(input).toHaveFocus();
+  expect(screen.queryByRole('button', { name: 'Focus test' })).not.toBeInTheDocument();
+  fireEvent.change(input, { target: { value: 'bad d' } });
+  input.setSelectionRange(1, 1);
+  fireEvent.select(input);
+  const word = screen.getByLabelText('Practice passage').querySelector('.practice-word');
+  act(() => input.blur());
+  const overlay = screen.getByRole('button', { name: 'Focus test' });
+  expect(overlay.parentElement).toHaveAttribute('data-unfocused', 'true');
+  fireEvent.click(overlay);
+  expect(input).toHaveFocus();
+  expect(input).toHaveValue('bad d');
+  expect(input.selectionStart).toBe(1);
+  expect(screen.getByLabelText('Practice passage').querySelector('.practice-word')).toBe(word);
+  act(() => screen.getByRole('button', { name: 'Test settings' }).focus());
+  expect(screen.getByRole('button', { name: 'Focus test' })).toBeInTheDocument();
+  expect(fireEvent.keyDown(screen.getByRole('button', { name: 'Test settings' }), { key: 'Tab' })).toBe(true);
+  act(() => (document.activeElement as HTMLElement).blur());
+  fireEvent.keyDown(document.body, { key: 'b' });
+  expect(input).toHaveFocus();
+  expect(screen.queryByRole('button', { name: 'Focus test' })).not.toBeInTheDocument();
+  fireEvent.blur(window);
+  expect(screen.getByRole('button', { name: 'Focus test' })).toBeInTheDocument();
+  fireEvent.focus(window);
+  expect(screen.queryByRole('button', { name: 'Focus test' })).not.toBeInTheDocument();
+  act(() => input.blur());
+  const keyboardOverlay = screen.getByRole('button', { name: 'Focus test' });
+  act(() => keyboardOverlay.focus());
+  fireEvent.keyDown(keyboardOverlay, { key: 'd' });
+  expect(input).toHaveFocus();
+  expect(screen.queryByRole('button', { name: 'Focus test' })).not.toBeInTheDocument();
+});
+
+it('does not steal settings focus or show a recovery overlay behind the settings dialog', () => {
+  vi.useFakeTimers();
+  render(<><PracticeSession config={config} onExit={() => {}} suspended/><input aria-label="Settings field"/></>);
+  const field = screen.getByRole('textbox', { name: 'Settings field' });
+  act(() => field.focus());
+  fireEvent.keyDown(field, { key: 'b' });
+  act(() => vi.advanceTimersByTime(100));
+  expect(field).toHaveFocus();
+  expect(screen.queryByRole('button', { name: 'Focus test' })).not.toBeInTheDocument();
+});

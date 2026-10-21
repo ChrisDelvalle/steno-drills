@@ -79,7 +79,7 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
         return [{ word, outline: entry?.outlines[0]?.outline }];
       });
     } else pool = eligibleWords(words, profile, filter);
-    return { pool, kind, unrestricted, attribution };
+    return { pool, kind, unrestricted, attribution, questionHints: isWords && !pool.some(word => word.word.includes('?')) };
   }, [source, filter, profile.learned, profile.excluded, profile.customText, words, wordMap, session.mode, session.count, restricted, list, isWords, isRaw, isWordList, ordered, drill, mixed, keyboardSet, fingerBook, section, pattern, customPatterns, repeats, quoteLength, symbolVariants, isReading, reading, readingKey]);
   const config = useMemo(() => ({ title, ...practice, ordered, ...session }), [title, practice, ordered, session]);
   const sessionKey = JSON.stringify({ preferences, filter, learned: profile.learned, corrections: profile.corrections, excluded: profile.excluded, text: profile.customText, lists: profile.lists, mode: session.mode, duration: session.duration, count: session.count });

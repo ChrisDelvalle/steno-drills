@@ -20,6 +20,19 @@ export function generateWords(pool: PracticeWord[], count: number, random = Math
   return result;
 }
 
+// Keep commands in the native input buffer so Plover can undo and replace its
+// own output. Only the practice view and scoring omit the hint punctuation.
+export function practiceText(input: string, questionHints = false) {
+  return questionHints ? input.replaceAll('?', '') : input;
+}
+
+export function insertedText(previous: string, next: string) {
+  let prefix = 0, suffix = 0;
+  while (prefix < previous.length && prefix < next.length && previous[prefix] === next[prefix]) prefix++;
+  while (suffix < previous.length - prefix && suffix < next.length - prefix && previous[previous.length - suffix - 1] === next[next.length - suffix - 1]) suffix++;
+  return next.slice(prefix, next.length - suffix);
+}
+
 export function scoreInput(expected: PracticeWord[], input: string, elapsedMs: number) {
   const typed = input.trimStart().split(/\s+/);
   const trailingSpace = /\s$/.test(input);
@@ -56,16 +69,13 @@ export interface WordMistake { index: number; typed: string; expected: string }
 export interface ErrorSample { seconds: number; count: number; mistakes: WordMistake[] }
 export interface TypingEvent { at: number; characters: number }
 export function inputMetrics(expected: PracticeWord[], previous: string, next: string) {
-  let prefix = 0, suffix = 0;
-  while (prefix < previous.length && prefix < next.length && previous[prefix] === next[prefix]) prefix++;
-  while (suffix < previous.length - prefix && suffix < next.length - prefix && previous[previous.length - suffix - 1] === next[next.length - suffix - 1]) suffix++;
   const before = scoreInput(expected, previous, 0), after = scoreInput(expected, next, 0);
   const mistakes = expected.slice(0, after.completed).flatMap((word, i): WordMistake[] => {
     const newlySubmitted = i >= before.completed || before.tokens[i]?.toLowerCase() !== after.tokens[i]?.toLowerCase();
     const typed = after.tokens[i] || '';
     return newlySubmitted && word.word.toLowerCase() !== typed.toLowerCase() ? [{ index: i, typed, expected: word.word }] : [];
   });
-  return { inserted: [...next.slice(prefix, next.length - suffix)].length, errors: mistakes.length, mistakes };
+  return { inserted: [...insertedText(previous, next)].length, errors: mistakes.length, mistakes };
 }
 export function burstSpeed(events: TypingEvent[], elapsedMs: number) {
   return events.filter(e => (elapsedMs <= 1000 ? e.at >= 0 : e.at > elapsedMs - 1000) && e.at <= elapsedMs).reduce((sum, e) => sum + e.characters, 0) * 12;

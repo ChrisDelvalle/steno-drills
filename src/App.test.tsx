@@ -99,6 +99,24 @@ it('opens on a ready test and restores exercise parameters after reload', async 
   expect(screen.getByRole('combobox', { name: 'Repeats' })).toHaveValue('10');
 });
 
+it('enables question-mark hints for word practice and preserves punctuation in custom text', async () => {
+  render(<App/>);
+  const input = await screen.findByRole('textbox', { name: 'Practice input' });
+  fireEvent.change(input, { target: { value: '?' } });
+  expect(screen.getByRole('group', { name: 'Hints' })).toBeInTheDocument();
+  expect(JSON.parse(localStorage.getItem(profileKey)!).session.hints).toBe(true);
+  fireEvent.click(screen.getByRole('button', { name: 'Test settings' }));
+  await screen.findByRole('dialog');
+  fireEvent.change(screen.getByRole('combobox', { name: 'Exercise' }), { target: { value: 'text' } });
+  fireEvent.change(screen.getByRole('textbox', { name: 'Text' }), { target: { value: 'why? yes' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Done' }));
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  fireEvent.change(screen.getByRole('textbox', { name: 'Practice input' }), { target: { value: 'why?' } });
+  expect(screen.getByRole('button', { name: 'Hints' })).toHaveAttribute('aria-pressed', 'true');
+  fireEvent.change(screen.getByRole('textbox', { name: 'Practice input' }), { target: { value: 'why? yes' } });
+  expect(screen.getByRole('region', { name: 'Practice results' })).toHaveTextContent('100%');
+});
+
 const teacherToken = () => {
   const result = normalizeSharedTest(defaultProfile());
   if (!result.ok) throw new Error(result.error);

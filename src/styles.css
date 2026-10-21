@@ -213,7 +213,13 @@ summary { width: fit-content; }
 .session-clock { font-size: 32px; line-height: 40px; color: var(--accent); font-variant-numeric: tabular-nums; }
 .practice-surface { position: relative; cursor: text; }
 .practice-surface { --line-height: 64px; font: 400 32px/40px 'Roboto Mono', monospace; }
-.target-words { position: relative; overflow: hidden; color: #7e8083; }
+.target-words { position: relative; overflow: hidden; color: #7e8083; transition: filter 160ms ease-out, opacity 160ms ease-out; }
+.practice-surface[data-unfocused='true'] .target-words { filter: blur(4px); opacity: .5; }
+.practice-surface[data-unfocused='true'] .cursor-before::before, .practice-surface[data-unfocused='true'] .cursor-end::after { opacity: 0; }
+.practice-focus { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; gap: 8px; padding: 16px; border: 0; border-radius: 0; color: var(--ink); background: transparent; font: 400 14px/20px 'Roboto Mono',monospace; opacity: 0; pointer-events: none; transition: opacity 160ms ease-out; }
+.practice-focus:hover { background: transparent; filter: none; }
+.practice-focus:focus-visible { outline-offset: -3px; }
+.practice-surface[data-unfocused='true'] .practice-focus { opacity: 1; pointer-events: auto; }
 :root[data-theme='light'] .target-words { color: #77797c; }
 .passage-measure { position: absolute; width: 100%; height: 0; overflow: hidden; visibility: hidden; pointer-events: none; }
 .passage-measure > span { display: inline-block; white-space: pre; }
@@ -254,11 +260,11 @@ textarea.practice-capture { position: absolute; inset: 0; width: 100%; height: 1
 .session-hint .vowels .steno-key { aspect-ratio: 25 / 23; }
 .hint-size-options { margin-top: 20px; }
 .passage-source { text-align: center; margin-top: 10px; font-size: 10px; }
-.test-footer { display: flex; justify-content: center; gap: 28px; margin-top: auto; padding-top: 40px; font-size: 11px; color: var(--muted); }
+.test-footer { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 28px; margin-top: auto; padding-top: 40px; font-size: 11px; color: var(--muted); }
 kbd { font: inherit; color: var(--page); background: var(--muted); border-radius: 2px; padding: 1px 4px; margin-right: 6px; }
 .session-controls { opacity: 1; transition: opacity 160ms ease-out; }
 .session-shell[data-controls-hidden='true'] .session-controls { opacity: 0; pointer-events: none; }
-@media (prefers-reduced-motion: reduce) { .session-controls { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .session-controls, .target-words, .practice-focus { transition: none; } }
 .session-results { padding: 70px 0 30px; outline: none; }
 .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 700px; }
 .results-grid span { color: var(--muted); font-size: 20px; }

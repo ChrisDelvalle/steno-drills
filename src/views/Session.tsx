@@ -1,6 +1,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import type { SessionConfig } from '../context';
-import { burstSpeed, generateWords, inputMetrics, scoreInput, speedSample } from '../domain/practice';
+import { burstSpeed, generateWords, inputMetrics, insertedText, practiceText, scoreInput, speedSample } from '../domain/practice';
 import type { ErrorSample, SpeedSample, TypingEvent } from '../domain/practice';
 import { Icon, StenoKeyboard } from '../components';
 import { PracticeSurface } from './PracticeSurface';
@@ -27,10 +27,10 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
   const latestInput = useRef('');
   const suspendedRef = useRef(suspended);
   suspendedRef.current = suspended;
-  const score = scoreInput(targets, input, elapsed);
+  const score = scoreInput(targets, practiceText(input, active.questionHints), elapsed);
   const remaining = Math.max(0, active.duration * 1000 - elapsed);
   const current = targets[cursor];
-  const capture = (ms: number, value = latestInput.current) => {
+  const capture = (ms: number, value = practiceText(latestInput.current, active.questionHints)) => {
     const lastTime = history.current.at(-1)?.seconds || 0;
     const errorCount = errors.current.filter(e => (history.current.length === 0 ? e.seconds >= 0 : e.seconds > lastTime) && e.seconds <= ms / 1000).reduce((sum, e) => sum + e.count, 0);
     const point = speedSample(targets, value, ms, burstSpeed(typing.current, ms), errorCount);
@@ -99,17 +99,19 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     {!finished ? <div className="test-stage">
       {active.hintPosition !== 'below' && <div className="hint-slot hint-above">{hint}</div>}
       <div className="test-status"><span className="session-clock" aria-label={active.mode === 'timed' ? 'Time left' : 'Elapsed time'}>{active.mode === 'timed' ? Math.ceil(remaining / 1000) : Math.floor(elapsed / 1000)}</span></div>
-      <PracticeSurface lines={active.lines || 3} targets={targets} input={input} tokens={score.tokens} completed={score.completed} inputRef={inputRef} onHintChange={setCursor} onInput={value => {
+      <PracticeSurface lines={active.lines || 3} targets={targets} input={input} tokens={score.tokens} completed={score.completed} inputRef={inputRef} questionHints={active.questionHints} suspended={suspended} onHintChange={setCursor} onInput={value => {
         if (/[\r\n]/.test(value)) { reset(); return; }
-        if (value !== latestInput.current) setControlsHidden(true);
+        const previous = practiceText(latestInput.current, active.questionHints), text = practiceText(value, active.questionHints);
+        if (active.questionHints && [...insertedText(latestInput.current, value)].filter(char => char === '?').length % 2) toggleHints();
+        if (text !== previous) setControlsHidden(true);
         const now = performance.now(), ms = startedAt === null ? 0 : now - startedAt;
-        const metrics = inputMetrics(targets, latestInput.current, value);
+        const metrics = inputMetrics(targets, previous, text);
         if (metrics.inserted) typing.current.push({ at: ms, characters: metrics.inserted });
         if (metrics.errors) errors.current.push({ seconds: ms / 1000, count: metrics.errors, mistakes: metrics.mistakes });
-        if (startedAt === null && value.trim()) setStartedAt(now);
+        if (startedAt === null && text.trim()) setStartedAt(now);
         latestInput.current = value; setInput(value);
       }}/>
-      <div className="test-actions session-controls"><button className="icon-button" aria-label="Restart" title="Restart (Enter)" onClick={() => reset()}><Icon name="refresh"/></button><button className="icon-button hint-toggle" aria-label="Hints" title="Hints" aria-pressed={active.hints} onClick={toggleHints}><Icon name="hint"/></button><button className="text-button small session-finish" disabled={startedAt === null} onClick={finish}>Finish</button></div>
+      <div className="test-actions session-controls"><button className="icon-button" aria-label="Restart" title="Restart (Enter)" onClick={() => reset()}><Icon name="refresh"/></button><button className="icon-button hint-toggle" aria-label="Hints" title={active.questionHints ? 'Hints (? / H-F)' : 'Hints'} aria-pressed={active.hints} onClick={toggleHints}><Icon name="hint"/></button><button className="text-button small session-finish" disabled={startedAt === null} onClick={finish}>Finish</button></div>
       {active.hintPosition === 'below' && <div className="hint-slot hint-below">{hint}</div>}
       {active.attribution && <p className="small muted passage-source session-controls">{active.attribution}</p>}
       <span className="sr-only">{score.completed} {active.kind === 'chords' ? 'chords' : 'words'} submitted{active.mode === 'count' ? ` of ${targets.length}` : ''}</span>
@@ -120,6 +122,6 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
       {missed.length > 0 && <details className="missed-words"><summary>{missed.length} missed {missed.length === 1 ? 'word' : 'words'}</summary><table><thead><tr><th>Word</th><th>Outline</th></tr></thead><tbody>{missed.map(w => <tr key={w.word}><td>{w.word}</td><td><code>{w.outline || '—'}</code></td></tr>)}</tbody></table><button className="text-button" onClick={() => reset({ ...active, title: 'Missed words', kind: active.kind === 'chords' ? 'chords' : 'words', pool: missed, ordered: false, attribution: undefined, mode: 'count', count: Math.max(10, missed.length) })}>Practice missed words</button></details>}
       <div className="button-row center"><button className="icon-button" aria-label="Restart" title="Restart (Enter)" onClick={() => reset(config)}><Icon name="refresh"/></button></div>
     </section>}
-    <footer className="test-footer session-controls"><span><kbd>enter</kbd> restart</span><span><kbd>esc</kbd> settings</span></footer>
+    <footer className="test-footer session-controls"><span><kbd>enter</kbd> restart</span>{active.questionHints && !finished && <span><kbd>?</kbd> hints</span>}<span><kbd>esc</kbd> settings</span></footer>
   </main>;
 }

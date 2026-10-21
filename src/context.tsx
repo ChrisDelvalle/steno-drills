@@ -11,6 +11,7 @@ export interface SessionConfig {
   duration: number;
   count: number;
   hints: boolean;
+  questionHints?: boolean;
   lines?: number;
   hintPosition?: 'above' | 'below';
   hintTextSize?: HintSize;

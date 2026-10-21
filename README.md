@@ -23,6 +23,8 @@ npm run preview # Serve the production build locally
 
 The homepage is a ready-to-type test. Start typing; the clock begins on input. Controls fade out while typing, leaving the logo, hint, timer, and words. Move the pointer, touch the page, or press Tab to reveal the controls. Enter restarts during practice or from results, and Escape opens the gear menu. Test settings are saved locally and restored on the next visit.
 
+If the test loses focus, its words blur behind a focus prompt. Click the passage or start typing to resume; the first character is retained. Tab and settings controls keep their normal navigation. In word drills, `?` toggles hints using Plover's existing `H-F` stroke (left H + right F). Question marks remain punctuation in text, symbol, and other exercises that need them. The app does not modify Plover dictionaries or configuration.
+
 Share in Test settings copies a compact link to a ready test. Links carry supported test parameters and explicit concepts, leaving recipients' Skills and appearance unchanged. Shared settings are temporary until Save settings; Exit restores the previous personal test. See [shared tests and the v1 format](docs/sharing.md).
 
 The gear menu contains:
