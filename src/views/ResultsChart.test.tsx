@@ -40,10 +40,20 @@ it('shows each submitted word in red above its expected word, without a timestam
   expect(tooltip.querySelector('wrong')).toBeNull();
   expect(tooltip).not.toHaveTextContent('2.123');
   expect(chart.configuration.data.datasets.at(-1)?.data).toEqual([{ x: 2.123456789, y: 2 }]);
+  expect(chart.configuration.options?.interaction?.axis).toBe('xy');
   show(false);
   expect(screen.getByRole('tooltip')).toHaveTextContent('WPM: 44');
   expect(screen.getByRole('tooltip')).not.toHaveTextContent('2.123');
   show(true, false); expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+});
+it('keeps the full speed summary when pointing at any speed series', () => {
+  vi.stubGlobal('ResizeObserver', class {});
+  render(<ResultsChart samples={[{ seconds: 2, wpm: 43.987, raw: 51.2, burst: 72, errors: 0 }]} errors={[]}/>);
+  show(false);
+  const tooltip = screen.getByRole('tooltip');
+  expect(tooltip).toHaveTextContent('WPM: 44');
+  expect(tooltip).toHaveTextContent('Raw WPM: 51');
+  expect(tooltip).toHaveTextContent('Burst: 72');
 });
 it('offers the same typed and expected words in the accessible chart-data table', () => {
   render(<ResultsChart samples={[]} errors={errors}/>);

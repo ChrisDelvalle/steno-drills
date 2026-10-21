@@ -35,7 +35,7 @@ export default function ResultsChart({ samples, errors, chords = false }: { samp
       ] },
       options: {
         responsive: true, maintainAspectRatio: false, animation: false,
-        interaction: { mode: 'nearest', axis: 'x', intersect: false },
+        interaction: { mode: 'nearest', axis: 'xy', intersect: false },
         font: { family: 'Roboto Mono, monospace' },
         plugins: {
           legend: { position: 'bottom', align: 'end', labels: { color: color('--muted'), usePointStyle: true, boxWidth: 8, font: { size: 11 } } },
@@ -43,8 +43,12 @@ export default function ResultsChart({ samples, errors, chords = false }: { samp
             if (!tooltip.opacity || !tooltip.dataPoints.length) { setHover(null); return; }
             const points = tooltip.dataPoints;
             const mistakes = points.filter(p => p.dataset.yAxisID === 'errors').flatMap(p => errors[p.dataIndex]?.mistakes || []);
+            const sample = samples[points[0].dataIndex];
+            const series = sample ? [{ label: chords ? 'Correct chords/min' : 'WPM', value: Math.round(sample.wpm) },
+              ...(!chords ? [{ label: 'Raw WPM', value: Math.round(sample.raw) }, { label: 'Burst', value: Math.round(sample.burst) }] : [])] :
+              points.map(p => ({ label: p.dataset.label || '', value: Math.round(p.parsed.y || 0) }));
             const next: ChartHover = { key: points.map(p => `${p.datasetIndex}:${p.dataIndex}`).join(','), x: tooltip.caretX, y: tooltip.caretY, mistakes,
-              series: mistakes.length ? [] : points.map(p => ({ label: p.dataset.label || '', value: Math.round(p.parsed.y || 0) })) };
+              series: mistakes.length ? [] : series };
             setHover(previous => previous?.key === next.key && previous.x === next.x && previous.y === next.y ? previous : next);
           } },
         },
