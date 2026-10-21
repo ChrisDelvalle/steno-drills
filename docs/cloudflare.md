@@ -26,3 +26,14 @@ Local storage is per origin. Export a profile from the local site and import it 
 Use `npx wrangler rollback` to restore a previous Worker deployment. Export browser data before deploying a future change to the profile schema.
 
 References: [Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/), [Worker Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/), [Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/).
+
+Deployed on 2026-10-20:
+
+- Production: https://steno.chrisdelvalle.com
+- Worker: `steno-drills` at https://steno-drills.irk-us.workers.dev
+- Source release: `f860e3784da4ecb952c8f880f9e047a591d14b0d` on `gh-pages`
+- Worker version: `1d8e32f4-982c-42ea-aecb-41a2454307b9`
+- Verified HTTPS, the live practice flow, hash-route reloads, security/cache headers, and the deployed dictionary's SHA-256 against the local build.
+- [GitHub checks passed](https://github.com/ChrisDelvalle/steno-jig/actions/runs/39531242374).
+
+Subsequent releases use `npm run deploy` from an authenticated local checkout. Automatic Worker deployments from GitHub are optional and have not been connected.
