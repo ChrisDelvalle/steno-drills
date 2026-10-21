@@ -43,6 +43,14 @@ export function scoreInput(expected: PracticeWord[], input: string, elapsedMs: n
   };
 }
 
+// Plover supplies the separator with the following translation. A complete
+// matching token can reveal the next hint before that separator arrives.
+export function hintTargetIndex(expected: PracticeWord[], tokens: string[], current: number, caretOffset: number) {
+  const target = expected[current]?.word;
+  const complete = target !== undefined && tokens[current]?.toLowerCase() === target.toLowerCase() && caretOffset === [...target].length;
+  return Math.min(current + Number(complete), Math.max(0, expected.length - 1));
+}
+
 export interface SpeedSample { seconds: number; wpm: number; raw: number; burst: number; errors: number }
 export interface ErrorSample { seconds: number; count: number }
 export interface TypingEvent { at: number; characters: number }

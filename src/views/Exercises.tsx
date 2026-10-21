@@ -8,7 +8,7 @@ import { ExerciseLibrary } from './ExerciseLibrary';
 import type { WordCorrection } from '../domain/types';
 
 export function ExercisesView() {
-  const { profile, setProfile, wordMap, words, goPractice } = useApp();
+  const { profile, setProfile, wordMap, words, goPractice, routeHash } = useApp();
   const [tab, setTab] = useState(new URLSearchParams(window.location.hash.split('?')[1]).has('word') ? 'lists' : 'library');
   const [editing, setEditing] = useState('');
   const [name, setName] = useState('');
@@ -43,7 +43,7 @@ export function ExercisesView() {
     </details>
     </>}
     {tab === 'filters' && <>
-    <section className="collection-section" aria-label="Saved filters"><div className="panel-toolbar"><a href="#/words" className="text-link">Save a word-bank filter <Icon name="plus" size={16}/></a></div><div className="saved-grid">{profile.exercises.map(exercise => <article className="card saved-card" key={exercise.id}><div className="saved-name"><strong>{exercise.name}</strong><span className="muted small">Saved filter</span></div><p className="small muted">{eligibleWords(words, profile, exercise.filter).length} words ready · {exercise.filter.pool === 'common' ? 'Common' : 'Entire dictionary'}</p><p className="small">{exercise.filter.focus ? conceptLabel(exercise.filter.focus) : 'All learned concepts'} · {exercise.filter.minLength}–{exercise.filter.maxLength} letters</p><div className="button-row"><button className="secondary small" onClick={() => goPractice(`filter:${exercise.id}`)}>Practice <Icon name="arrow" size={15}/></button><button className="text-button small" onClick={() => { setProfile(p => ({ ...p, filter: { ...exercise.filter } })); window.location.hash = '/words'; }}>Edit filters</button><button className="text-button small" onClick={() => setProfile(p => ({ ...p, exercises: p.exercises.filter(e => e.id !== exercise.id) }))}>Remove</button></div></article>)}</div></section>
+    <section className="collection-section" aria-label="Saved filters"><div className="panel-toolbar"><a href={routeHash('words')} className="text-link">Save a word-bank filter <Icon name="plus" size={16}/></a></div><div className="saved-grid">{profile.exercises.map(exercise => <article className="card saved-card" key={exercise.id}><div className="saved-name"><strong>{exercise.name}</strong><span className="muted small">Saved filter</span></div><p className="small muted">{eligibleWords(words, profile, exercise.filter).length} words ready · {exercise.filter.pool === 'common' ? 'Common' : 'Entire dictionary'}</p><p className="small">{exercise.filter.focus ? conceptLabel(exercise.filter.focus) : 'All learned concepts'} · {exercise.filter.minLength}–{exercise.filter.maxLength} letters</p><div className="button-row"><button className="secondary small" onClick={() => goPractice(`filter:${exercise.id}`)}>Practice <Icon name="arrow" size={15}/></button><button className="text-button small" onClick={() => { setProfile(p => ({ ...p, filter: { ...exercise.filter } })); window.location.hash = routeHash('words'); }}>Edit filters</button><button className="text-button small" onClick={() => setProfile(p => ({ ...p, exercises: p.exercises.filter(e => e.id !== exercise.id) }))}>Remove</button></div></article>)}</div></section>
     </>}
 
   </>;

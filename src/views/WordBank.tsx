@@ -6,7 +6,7 @@ import { Empty, FilterControls, Icon, StenoKeyboard } from '../components';
 import type { WordEntry } from '../domain/types';
 
 function WordDetails({ entry, onClose }: { entry: WordEntry; onClose: () => void }) {
-  const { profile, setProfile } = useApp();
+  const { profile, setProfile, routeHash } = useApp();
   const ref = useRef<HTMLElement>(null);
   useEffect(() => { ref.current?.focus(); }, [entry.word]);
   const result = evaluateForFocus(entry, profile, profile.filter.focus);
@@ -18,7 +18,7 @@ function WordDetails({ entry, onClose }: { entry: WordEntry; onClose: () => void
     <p className="small muted">Syllables: {entry.syllables.join(' or ') || 'unknown'} · {entry.rank === undefined ? 'Full dictionary' : `Common vocabulary #${entry.rank + 1}`}</p>
     <div className="outline-list">{entry.outlines.map(analysis => <div key={analysis.outline}><code>{analysis.outline}</code><span>{analysis.requirements.length ? analysis.requirements.map((requirements, i) => <span key={i} className="rule-line">{requirements.map(conceptLabel).join(' + ')}</span>) : analysis.reason}</span></div>)}</div>
     <details><summary>Pronunciations (CMU/ARPAbet)</summary><p className="mono small">{entry.pronunciations.map(p => p.join(' ')).join(' / ') || 'No pronunciation available. Add a personal correction to explain this word.'}</p></details>
-    <div className="button-row"><button className="secondary" onClick={() => setProfile(p => ({ ...p, excluded: excluded ? p.excluded.filter(w => w !== entry.word) : [...p.excluded, entry.word] }))}>{excluded ? 'Include in automatic practice' : 'Exclude from automatic practice'}</button><a href={`#/exercises?word=${encodeURIComponent(entry.word)}`}>Correct this entry →</a></div>
+    <div className="button-row"><button className="secondary" onClick={() => setProfile(p => ({ ...p, excluded: excluded ? p.excluded.filter(w => w !== entry.word) : [...p.excluded, entry.word] }))}>{excluded ? 'Include in automatic practice' : 'Exclude from automatic practice'}</button><a href={routeHash(`exercises?word=${encodeURIComponent(entry.word)}`)}>Correct this entry →</a></div>
   </section>;
 }
 

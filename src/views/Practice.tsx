@@ -9,6 +9,7 @@ import { ConceptPicker, Empty, FilterControls, Icon } from '../components';
 
 import { PracticeSession } from './Session';
 import { TestSettings } from './TestSettings';
+import { ShareControls } from './ShareControls';
 
 const builtins = [
   ['bank', 'Words'], ['drills', 'Word drills'], ['chords', 'Keys / chords'], ['fingers', 'Finger drills'],
@@ -20,14 +21,14 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
   settingsOpen: boolean; onSettings: () => void; onClose: () => void;
   navigation: ReactNode; settingsContent?: ReactNode; warning: string;
 }) {
-  const { profile, setProfile, words, wordMap, source, setSource } = useApp();
+  const { testProfile: profile, setTestProfile: setProfile, testWords: words, testWordMap: wordMap, source, setSource, shared, saveShared, exitShared, routeHash } = useApp();
   const preferences = profile.practice;
   const { restricted, drill, mixed, keyboardSet, fingerBook, section, pattern, repeats, customPatterns, quoteLength, symbolVariants } = preferences;
   const setter = <K extends keyof PracticePreferences,>(key: K) => (value: PracticePreferences[K] | ((current: PracticePreferences[K]) => PracticePreferences[K])) => {
     setProfile(p => ({ ...p, practice: { ...p.practice, [key]: typeof value === 'function' ? value(p.practice[key]) : value } }));
   };
   const setRestricted = setter('restricted'), setDrill = setter('drill'), setMixed = setter('mixed'), setKeyboardSet = setter('keyboardSet');
-  const setFingerBook = setter('fingerBook'), setSection = setter('section'), setPattern = setter('pattern'), setRepeats = setter('repeats');
+  const setPattern = setter('pattern'), setRepeats = setter('repeats');
   const setCustomPatterns = setter('customPatterns'), setQuoteLength = setter('quoteLength'), setSymbolVariants = setter('symbolVariants');
   const list = profile.lists.find(l => `list:${l.id}` === source);
   const saved = profile.exercises.find(e => `filter:${e.id}` === source);
@@ -83,8 +84,9 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
   const config = useMemo(() => ({ title, ...practice, ordered, ...session }), [title, practice, ordered, session]);
   const sessionKey = JSON.stringify({ preferences, filter, learned: profile.learned, corrections: profile.corrections, excluded: profile.excluded, text: profile.customText, lists: profile.lists, mode: session.mode, duration: session.duration, count: session.count });
   const controls = <section className="practice-setup" aria-label="Practice setup">
+    {shared && <div className="shared-test"><span className="small muted">Shared test</span><button className="text-button small" onClick={saveShared}>Save settings</button><button className="text-button small" onClick={exitShared}>Exit</button></div>}
     <label className="field">Exercise<select aria-label="Exercise" value={source} onChange={e => setSource(e.target.value)}>
-      {builtins.map(([id, label]) => <option key={id} value={id}>{label}</option>)}
+      {builtins.filter(([id]) => !shared || id !== 'text').map(([id, label]) => <option key={id} value={id}>{label}</option>)}
       {profile.lists.length > 0 && <optgroup label="My lists">{profile.lists.map(l => <option key={l.id} value={`list:${l.id}`}>{l.name}</option>)}</optgroup>}
       {profile.exercises.length > 0 && <optgroup label="Saved filters">{profile.exercises.map(e => <option key={e.id} value={`filter:${e.id}`}>{e.name}</option>)}</optgroup>}
     </select></label>
@@ -99,8 +101,8 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
       {keyboardSet === 'selected' && <ConceptPicker learned={profile.learned} filter={filter} onChange={updateFilter}/>}
     </>}
     {source === 'fingers' && <>
-      <label className="field">Pattern set<select aria-label="Pattern set" value={fingerBook} onChange={e => { setFingerBook(e.target.value as typeof fingerBook); setPattern(0); }}><option value="duo">Dueling Digit Duo</option><option value="technique">Stenotype Finger Technique</option><option value="custom">Custom</option></select></label>
-      {fingerBook === 'duo' && <label className="field">Section<select aria-label="Section" value={section} onChange={e => { setSection(+e.target.value); setPattern(0); }}>{fingerSections.map((_, i) => <option key={i} value={i}>{i + 1}</option>)}</select></label>}
+      <label className="field">Pattern set<select aria-label="Pattern set" value={fingerBook} onChange={e => { const fingerBook = e.target.value as typeof preferences.fingerBook; setProfile(p => ({ ...p, practice: { ...p.practice, fingerBook, section: 0, pattern: 0 } })); }}><option value="duo">Dueling Digit Duo</option><option value="technique">Stenotype Finger Technique</option>{!shared && <option value="custom">Custom</option>}</select></label>
+      {fingerBook === 'duo' && <label className="field">Section<select aria-label="Section" value={section} onChange={e => { const section = +e.target.value; setProfile(p => ({ ...p, practice: { ...p.practice, section, pattern: 0 } })); }}>{fingerSections.map((_, i) => <option key={i} value={i}>{i + 1}</option>)}</select></label>}
       {fingerBook === 'custom' ? <label className="field">Patterns<input aria-label="Patterns" value={customPatterns} maxLength={2000} onChange={e => setCustomPatterns(e.target.value)}/><span className="field-help">Separate strokes with / and patterns with spaces.</span></label> : <label className="field">Pattern<select aria-label="Pattern" value={pattern} onChange={e => setPattern(+e.target.value)}><option value={-1}>All</option>{patterns.map((s, i) => <option key={i} value={i}>{s}</option>)}</select></label>}
       <label className="field">Repeats<select aria-label="Repeats" value={repeats} onChange={e => setRepeats(+e.target.value)}>{[5,10,20,50].map(n => <option key={n}>{n}</option>)}</select></label>
       {invalidStrokes(activePatterns).length > 0 && <p className="error" role="alert">Invalid steno: {invalidStrokes(activePatterns).join(', ')}</p>}
@@ -117,12 +119,12 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
     <div className="session-options"><label>Lines<select aria-label="Lines" value={session.lines} onChange={e => updateSession({ lines: +e.target.value })}>{[3,4,5,6,7,8].map(n => <option key={n}>{n}</option>)}</select></label><label>Hint position<select aria-label="Hint position" value={session.hintPosition} onChange={e => updateSession({ hintPosition: e.target.value as 'above' | 'below' })}><option value="above">Above</option><option value="below">Below</option></select></label></div>
     <div className="session-options hint-size-options">{(['hintTextSize','hintKeyboardSize'] as const).map(key => <label key={key}>{key === 'hintTextSize' ? 'Hint text size' : 'Keyboard size'}<select aria-label={key === 'hintTextSize' ? 'Hint text size' : 'Keyboard size'} value={session[key]} onChange={e => updateSession({ [key]: e.target.value as HintSize })}>{(['small','medium','large','extra-large'] as const).map(value => <option key={value} value={value}>{value === 'extra-large' ? 'Extra large' : value[0].toUpperCase() + value.slice(1)}</option>)}</select></label>)}</div>
     {readingError ? <p className="error" role="alert">{readingError}</p> : isReading && reading?.key !== readingKey ? <p className="pool-summary" role="status">Loading exercise…</p> : !practice.pool.length ? <Empty title="No matches">Change the concepts{isWordList ? ' or turn off the filter' : ''}.</Empty> : <div className="pool-summary">{practice.pool.length.toLocaleString()} {isRaw ? practice.pool.length === 1 ? 'stroke' : 'strokes' : practice.pool.length === 1 ? 'word' : 'words'}{practice.unrestricted && <span className="tag">Unrestricted</span>}</div>}
-    <button className="primary start-button" disabled={!practice.pool.length} onClick={onClose}>Done</button>
+    <div className="test-settings-actions"><button className="primary start-button" disabled={!practice.pool.length} onClick={onClose}>Done</button><ShareControls profile={profile} disabled={!practice.pool.length}/></div>
   </section>;
   return <>
-    {practice.pool.length ? <PracticeSession key={sessionKey} config={config} onExit={onSettings} suspended={settingsOpen} onOptionsChange={updateSession}/> :
-      <main className="session-shell"><header className="session-header"><a className="session-brand" href="#/practice">Steno Drills</a><button className="icon-button" aria-label="Test settings" onClick={onSettings}><Icon name="settings"/></button></header><div className="home-empty">{readingError || (isReading && reading?.key !== readingKey ? 'Loading exercise…' : 'No matching words.')}<button className="text-button" onClick={onSettings}>Test settings</button></div></main>}
-    {warning && !settingsOpen && <p className="storage-warning" role="status">{warning} <a href="#/settings">Backup & recovery</a></p>}
-    {settingsOpen && <TestSettings onClose={onClose} navigation={navigation}>{warning && <p className="notice warning" role="status">{warning} <a href="#/settings">Backup & recovery</a></p>}{settingsContent || controls}</TestSettings>}
+    {practice.pool.length ? <PracticeSession key={sessionKey} config={config} onExit={onSettings} suspended={settingsOpen} onOptionsChange={updateSession} practiceHref={routeHash('practice')}/> :
+      <main className="session-shell"><header className="session-header"><a className="session-brand" href={routeHash('practice')}>Steno Drills</a><button className="icon-button" aria-label="Test settings" onClick={onSettings}><Icon name="settings"/></button></header><div className="home-empty">{readingError || (isReading && reading?.key !== readingKey ? 'Loading exercise…' : 'No matching words.')}<button className="text-button" onClick={onSettings}>Test settings</button></div></main>}
+    {warning && !settingsOpen && <p className="storage-warning" role="status">{warning} <a href={routeHash('settings')}>Backup & recovery</a></p>}
+    {settingsOpen && <TestSettings onClose={onClose} navigation={navigation}>{warning && <p className="notice warning" role="status">{warning} <a href={routeHash('settings')}>Backup & recovery</a></p>}{settingsContent || controls}</TestSettings>}
   </>;
 }

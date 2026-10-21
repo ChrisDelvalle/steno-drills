@@ -35,6 +35,15 @@ hr { height: 1px; border: 0; background: var(--border); margin: 28px 0; }
 .text-link { display: inline-flex; align-items: center; gap: 7px; text-decoration: none; font-size: 12px; }
 .text-link:hover, .text-button:hover { text-decoration: underline; }
 .button-row { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 20px; }
+.test-settings-actions { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 12px; margin-top: 24px; }
+.test-settings-actions .start-button { margin: 0; }
+.share-controls { display: flex; flex: 1; flex-wrap: wrap; align-items: center; gap: 12px; min-width: 0; position: relative; }
+.share-controls > .sr-only { top: 0; left: 0; }
+.share-controls > .muted { flex-basis: 100%; }
+.share-fallback { flex-basis: 100%; min-width: 0; font-size: 12px; }
+.share-fallback input { font-family: 'Roboto Mono', monospace; font-size: 12px; }
+.shared-test { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-bottom: 20px; }
+.shared-test > span { margin-right: auto; }
 .field { margin: 20px 0; }
 .field-help { font-size: 11px; font-weight: 400; }
 .check-line { flex-direction: row; align-items: center; gap: 10px; font-size: 12px; margin: 18px 0; }
@@ -264,18 +273,19 @@ kbd { font: inherit; color: var(--page); background: var(--muted); border-radius
 .missed-words table { margin: 16px 0; }
 .home-empty { margin: auto; display: flex; flex-direction: column; align-items: center; gap: 20px; color: var(--muted); }
 .storage-warning { position: fixed; bottom: 0; width: 100%; font-size: 11px; padding: 12px; background: var(--warning-bg); }
-.test-settings { color: var(--ink); background: var(--page); border: 1px solid var(--border); border-radius: 12px; padding: 0; width: min(1000px, calc(100vw - 48px)); height: min(820px, calc(100svh - 64px)); max-width: none; max-height: none; }
+.test-settings { color: var(--ink); background: var(--page); border: 1px solid var(--border); border-radius: 12px; padding: 0; width: min(1000px, calc(100vw - 48px)); height: min(820px, calc(100svh - 64px)); max-width: none; max-height: none; overflow: hidden; }
 .test-settings::backdrop { background: #0008; }
 .settings-panel { height: 100%; display: flex; flex-direction: column; }
-.settings-navigation { display: flex; gap: 16px; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); }
+.settings-navigation { display: flex; flex-shrink: 0; gap: 16px; align-items: center; padding: 16px 20px; border-bottom: 1px solid var(--border); }
 .settings-navigation nav { display: flex; flex-wrap: wrap; gap: 4px; flex: 1; }
 .settings-navigation nav a { display: flex; align-items: center; gap: 7px; color: var(--muted); font-size: 13px; text-decoration: none; padding: 7px 12px; border-radius: 6px; }
 .settings-navigation nav a:hover { color: var(--ink); }
 .settings-navigation nav a.active { color: var(--ink); background: var(--hover); }
 .settings-navigation nav svg { width: 17px; height: 17px; }
-.settings-content { padding: 30px; overflow: auto; flex: 1; }
+.settings-content { padding: 30px; overflow: auto; flex: 1; min-height: 0; }
 .settings-content .practice-setup { margin: 0 auto; }
 .settings-content .start-button { margin-top: 16px; }
+.settings-content .test-settings-actions .start-button { width: auto; min-width: 100px; margin: 0; }
 @media (max-width: 700px) {
   .session-shell { padding: 24px 24px 20px; }
   .session-brand { font-size: 22px; }

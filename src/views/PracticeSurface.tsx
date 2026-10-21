@@ -3,6 +3,7 @@ import type { RefObject } from 'react';
 import type { PracticeWord } from '../domain/types';
 import { passageWindow, wrapPassage } from '../domain/passage';
 import type { PassageLine } from '../domain/passage';
+import { hintTargetIndex } from '../domain/practice';
 
 const MeasureWords = memo(function MeasureWords({ targets }: { targets: PracticeWord[] }) {
   // Match the displayed letter spans exactly: fractional glyph rounding can
@@ -37,10 +38,10 @@ const Word = memo(function Word({ word, typed = '', complete, active, offset, wi
   </span>;
 });
 
-export function PracticeSurface({ targets, input, tokens, completed, onInput, inputRef, lines = 3, onCurrentChange }: {
+export function PracticeSurface({ targets, input, tokens, completed, onInput, inputRef, lines = 3, onHintChange }: {
   targets: PracticeWord[]; input: string; tokens: string[]; completed: number;
   onInput: (value: string) => void; inputRef: RefObject<HTMLTextAreaElement | null>; lines?: number;
-  onCurrentChange?: (index: number) => void;
+  onHintChange?: (index: number) => void;
 }) {
   const [caret, setCaret] = useState(0);
   const surface = useRef<HTMLDivElement>(null);
@@ -49,7 +50,8 @@ export function PracticeSurface({ targets, input, tokens, completed, onInput, in
   const prefix = input.slice(0, Math.min(caret, input.length)).trimStart().split(/\s+/);
   const current = Math.min(targets.length - 1, Math.max(0, prefix.length - 1));
   const offset = Math.min([...(prefix.at(-1) || '')].length, [...(targets[current]?.word || '')].length);
-  useLayoutEffect(() => { onCurrentChange?.(current); }, [current, onCurrentChange]);
+  const hintIndex = hintTargetIndex(targets, tokens, current, offset);
+  useLayoutEffect(() => { onHintChange?.(hintIndex); }, [hintIndex, onHintChange]);
   useLayoutEffect(() => {
     const frame = surface.current, ruler = measure.current;
     if (!frame || !ruler) return;

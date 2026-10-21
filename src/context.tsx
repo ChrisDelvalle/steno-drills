@@ -1,6 +1,7 @@
 import { createContext, useContext } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import type { Dictionary, HintSize, PracticeWord, Profile, WordEntry } from './domain/types';
+import type { SharedTest } from './domain/sharing';
 
 export interface SessionConfig {
   title: string;
@@ -24,6 +25,14 @@ export interface AppState {
   dictionary: Dictionary;
   words: WordEntry[];
   wordMap: Map<string, WordEntry>;
+  testProfile: Profile;
+  setTestProfile: Dispatch<SetStateAction<Profile>>;
+  testWords: WordEntry[];
+  testWordMap: Map<string, WordEntry>;
+  shared: SharedTest | null;
+  routeHash: (route: string) => string;
+  saveShared: () => void;
+  exitShared: () => void;
   source: string;
   setSource: (source: string) => void;
   goPractice: (source?: string) => void;

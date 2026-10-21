@@ -4,6 +4,7 @@ import { App } from './App';
 import { makeEntry } from './domain/classifier';
 import { defaultProfile, exportBackup, profileKey } from './domain/profile';
 import type { Dictionary } from './domain/types';
+import { decodeSharedTest, encodeSharedTest, normalizeSharedTest, sharedHash } from './domain/sharing';
 
 const dictionary: Dictionary = { version: 1, words: [makeEntry('bad', ['PWAD'], [['B','AE1','D']], 1), makeEntry('dim', ['TKEUPL'], [['D','IH1','M']], 2)], report: { entries: 2, words: 2, monosyllables: 2, classified: 2, starter: 2, starterCommon: 2, missingPronunciation: 0, unexplained: 0 } };
 beforeEach(() => {
@@ -96,4 +97,130 @@ it('opens on a ready test and restores exercise parameters after reload', async 
   expect(screen.getByRole('combobox', { name: 'Exercise' })).toHaveValue('fingers');
   expect(screen.getByRole('combobox', { name: 'Section' })).toHaveValue('3');
   expect(screen.getByRole('combobox', { name: 'Repeats' })).toHaveValue('10');
+});
+
+const teacherToken = () => {
+  const result = normalizeSharedTest(defaultProfile());
+  if (!result.ok) throw new Error(result.error);
+  return encodeSharedTest(result.value);
+};
+it('opens a fresh shared test immediately without saving its concepts', async () => {
+  const teacher = defaultProfile(); teacher.learned = teacher.learned.filter(id => id !== 'initial.d');
+  const result = normalizeSharedTest(teacher); if (!result.ok) throw new Error(result.error);
+  window.location.hash = sharedHash('practice', encodeSharedTest(result.value));
+  render(<App/>); await screen.findByRole('textbox', { name: 'Practice input' });
+  await waitFor(() => expect(document.activeElement).toBe(screen.getByRole('textbox', { name: 'Practice input' })));
+  expect(screen.getByLabelText('Practice passage')).toHaveTextContent('bad');
+  expect(screen.getByLabelText('Practice passage')).not.toHaveTextContent('dim');
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  expect(JSON.parse(localStorage.getItem(profileKey)!).learned).toEqual(defaultProfile().learned);
+});
+it('uses bundled words while preserving personal skills, corrections, exclusions, and visuals', async () => {
+  const personal = defaultProfile(); personal.learned = []; personal.theme = 'light'; personal.session.lines = 5; personal.session.hintPosition = 'below';
+  personal.session.mode = 'count'; personal.session.count = 100; personal.excluded = ['bad'];
+  personal.corrections = [{ word: 'bad', outlines: ['PWAD'], syllables: 2, pronunciation: '' }];
+  localStorage.setItem(profileKey, JSON.stringify(personal)); window.location.hash = sharedHash('practice', teacherToken());
+  render(<App/>); await screen.findByRole('textbox', { name: 'Practice input' });
+  expect(screen.getByLabelText('Practice passage')).toHaveTextContent('bad');
+  expect(screen.getByLabelText('Practice passage')).toHaveTextContent('dim');
+  expect(screen.getByLabelText('Practice passage')).toHaveStyle({ height: 'calc(var(--line-height) * 5)' });
+  expect(document.documentElement.dataset.theme).toBe('light');
+  expect(screen.getByLabelText('Time left')).toHaveTextContent('60');
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
+});
+it('edits and reloads shared parameters without adding history entries or saving defaults', async () => {
+  const token = teacherToken(), app = render(<App/>);
+  await screen.findByRole('button', { name: 'Test settings' });
+  await navigate(sharedHash('test-settings', token));
+  await screen.findByText('Shared test', { exact: true });
+  const personal = JSON.parse(localStorage.getItem(profileKey)!), entries = history.length;
+  fireEvent.change(screen.getByRole('combobox', { name: 'Duration' }), { target: { value: '90' } });
+  await waitFor(() => expect(window.location.hash).not.toContain(token));
+  const changedToken = new URLSearchParams(window.location.hash.split('?')[1]).get('t')!;
+  expect(decodeSharedTest(changedToken)).toMatchObject({ ok: true, value: { session: { duration: 90 } } });
+  expect(history.length).toBe(entries);
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
+  app.unmount(); render(<App/>);
+  await screen.findByRole('combobox', { name: 'Duration' });
+  expect(screen.getByRole('combobox', { name: 'Duration' })).toHaveValue('90');
+  expect(screen.getByRole('link', { name: 'Skills' })).toHaveAttribute('href', sharedHash('skills', changedToken));
+  await navigate(sharedHash('skills', changedToken));
+  await screen.findByRole('checkbox', { name: 'initial D (TK)' });
+  expect(screen.getByRole('checkbox', { name: 'initial D (TK)' })).toBeChecked();
+  await navigate(sharedHash('test-settings', changedToken));
+  expect(screen.getByRole('combobox', { name: 'Duration' })).toHaveValue('90');
+});
+it('changes shared hints without restarting input or persisting the assistance setting', async () => {
+  window.location.hash = sharedHash('practice', teacherToken()); render(<App/>);
+  const input = await screen.findByRole('textbox', { name: 'Practice input' });
+  fireEvent.change(input, { target: { value: 'bad ' } });
+  const before = window.location.hash;
+  fireEvent.click(screen.getByRole('button', { name: 'Hints' }));
+  expect(input).toHaveValue('bad ');
+  expect(window.location.hash).not.toBe(before);
+  expect(JSON.parse(localStorage.getItem(profileKey)!).session.hints).toBe(false);
+});
+it('saves only shared test parameters and exits back to normal settings', async () => {
+  const personal = defaultProfile(); personal.learned = []; personal.theme = 'light'; personal.excluded = ['bad'];
+  personal.lists = [{ id: 'mine', name: 'Mine', words: ['dim'] }];
+  localStorage.setItem(profileKey, JSON.stringify(personal));
+  window.location.hash = sharedHash('test-settings', teacherToken()); render(<App/>);
+  await screen.findByRole('button', { name: 'Save settings' });
+  fireEvent.change(screen.getByRole('combobox', { name: 'Duration' }), { target: { value: '90' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Save settings' }));
+  const saved = JSON.parse(localStorage.getItem(profileKey)!);
+  expect(saved.session.duration).toBe(90); expect(saved.learned).toEqual([]); expect(saved.theme).toBe('light');
+  expect(saved.excluded).toEqual(['bad']); expect(saved.lists).toEqual(personal.lists);
+  expect(saved.filter.concepts.selected).toEqual(defaultProfile().learned);
+  expect(screen.queryByText('Shared test', { exact: true })).not.toBeInTheDocument();
+  expect(window.location.hash).toBe('#/test-settings');
+});
+it('exits a shared test and restores the previous personal exercise', async () => {
+  const personal = defaultProfile(); personal.practice.source = 'numbers'; personal.session.duration = 120;
+  localStorage.setItem(profileKey, JSON.stringify(personal));
+  window.location.hash = sharedHash('test-settings', teacherToken()); render(<App/>);
+  fireEvent.click(await screen.findByRole('button', { name: 'Exit' }));
+  await screen.findByRole('textbox', { name: 'Practice input' });
+  expect(screen.getByLabelText('Time left')).toHaveTextContent('120');
+  expect(window.location.hash).toBe('#/practice');
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
+});
+it('copies compact links and offers a selectable URL when clipboard access fails', async () => {
+  const writeText = vi.fn().mockResolvedValue(undefined); vi.stubGlobal('navigator', { clipboard: { writeText } });
+  window.location.hash = '/test-settings'; render(<App/>);
+  fireEvent.click(await screen.findByRole('button', { name: 'Share' }));
+  await screen.findByRole('button', { name: 'Copied' });
+  expect(writeText).toHaveBeenLastCalledWith(new URL('#t=' + teacherToken(), window.location.href).href);
+  writeText.mockRejectedValue(new Error('denied'));
+  fireEvent.click(screen.getByRole('button', { name: 'Copied' }));
+  const fallback = await screen.findByRole('textbox', { name: 'Share link' });
+  expect(fallback).toHaveAttribute('readonly'); expect(document.activeElement).toBe(fallback);
+});
+it('rejects invalid links visibly and allows returning to personal practice', async () => {
+  window.location.hash = '#t=invalid!'; render(<App/>);
+  expect(await screen.findByRole('alert')).toHaveTextContent('Invalid test link.');
+  expect(screen.queryByRole('textbox', { name: 'Practice input' })).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Open practice' }));
+  await screen.findByRole('textbox', { name: 'Practice input' });
+  expect(window.location.hash).toBe('#/practice');
+});
+it('can edit a shared single-drill mix and change finger books with a high active pattern', async () => {
+  window.location.hash = sharedHash('test-settings', teacherToken()); render(<App/>);
+  await screen.findByRole('combobox', { name: 'Exercise' });
+  fireEvent.change(screen.getByRole('combobox', { name: 'Exercise' }), { target: { value: 'drills' } });
+  fireEvent.change(screen.getByRole('combobox', { name: 'Drill' }), { target: { value: 'custom' } });
+  expect(screen.getByRole('combobox', { name: 'Drill' })).toHaveValue('custom');
+  fireEvent.click(screen.getByLabelText('Short / long A'));
+  expect(screen.getByRole('combobox', { name: 'Drill' })).toHaveValue('custom');
+  fireEvent.change(screen.getByRole('combobox', { name: 'Exercise' }), { target: { value: 'fingers' } });
+  fireEvent.change(screen.getByRole('combobox', { name: 'Pattern set' }), { target: { value: 'technique' } });
+  fireEvent.change(screen.getByRole('combobox', { name: 'Pattern' }), { target: { value: '25' } });
+  fireEvent.change(screen.getByRole('combobox', { name: 'Pattern set' }), { target: { value: 'duo' } });
+  expect(screen.getByRole('combobox', { name: 'Pattern set' })).toHaveValue('duo');
+  expect(screen.getByRole('combobox', { name: 'Pattern' })).toHaveValue('0');
+  fireEvent.change(screen.getByRole('combobox', { name: 'Section' }), { target: { value: '2' } });
+  fireEvent.change(screen.getByRole('combobox', { name: 'Pattern' }), { target: { value: '23' } });
+  fireEvent.change(screen.getByRole('combobox', { name: 'Section' }), { target: { value: '0' } });
+  expect(screen.getByRole('combobox', { name: 'Section' })).toHaveValue('0');
+  expect(screen.getByRole('combobox', { name: 'Pattern' })).toHaveValue('0');
 });

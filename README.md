@@ -23,6 +23,8 @@ npm run preview # Serve the production build locally
 
 The homepage is a ready-to-type test. Start typing; the clock begins on input. Enter restarts during practice or from results, and Escape opens the gear menu. Test settings are saved locally and restored on the next visit.
 
+Share in Test settings copies a compact link to a ready test. Links carry supported test parameters and explicit concepts, leaving recipients' Skills and appearance unchanged. Shared settings are temporary until Save settings; Exit restores the previous personal test. See [shared tests and the v1 format](docs/sharing.md).
+
 The gear menu contains:
 
 - **Test:** words, named word lessons, raw keys/chords, finger patterns, sentences, quotes, numbers, symbols, and custom text. Choose single keys, starter concepts, Skills, All, or a custom checklist without changing learned skills. Combine named lessons with Custom mix. Hints toggle the outline and keyboard together, before or during practice. Choose 3–8 visible rows, hint position, and independent text and keyboard sizes. Hints default above the test at the large size; the keyboard stays centered and text sits to its left.
@@ -35,7 +37,7 @@ Expected words are measured into explicit rows. Only complete active rows render
 
 Your data is saved in this browser. Export a backup before clearing browser storage or moving to another device or domain. An unreadable saved profile is preserved until you explicitly replace it. There are no accounts, external analytics, or device synchronization.
 
-Use normal Plover translated text for words. For raw chord drills, temporarily disable translating dictionaries in Plover so it sends raw outlines, then restore them before word practice. The app checks resulting text; it cannot verify physical chords from translated text. For Symbols, enable Emily’s Symbols with spacing. Sentence, quote, number, symbol, and custom-text practice is unrestricted; the menu labels it accordingly.
+Use normal Plover translated text for words. Hints advance after a complete matching word, even before Plover supplies the following space. Incomplete words, mistakes, and edits keep the corresponding hint. For raw chord drills, temporarily disable translating dictionaries in Plover so it sends raw outlines, then restore them before word practice. The app checks resulting text; it cannot verify physical chords from translated text. For Symbols, enable Emily’s Symbols with spacing. Sentence, quote, number, symbol, and custom-text practice is unrestricted; the menu labels it accordingly.
 
 ## Filtering and coverage
 

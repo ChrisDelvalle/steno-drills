@@ -8,8 +8,8 @@ import { PracticeSurface } from './PracticeSurface';
 const ResultsChart = lazy(() => import('./ResultsChart'));
 const makeTargets = (c: SessionConfig) => c.ordered || c.kind === 'text' ? c.pool : generateWords(c.pool, c.mode === 'timed' ? 200 : c.count);
 
-export function PracticeSession({ config, onExit, onOptionsChange, suspended = false }: {
-  config: SessionConfig; onExit: () => void; onOptionsChange?: (options: { hints: boolean }) => void; suspended?: boolean;
+export function PracticeSession({ config, onExit, onOptionsChange, suspended = false, practiceHref = '#/practice' }: {
+  config: SessionConfig; onExit: () => void; onOptionsChange?: (options: { hints: boolean }) => void; suspended?: boolean; practiceHref?: string;
 }) {
   const [active, setActive] = useState(config);
   const [targets, setTargets] = useState(() => makeTargets(config));
@@ -24,6 +24,8 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
   const errors = useRef<ErrorSample[]>([]);
   const typing = useRef<TypingEvent[]>([]);
   const latestInput = useRef('');
+  const suspendedRef = useRef(suspended);
+  suspendedRef.current = suspended;
   const score = scoreInput(targets, input, elapsed);
   const remaining = Math.max(0, active.duration * 1000 - elapsed);
   const current = targets[cursor];
@@ -36,7 +38,7 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     if (previous?.seconds === point.seconds) history.current[history.current.length - 1] = point;
     else history.current.push(point);
   };
-  const focus = () => requestAnimationFrame(() => inputRef.current?.focus());
+  const focus = () => requestAnimationFrame(() => { if (!suspendedRef.current) inputRef.current?.focus(); });
   const reset = (next: SessionConfig = active) => {
     setActive(next); setTargets(makeTargets(next)); setInput(''); latestInput.current = '';
     setStartedAt(null); setElapsed(0); setFinished(false); setCursor(0); history.current = []; errors.current = []; typing.current = []; focus();
@@ -80,11 +82,11 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     if (e.key === 'Escape') { e.preventDefault(); onExit(); }
     if (e.key === 'Enter' && !(e.target instanceof HTMLButtonElement) && !(e.target instanceof HTMLAnchorElement)) { e.preventDefault(); reset(); }
   }}>
-    <header className="session-header"><a className="session-brand" href="#/practice" onClick={e => { e.preventDefault(); reset(); }}>Steno Drills</a><button className="icon-button" aria-label="Test settings" title="Test settings" onClick={onExit}><Icon name="settings"/></button></header>
+    <header className="session-header"><a className="session-brand" href={practiceHref} onClick={e => { e.preventDefault(); reset(); }}>Steno Drills</a><button className="icon-button" aria-label="Test settings" title="Test settings" onClick={onExit}><Icon name="settings"/></button></header>
     {!finished ? <div className="test-stage">
       {active.hintPosition !== 'below' && <div className="hint-slot hint-above">{hint}</div>}
       <div className="test-status"><span className="session-clock" aria-label={active.mode === 'timed' ? 'Time left' : 'Elapsed time'}>{active.mode === 'timed' ? Math.ceil(remaining / 1000) : Math.floor(elapsed / 1000)}</span></div>
-      <PracticeSurface lines={active.lines || 3} targets={targets} input={input} tokens={score.tokens} completed={score.completed} inputRef={inputRef} onCurrentChange={setCursor} onInput={value => {
+      <PracticeSurface lines={active.lines || 3} targets={targets} input={input} tokens={score.tokens} completed={score.completed} inputRef={inputRef} onHintChange={setCursor} onInput={value => {
         if (/[\r\n]/.test(value)) { reset(); return; }
         const now = performance.now(), ms = startedAt === null ? 0 : now - startedAt;
         const metrics = inputMetrics(targets, latestInput.current, value);

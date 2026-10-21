@@ -134,3 +134,32 @@ it('keeps hints aligned with the caret when editing earlier words', () => {
   input.focus(); input.setSelectionRange(0, 0); fireEvent.select(input);
   expect(screen.getByRole('group', { name: 'Hints' })).toHaveTextContent('bad');
 });
+it('advances hints on a complete Plover word without waiting for an automatic space', () => {
+  const pool = [{ word: 'one', outline: 'WUPB' }, { word: 'net', outline: 'TPHET' }, { word: 'dad', outline: 'TKAD' }];
+  render(<PracticeSession config={{ ...config, pool }} onExit={() => {}}/>);
+  const input = screen.getByRole('textbox') as HTMLTextAreaElement;
+  const hint = () => screen.getByRole('group', { name: 'Hints' });
+  const target = screen.getByLabelText('Practice passage').querySelector('.practice-word');
+  expect(hint()).toHaveTextContent('one');
+  fireEvent.change(input, { target: { value: 'on' } }); expect(hint()).toHaveTextContent('one');
+  fireEvent.change(input, { target: { value: 'ONE' } }); expect(hint()).toHaveTextContent('net');
+  expect(hint()).toHaveTextContent('TPHET');
+  expect(screen.getByLabelText('Practice passage').querySelector('.practice-word')).toBe(target);
+  fireEvent.change(input, { target: { value: 'one ne' } }); expect(hint()).toHaveTextContent('net');
+  fireEvent.change(input, { target: { value: 'one not' } }); expect(hint()).toHaveTextContent('net');
+  fireEvent.change(input, { target: { value: 'one net' } }); expect(hint()).toHaveTextContent('dad');
+  fireEvent.change(input, { target: { value: 'one ne' } }); expect(hint()).toHaveTextContent('net');
+  fireEvent.change(input, { target: { value: 'one net ' } }); expect(hint()).toHaveTextContent('dad');
+  input.focus(); input.setSelectionRange(1, 1); fireEvent.select(input); expect(hint()).toHaveTextContent('one');
+});
+it('waits for an entire multi-stroke or punctuated target rather than each input event', () => {
+  const pool = [{ word: 'tablet', outline: 'TAB/HRET' }, { word: 'one,', outline: 'WUPB' }, { word: 'dad', outline: 'TKAD' }];
+  render(<PracticeSession config={{ ...config, pool }} onExit={() => {}}/>);
+  const input = screen.getByRole('textbox');
+  const hint = () => screen.getByRole('group', { name: 'Hints' });
+  fireEvent.change(input, { target: { value: 'tab' } }); expect(hint()).toHaveTextContent('tablet');
+  fireEvent.change(input, { target: { value: 'tablet' } }); expect(hint()).toHaveTextContent('one,');
+  fireEvent.change(input, { target: { value: 'tablet one' } }); expect(hint()).toHaveTextContent('one,');
+  fireEvent.change(input, { target: { value: 'tablet one,' } }); expect(hint()).toHaveTextContent('dad');
+  fireEvent.change(input, { target: { value: 'table' } }); expect(hint()).toHaveTextContent('tablet');
+});

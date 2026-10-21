@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { PlayIcon, CheckCircleIcon, BookOpenIcon, DocumentTextIcon, Cog6ToothIcon, ArrowRightIcon, ArrowLeftIcon, PlusIcon, ArrowDownTrayIcon, ArrowPathIcon, XMarkIcon, LightBulbIcon } from '@heroicons/react/24/outline';
+import { PlayIcon, CheckCircleIcon, BookOpenIcon, DocumentTextIcon, Cog6ToothIcon, ArrowRightIcon, ArrowLeftIcon, PlusIcon, ArrowDownTrayIcon, ArrowPathIcon, XMarkIcon, LightBulbIcon, LinkIcon } from '@heroicons/react/24/outline';
 import { concepts, conceptBanks, conceptLabel } from './domain/concepts';
 import { selectedConcepts } from './domain/vocabulary';
 import { parseStroke } from './domain/classifier';
@@ -9,7 +9,7 @@ export function Icon({ name, size = 20 }: { name: string; size?: number }) {
   const icons = {
     practice: PlayIcon, skills: CheckCircleIcon, words: BookOpenIcon,
     exercises: DocumentTextIcon, settings: Cog6ToothIcon, arrow: ArrowRightIcon,
-    back: ArrowLeftIcon, plus: PlusIcon, download: ArrowDownTrayIcon, refresh: ArrowPathIcon, close: XMarkIcon, hint: LightBulbIcon,
+    back: ArrowLeftIcon, plus: PlusIcon, download: ArrowDownTrayIcon, refresh: ArrowPathIcon, close: XMarkIcon, hint: LightBulbIcon, share: LinkIcon,
   };
   const Component = icons[name as keyof typeof icons] || BookOpenIcon;
   return <Component width={size} height={size} aria-hidden="true"/>;
