@@ -2,7 +2,7 @@ final result: passed
 
 Reviewed the focused Steno Drills redesign against Monkeytype on 2026-10-20. The user's later Monkeytype references supersede the earlier ChatGPT comparison. The homepage opens directly into a ready test, with settings behind the gear. No sidebar, headings, slogans, live speed/accuracy meters, or separate visible typing field remain.
 
-Evidence directory: /Users/irk/.codex/visualizations/2026/10/20/01a15bac-4542-7a03-854d-233aa2b5b8c7
+QA screenshots are kept locally.
 
 - Source visual truth: monkeytype-reference.png, captured from https://monkeytype.com/, plus the supplied active-test and results screenshots.
 - Implementation: steno-drills-ready.png, steno-drills-hints.png, steno-drills-results.png, steno-drills-skills.png, and steno-drills-mobile.png.
@@ -26,7 +26,7 @@ Comparison history:
 
 - P1: the previous practice setup/sidebar and visible textarea competed with the test. Replaced them with the immediate focused test and a gear-triggered modal. Post-fix evidence: steno-drills-ready.png and steno-drills-comparison.png.
 - P1: clipping a scrolling passage exposed partial rows. Replaced scrolling with measured complete-row wrapping and a pure row-window function. Verified three 64px rows at desktop, three 56px rows at mobile, active row second after progression, and a four-row finite end with the final row reachable. Evidence: steno-drills-ready.png and steno-drills-mobile.png.
-- P1: input and long mistakes could change wrapping. Target geometry is now independent of typed content; absolute error annotations shrink/truncate within each target. A 400-character mistake changed none of the visible word coordinates or widths. Backspace cleared the annotation. Evidence: /tmp/steno-design-reference/steno-row-error.png.
+- P1: input and long mistakes could change wrapping. Target geometry is now independent of typed content; absolute error annotations shrink/truncate within each target. A 400-character mistake changed none of the visible word coordinates or widths. Backspace cleared the annotation. Evidence: steno-row-error.png (local QA capture).
 - P2: narrow rendered letter spans rounded slightly wider than whole-word measurements, causing ellipses. Measurement now uses the same per-letter spans plus a 0.25px allowance. Reloaded and recaptured the 393px viewport: no document overflow, no clipped normal words, and the keyboard centered at 196.5px. Evidence: steno-drills-mobile.png.
 - P2: the hint panel centered its text and keyboard together. Equal outer grid columns now center the keyboard itself; independent text and keyboard sizing and above/below position persist. Evidence: steno-drills-hints.png.
 - P2: repeated graph error marks represented a persistent incorrect word every second. Error events are now recorded at submission and plotted separately. Burst speed uses a rolling one-second translated-character window. Verified one submitted error produces one X at its actual event time, alongside WPM, raw, and burst. Evidence: steno-drills-results.png and the accessible chart-data tables.
