@@ -19,15 +19,96 @@ function harness(overrides: Partial<SessionConfig> = {}, voices = true) {
   return { ...view, calls, adapter, type, play, start, onOptionsChange, onExit };
 }
 afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); });
-it('waits for Play and actual speech start, then counts listening and replay time', () => {
+it('waits for activation and actual speech start, then counts listening and replay time', () => {
   const h = harness();
-  h.type('one'); expect(screen.getByRole('textbox')).toHaveValue('');
   act(() => vi.advanceTimersByTime(5000)); expect(h.calls).toHaveLength(0);
   h.play(); expect(h.calls[0].text).toBe('one');
   act(() => vi.advanceTimersByTime(1000)); expect(screen.getByLabelText('Elapsed time')).toHaveTextContent('0');
   h.start(); act(() => vi.advanceTimersByTime(2100));
   h.play(); h.start(); expect(screen.getByLabelText('Elapsed time')).toHaveTextContent('2');
   act(() => vi.advanceTimersByTime(1000)); expect(screen.getByLabelText('Elapsed time')).toHaveTextContent('3');
+});
+it.each(['full', 'current'] as const)('starts on visible %s typing and retains every character while the first cue is pending', display => {
+  const h = harness({ listening: { enabled: true, display, rate: 1 } });
+  h.type('o'); expect(screen.getByRole('textbox')).toHaveValue('o');
+  expect(h.calls.map(call => call.text)).toEqual(['one']);
+  h.type('one'); h.type('one net');
+  expect(screen.getByRole('textbox')).toHaveValue('one net');
+  expect(h.calls).toHaveLength(1); // Do not supersede the first cue before its start event.
+  act(() => vi.advanceTimersByTime(1000)); expect(screen.getByLabelText('Elapsed time')).toHaveTextContent('0');
+  h.start(); expect(h.calls.map(call => call.text)).toEqual(['one', 'dad']);
+  h.type('one net '); expect(h.calls).toHaveLength(2);
+});
+it('preserves raw outlines typed immediately after a fresh restart', () => {
+  const translator = createOutlineTranslator(pool.map(p => ({ word: p.word, outlines: [{ outline: p.outline, requirements: [] }], pronunciations: [], syllables: [1] })));
+  const h = harness({ inputMode: 'steno', translator });
+  fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Enter' });
+  h.type('w'); h.type('wupb');
+  expect(screen.getByRole('textbox')).toHaveValue('wupb'); expect(h.calls.map(call => call.text)).toEqual(['one']);
+  h.start(); expect(h.calls.at(-1)?.text).toBe('net');
+  h.type('wupb '); expect(h.calls).toHaveLength(2);
+});
+it('starts Hidden with Space, consumes that space, and immediately accepts typing', () => {
+  const h = harness({ listening: { enabled: true, display: 'hidden', rate: 1 } });
+  const input = screen.getByRole('textbox');
+  expect(screen.getByText('Press space to start')).toBeInTheDocument();
+  h.type('o'); expect(input).toHaveValue(''); expect(h.calls).toHaveLength(0);
+  expect(fireEvent.keyDown(input, { key: ' ' })).toBe(false);
+  expect(input).toHaveValue(''); expect(h.calls.map(call => call.text)).toEqual(['one']);
+  expect(screen.queryByText('Press space to start')).not.toBeInTheDocument();
+  h.type('one'); expect(input).toHaveValue('one'); expect(h.calls).toHaveLength(1);
+  expect(fireEvent.keyDown(input, { key: ' ' })).toBe(true); // Ordinary spaces remain separators.
+  h.type('one '); h.start(); expect(h.calls.at(-1)?.text).toBe('net');
+  expect(h.container.querySelector('.passage-measure')).toBeNull();
+});
+it('handles input-only start spaces, reveal, and normal keyboard navigation', () => {
+  const h = harness({ listening: { enabled: true, display: 'hidden', rate: 1 } });
+  const input = screen.getByRole('textbox');
+  expect(fireEvent.keyDown(input, { key: 'Tab' })).toBe(true);
+  fireEvent.keyDown(input, { key: ' ', ctrlKey: true }); expect(h.calls).toHaveLength(0);
+  const settings = screen.getByRole('button', { name: 'Test settings' });
+  expect(fireEvent.keyDown(settings, { key: ' ' })).toBe(true); expect(h.calls).toHaveLength(0);
+  h.type('?'); expect(h.calls).toHaveLength(0); expect(screen.getByLabelText('Practice passage')).toHaveTextContent('one');
+  h.type('o'); expect(input).toHaveValue('o'); expect(h.calls).toHaveLength(1);
+  fireEvent.keyDown(input, { key: 'Enter' });
+  h.rerender(<PracticeSession config={config} onExit={h.onExit} speechAdapter={h.adapter} suspended/>);
+  h.rerender(<PracticeSession config={{ ...config, listening: { enabled: true, display: 'hidden', rate: 1 } }} onExit={h.onExit} speechAdapter={h.adapter}/>);
+  const count = h.calls.length;
+  h.type(' '); expect(screen.getByRole('textbox')).toHaveValue(''); expect(h.calls).toHaveLength(count + 1);
+});
+it('always plays on Enter and Restart, accepts immediate input, and ignores canceled start events', () => {
+  const h = harness({ listening: { enabled: true, display: 'hidden', rate: 1 } });
+  fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Enter' });
+  expect(h.calls.map(call => call.text)).toEqual(['one']);
+  h.type('o'); expect(screen.getByRole('textbox')).toHaveValue('o');
+  fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Enter' });
+  expect(h.calls).toHaveLength(2); h.type('one');
+  act(() => h.calls[0].events.start());
+  act(() => vi.advanceTimersByTime(1000)); expect(screen.getByLabelText('Elapsed time')).toHaveTextContent('0');
+  expect(h.calls).toHaveLength(2);
+  act(() => h.calls[1].events.start()); expect(h.calls.at(-1)?.text).toBe('net');
+  fireEvent.click(screen.getByRole('button', { name: 'Restart' }));
+  expect(h.calls.at(-1)?.text).toBe('one'); expect(screen.getByRole('textbox')).toHaveFocus();
+  h.type('o'); expect(screen.getByRole('textbox')).toHaveValue('o');
+});
+it('starts from Space or Enter after focus recovery without requiring a pointer', () => {
+  const h = harness({ listening: { enabled: true, display: 'hidden', rate: 1 } });
+  act(() => screen.getByRole('textbox').blur());
+  expect(fireEvent.keyDown(document.body, { key: ' ' })).toBe(false);
+  expect(h.calls).toHaveLength(1); expect(screen.getByRole('textbox')).toHaveFocus();
+  act(() => screen.getByRole('textbox').blur());
+  fireEvent.keyDown(document.body, { key: 'Enter' });
+  expect(h.calls).toHaveLength(2); expect(screen.getByRole('textbox')).toHaveFocus();
+});
+it('can retry startup after failure without discarding early input or getting stuck on completion', () => {
+  const h = harness({ pool: [{ word: 'one' }] });
+  h.type('one'); expect(screen.getByRole('textbox')).toHaveValue('one');
+  act(() => h.calls[0].events.error('Playback blocked. Select Replay to try again.'));
+  expect(screen.queryByRole('region', { name: 'Practice results' })).not.toBeInTheDocument();
+  h.play(); expect(h.calls.at(-1)?.text).toBe('one');
+  h.start(); expect(screen.getByRole('region', { name: 'Practice results' })).toBeInTheDocument();
+  fireEvent.keyDown(screen.getByRole('region', { name: 'Practice results' }), { key: 'Enter' });
+  expect(h.calls.at(-1)?.text).toBe('one'); expect(screen.getByRole('textbox')).toHaveFocus();
 });
 it('speaks complete groups once per pass, previews tails, and reverses edits without duplicate errors', () => {
   const h = harness({ groupSize: 3, repetitions: 2, repeatOnError: true, errorRepetitions: 3 }); h.play(); h.start();

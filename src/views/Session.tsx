@@ -23,6 +23,8 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
   const [speechError, setSpeechError] = useState('');
   const [activated, setActivated] = useState(false);
   const [epoch, setEpoch] = useState(0);
+  const epochRef = useRef(0);
+  const inputAllowed = useRef(false);
   const [revealedPrompt, setRevealedPrompt] = useState('');
   const adapter = useMemo(() => speechAdapter || browserSpeech(), [speechAdapter]);
   const [targets, setTargets] = useState(() => makeTargets(config));
@@ -62,7 +64,11 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     error: message => { setSpeechError(message); setControlsHidden(false); },
   };
   const speaker = useMemo(() => new PromptSpeaker(adapter, { start: () => speechCallbacks.current.start(), error: message => speechCallbacks.current.error(message) }), [adapter]);
-  const spokenPrompt = audio && prompt && prompt.start < prompt.end ? { id: promptId, text: targets.slice(prompt.start, prompt.end).map(w => w.word).join(' ') } : null;
+  // Keep the first cue queued while accepting early typing. An exact tail must
+  // not cancel it before its start callback can establish the session clock.
+  const spokenPrompt = !audio ? null : startedAt === null && targets.length ? {
+    id: `${epoch}:0:0`, text: targets.slice(0, options.groupSize).map(w => w.word).join(' '),
+  } : prompt && prompt.start < prompt.end ? { id: promptId, text: targets.slice(prompt.start, prompt.end).map(w => w.word).join(' ') } : null;
   useEffect(() => {
     speaker.update(!suspended && !finished ? spokenPrompt : null, active.voice || '', listening.rate, playbackAllowed.current && document.hasFocus() && document.visibilityState !== 'hidden');
   }, [speaker, spokenPrompt?.id, suspended, finished, active.voice, listening.rate]);
@@ -74,7 +80,7 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
   }, [speaker]);
   const play = () => {
     if (!spokenPrompt || suspended || finished) return;
-    playbackAllowed.current = true; setActivated(true); setSpeechError(''); speaker.play(spokenPrompt, active.voice || '', listening.rate); focus();
+    inputAllowed.current = true; playbackAllowed.current = true; setActivated(true); setSpeechError(''); speaker.play(spokenPrompt, active.voice || '', listening.rate); focus();
   };
   const capture = (ms: number, value = latestInput.current, finalized = false) => {
     const lastTime = history.current.at(-1)?.seconds || 0;
@@ -86,11 +92,19 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     if (previous?.seconds === point.seconds) history.current[history.current.length - 1] = point;
     else history.current.push(point);
   };
-  const focus = () => requestAnimationFrame(() => { if (!suspendedRef.current) inputRef.current?.focus(); });
+  const focus = () => {
+    if (!suspendedRef.current) inputRef.current?.focus();
+    requestAnimationFrame(() => { if (!suspendedRef.current) inputRef.current?.focus(); });
+  };
   const reset = (next: SessionConfig = active, replay = true) => {
-    playbackAllowed.current = replay; speaker.cancel(); setEpoch(n => n + 1); setSpeechError(''); setRevealedPrompt('');
-    setActive(next); setTargets(makeTargets(next)); setInput(''); latestInput.current = '';
+    const nextTargets = makeTargets(next), nextEpoch = ++epochRef.current;
+    const nextListening = next.listening || listeningDefaults();
+    const startAudio = replay && next.kind === 'words' && nextListening.enabled && nextTargets.length > 0;
+    inputAllowed.current = startAudio; playbackAllowed.current = replay;
+    speaker.cancel(); setActivated(startAudio); setEpoch(nextEpoch); setSpeechError(''); setRevealedPrompt('');
+    setActive(next); setTargets(nextTargets); setInput(''); latestInput.current = '';
     setStartedAt(null); setElapsed(0); setFinished(false); setControlsHidden(false); setCursor(0); history.current = []; errors.current = []; typing.current = []; incorrectChars.current = 0; recovery.current.clear(); focus();
+    if (startAudio) speaker.play({ id: `${nextEpoch}:0:0`, text: nextTargets.slice(0, next.groupSize || 1).map(w => w.word).join(' ') }, next.voice || '', nextListening.rate);
   };
   const previousSuspended = useRef(suspended);
   useLayoutEffect(() => {
@@ -98,6 +112,9 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
       previousSuspended.current = suspended; reset(config, false);
     } else if (!suspended) focus();
   }, [suspended]);
+  useLayoutEffect(() => {
+    if (!suspended && !finished) inputRef.current?.focus();
+  }, [epoch, suspended, finished]);
   useEffect(() => {
     const reveal = () => setControlsHidden(false);
     window.addEventListener('pointermove', reveal, { passive: true });
@@ -138,24 +155,40 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     const hints = !active.hints;
     setActive(previous => ({ ...previous, hints })); onOptionsChange?.({ hints }); focus();
   };
+  const handleKey = (event: KeyboardEvent) => {
+    if (suspended || event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (event.key === 'Tab') setControlsHidden(false);
+    if (event.key === 'Escape') { event.preventDefault(); speaker.cancel(); onExit(); return; }
+    const target = event.target;
+    const control = target instanceof Element && target.closest('button,a,input,textarea,select,[contenteditable],dialog');
+    if (control && control !== inputRef.current && !control.classList.contains('practice-focus')) return;
+    if (event.key === 'Enter') { event.preventDefault(); reset(); }
+    else if (event.key === ' ' && audio && !inputAllowed.current && !finished) { event.preventDefault(); play(); }
+  };
+  const keyboard = useRef(handleKey);
+  keyboard.current = handleKey;
+  useEffect(() => {
+    const handle = (event: KeyboardEvent) => keyboard.current(event);
+    window.addEventListener('keydown', handle);
+    return () => window.removeEventListener('keydown', handle);
+  }, []);
   const hint = <div className="session-hint" role="group" aria-label="Hints" aria-hidden={!hintsVisible} data-visible={hintsVisible}>{revealed && <><p><strong>{current?.word}</strong><code>{current?.outline || 'No dictionary hint'}</code></p><StenoKeyboard outline={current?.outline}/></>}</div>;
   return <main className="session-shell" aria-label="Practice" data-controls-hidden={controlsHidden && startedAt !== null && !finished && !suspended} data-hint-position={active.hintPosition || 'above'} data-hint-text={active.hintTextSize || 'extra-large'} data-hint-keyboard={active.hintKeyboardSize || 'extra-large'} onFocusCapture={e => {
     if (e.target !== inputRef.current) setControlsHidden(false);
-  }} onKeyDown={e => {
-    if (suspended || e.nativeEvent.isComposing) return;
-    if (e.key === 'Tab') setControlsHidden(false);
-    if (e.key === 'Escape') { e.preventDefault(); speaker.cancel(); onExit(); }
-    if (e.key === 'Enter' && !(e.target instanceof HTMLButtonElement) && !(e.target instanceof HTMLAnchorElement)) { e.preventDefault(); reset(); }
-  }}>
+  }} onKeyDown={e => handleKey(e.nativeEvent)}>
     <header className="session-header"><Brand href={practiceHref} onClick={e => { e.preventDefault(); reset(); }}/><button className="icon-button session-controls" aria-label="Test settings" title="Test settings" onClick={() => { speaker.cancel(); onExit(); }}><Icon name="settings"/></button></header>
     {!finished ? <div className="test-stage">
       {active.hintPosition !== 'below' && <div className="hint-slot hint-above">{hint}</div>}
-      <div className="test-status"><span className="session-clock" aria-label={active.mode === 'timed' ? 'Time left' : 'Elapsed time'}>{active.mode === 'timed' ? Math.ceil(remaining / 1000) : Math.floor(elapsed / 1000)}</span></div>
+      <div className="test-status"><span className="session-clock" aria-label={active.mode === 'timed' ? 'Time left' : 'Elapsed time'}>{active.mode === 'timed' ? Math.ceil(remaining / 1000) : Math.floor(elapsed / 1000)}</span>{audio && !activated && <span className="audio-start-prompt" role="status">Press space to start</span>}</div>
       <PracticeSurface display={display} revealed={revealed} lines={active.lines || 3} targets={targets} input={input} projection={projection} project={assisted ? project : undefined} repetitions={options.repetitions} groupSize={options.groupSize} repeatOnError={options.repeatOnError} rawInput={options.inputMode === 'steno'} tokens={score.tokens} completed={score.completed} inputRef={inputRef} questionHints={active.questionHints} suspended={suspended} onHintChange={setCursor} onInput={value => {
         if (/[\r\n]/.test(value)) { reset(); return; }
         const previous = practiceText(latestInput.current, active.questionHints), text = practiceText(value, active.questionHints);
         if (active.questionHints && [...insertedText(latestInput.current, value)].filter(char => char === '?').length % 2) toggleHints();
-        if (audio && startedAt === null) return;
+        if (audio && !inputAllowed.current) {
+          if (!text.trim()) { if (/\s/.test(text)) play(); return; }
+          if (!revealed) return;
+          play();
+        }
         if (text !== previous) setControlsHidden(true);
         const now = performance.now(), ms = startedAt === null ? 0 : now - startedAt;
         if (assisted) {

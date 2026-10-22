@@ -211,7 +211,8 @@ summary { width: fit-content; }
 .icon-button:hover { color: var(--ink); background: transparent; filter: none; }
 .icon-button:focus-visible { outline-color: var(--accent); }
 .test-stage { position: relative; margin-top: clamp(90px, calc(40svh - 150px), 500px); }
-.test-status { height: 40px; }
+.test-status { position: relative; height: 40px; }
+.audio-start-prompt { position: absolute; right: 0; top: 10px; font-size: 12px; line-height: 20px; color: var(--muted); }
 .session-clock { font-size: 32px; line-height: 40px; color: var(--accent); font-variant-numeric: tabular-nums; }
 .practice-surface { position: relative; cursor: text; }
 .practice-surface { --line-height: 64px; font: 400 32px/40px 'Roboto Mono', monospace; }
