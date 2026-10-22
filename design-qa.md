@@ -2,7 +2,7 @@ final result: passed
 
 Reviewed the focused Steno Drills redesign against Monkeytype on 2026-10-20. The user's later Monkeytype references supersede the earlier ChatGPT comparison. The homepage opens directly into a ready test, with settings behind the gear. No sidebar, headings, slogans, live speed/accuracy meters, or separate visible typing field remain.
 
-QA screenshots are kept locally. The [public practice screenshot](docs/images/practice.png) was captured from the live site with hints enabled and both hint sizes set to Extra large.
+QA screenshots are kept locally. The [public practice screenshot](docs/images/practice.png) was captured from the production build with hints enabled and both hint sizes set to Extra large.
 
 - Source visual truth: monkeytype-reference.png, captured from https://monkeytype.com/, plus the supplied active-test and results screenshots.
 - Implementation: steno-drills-ready.png, steno-drills-hints.png, steno-drills-results.png, steno-drills-skills.png, and steno-drills-mobile.png.
@@ -64,3 +64,9 @@ Focus and hint shortcut update, 2026-10-21: passed. Compared Monkeytype's unfocu
 The existing Plover question-mark stroke H-F toggles the full hint in word exercises. The native buffer keeps the punctuation for Plover undo and replacements, while displayed text, caret mapping, scoring, timing, and speed metrics omit command characters. Deleting an old command does not toggle again. Text, symbols, raw chords, numbers, and word lists containing question marks retain literal punctuation. No Plover files were changed; AGENTS.md records the prohibition on modifying them.
 
 Evidence: monkeytype-focus-reference.png, steno-drills-focus-overlay-local.png, and steno-drills-focus-overlay-mobile.png in the existing evidence directory. The mobile capture shows a real 393 × 690 iframe at native scale inside a 1280 × 720 browser; its prompt fits without horizontal overflow. Screenshots were opened and inspected. Light mode also passed a direct browser check. Verified native question-mark insertion, backspace, toggling without revealing controls, next-word hints, settings navigation, and normal Tab focus on Restart. All 90 tests, TypeScript, and dictionary validation pass. Browser console checks are clear. The temporary QA harness was removed before the final build.
+
+Raw input and repetitions checked on 2026-10-22:
+
+- Production-build browser QA covered raw outlines, three repetitions, strict blocking, corrections, completion, restart, clipboard fallback, shared reloads, and a single retained error event. No browser runtime errors.
+- At 393px, ten 4px dots plus gaps fit inside the 345px passage, including above a one-letter word. A 400-character mistake changed no word coordinates. Three complete rows remain visible, with the active row second after progression. Both themes and enabled/disabled hints passed.
+- The README capture shows the updated author label and extra-large hints. Dot progress and error text use separate reserved rows. Existing v1 link fixtures are unchanged; word options add one character in v2.

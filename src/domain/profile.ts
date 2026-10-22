@@ -1,6 +1,7 @@
 import { conceptMap, starterSkills } from './concepts';
 import { parseStroke, phoneSet, syllableCount } from './classifier';
 import type { Filter, Profile, WordCorrection } from './types';
+import { wordPracticeDefaults } from './wordPractice';
 import { fingerSections, keyboardSets, wordDrills } from './exercises';
 
 export const profileKey = 'steno-drills.profile.v1';
@@ -9,7 +10,7 @@ export const defaultPractice = (): Profile['practice'] => ({ source: 'bank', res
 export const defaultProfile = (): Profile => ({
   version: 1, learned: [...starterSkills], lists: [], corrections: [], excluded: [],
   exercises: [{ id: 'everything', name: 'Skills', filter: defaultFilter() }],
-  filter: defaultFilter(), theme: 'dark', customText: '', practice: defaultPractice(), session: { mode: 'timed', duration: 60, count: 25, hints: false, lines: 3, hintPosition: 'above', hintTextSize: 'large', hintKeyboardSize: 'large' },
+  filter: defaultFilter(), theme: 'dark', customText: '', practice: defaultPractice(), session: { ...wordPracticeDefaults(), mode: 'timed', duration: 60, count: 25, hints: false, lines: 3, hintPosition: 'above', hintTextSize: 'extra-large', hintKeyboardSize: 'extra-large' },
 });
 
 const object = (value: unknown): Record<string, unknown> => {
@@ -91,18 +92,23 @@ export function validateProfile(v: unknown): Profile {
   const hintPosition = session.hintPosition === undefined ? 'above' : session.hintPosition;
   if (hintPosition !== 'above' && hintPosition !== 'below') throw new Error('Invalid hint position.');
   const hintSize = (v: unknown): Profile['session']['hintTextSize'] => {
-    if (v === undefined) return 'large';
+    if (v === undefined) return 'extra-large';
     if (v !== 'small' && v !== 'medium' && v !== 'large' && v !== 'extra-large') throw new Error('Invalid hint size.');
     return v;
   };
   const hintTextSize = hintSize(session.hintTextSize), hintKeyboardSize = hintSize(session.hintKeyboardSize);
+  const inputMode = session.inputMode === undefined ? 'text' : session.inputMode;
+  if (inputMode !== 'text' && inputMode !== 'steno') throw new Error('Invalid input mode.');
+  const repetitions = session.repetitions === undefined ? 1 : integer(session.repetitions, 1, 10);
+  const requireCorrect = session.requireCorrect === undefined ? false : session.requireCorrect;
+  if (typeof requireCorrect !== 'boolean') throw new Error('Invalid correction setting.');
   const duration = integer(session.duration, 30, 300), count = integer(session.count, 10, 500);
   if (![30, 60, 90, 120, 300].includes(duration) || ![10, 25, 50, 100, 250, 500].includes(count)) throw new Error('Unsupported practice length.');
   const practice = p.practice === undefined ? defaultPractice() : validatePractice(p.practice);
   return {
     version: 1, learned: conceptList(p.learned), lists, exercises, corrections,
     excluded: [...new Set(array(p.excluded, word))], filter: validateFilter(p.filter),
-    theme: p.theme as Profile['theme'], customText: p.customText, practice, session: { mode: session.mode, duration, count, hints: session.hints, lines, hintPosition, hintTextSize, hintKeyboardSize },
+    theme: p.theme as Profile['theme'], customText: p.customText, practice, session: { inputMode, repetitions, requireCorrect, mode: session.mode, duration, count, hints: session.hints, lines, hintPosition, hintTextSize, hintKeyboardSize },
   };
 }
 

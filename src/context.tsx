@@ -1,9 +1,10 @@
 import { createContext, useContext } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import type { Dictionary, HintSize, PracticeWord, Profile, WordEntry } from './domain/types';
+import type { Dictionary, HintSize, PracticeWord, Profile, WordEntry, WordPracticeOptions } from './domain/types';
 import type { SharedTest } from './domain/sharing';
 
-export interface SessionConfig {
+export interface SessionConfig extends Partial<WordPracticeOptions> {
+  translator?: import('./domain/translation').InputTranslator;
   title: string;
   kind: 'words' | 'chords' | 'text';
   pool: PracticeWord[];

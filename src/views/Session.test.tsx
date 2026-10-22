@@ -308,3 +308,42 @@ it('does not steal settings focus or show a recovery overlay behind the settings
   expect(field).toHaveFocus();
   expect(screen.queryByRole('button', { name: 'Focus test' })).not.toBeInTheDocument();
 });
+
+it('shows repetition dots, preserves progress through mistakes, and reverses edits', () => {
+  render(<PracticeSession config={{ ...config, kind: 'words', ordered: true, repetitions: 3 }} onExit={() => {}}/>);
+  const input = screen.getByRole('textbox');
+  const passage = screen.getByLabelText('Practice passage');
+  const first = passage.querySelector('.practice-word');
+  fireEvent.change(input, { target: { value: 'bad bad' } });
+  expect(screen.getByRole('status', { name: '2 of 3 repetitions' })).toBeInTheDocument();
+  fireEvent.change(input, { target: { value: 'bad bad nope ' } });
+  expect(screen.getByRole('status', { name: '2 of 3 repetitions' })).toBeInTheDocument();
+  fireEvent.change(input, { target: { value: 'bad bad bad' } });
+  expect(screen.getByRole('status', { name: '3 of 3 repetitions' })).toBeInTheDocument();
+  expect(document.querySelector('.session-hint strong')).toHaveTextContent('dim');
+  fireEvent.change(input, { target: { value: 'bad bad ba' } });
+  expect(screen.getByRole('status', { name: '2 of 3 repetitions' })).toBeInTheDocument();
+  expect(document.querySelector('.session-hint strong')).toHaveTextContent('bad');
+  expect(passage.querySelector('.practice-word')).toBe(first);
+  fireEvent.change(input, { target: { value: 'bad bad bad dim dim dim name name name' } });
+  expect(screen.getByRole('region', { name: 'Practice results' })).toHaveTextContent('90%');
+  fireEvent.keyDown(screen.getByRole('region', { name: 'Practice results' }), { key: 'Enter' });
+  expect(screen.getByRole('textbox')).toHaveValue('');
+  expect(screen.getByRole('status', { name: '0 of 3 repetitions' })).toBeInTheDocument();
+});
+it('keeps strict mistakes and blocked input visible and retains error accuracy after correction', () => {
+  render(<PracticeSession config={{ ...config, kind: 'words', ordered: true, requireCorrect: true }} onExit={() => {}}/>);
+  const input = screen.getByRole('textbox');
+  fireEvent.change(input, { target: { value: 'wrong dim name ' } });
+  expect(screen.queryByRole('region', { name: 'Practice results' })).not.toBeInTheDocument();
+  expect(document.querySelector('.word-mistake')).toHaveTextContent('wrong dim name');
+  fireEvent.change(input, { target: { value: 'bad dim name' } });
+  expect(screen.getByRole('region', { name: 'Practice results' })).toHaveTextContent('75%');
+});
+it('ends repeated practice at its timed deadline without requiring a word to finish', () => {
+  vi.useFakeTimers();
+  render(<PracticeSession config={{ ...config, kind: 'words', mode: 'timed', repetitions: 10 }} onExit={() => {}}/>);
+  fireEvent.change(screen.getByRole('textbox'), { target: { value: 'bad ' } });
+  act(() => vi.advanceTimersByTime(30_100));
+  expect(screen.getByRole('region', { name: 'Practice results' })).toBeInTheDocument();
+});

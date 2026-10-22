@@ -204,7 +204,8 @@ summary { width: fit-content; }
 /* The passage is laid out only from expected words. Input and errors never size it. */
 .session-shell { max-width: 1120px; min-height: 100svh; margin: 0 auto; padding: 40px 40px 24px; display: flex; flex-direction: column; font-family: 'Roboto Mono', monospace; }
 .session-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 36px; }
-.session-brand { font: 400 26px/36px 'Roboto Mono', monospace; letter-spacing: -1px; color: var(--ink); text-decoration: none; }
+.session-brand { display: flex; flex-direction: column; font: 400 26px/36px 'Roboto Mono', monospace; letter-spacing: -1px; color: var(--ink); text-decoration: none; }
+.brand-author { font: 400 10px/12px 'Roboto Mono',monospace; letter-spacing: 0; color: var(--muted); }
 .icon-button { width: 40px; height: 40px; min-height: 40px; padding: 8px; background: transparent; color: var(--muted); border: 0; border-radius: 6px; }
 .icon-button:hover { color: var(--ink); background: transparent; filter: none; }
 .icon-button:focus-visible { outline-color: var(--accent); }
@@ -214,6 +215,11 @@ summary { width: fit-content; }
 .practice-surface { position: relative; cursor: text; }
 .practice-surface { --line-height: 64px; font: 400 32px/40px 'Roboto Mono', monospace; }
 .target-words { position: relative; overflow: hidden; color: #7e8083; transition: filter 160ms ease-out, opacity 160ms ease-out; }
+.practice-surface[data-repetitions='true'] { --line-height: 80px; }
+.word-mistake.pending { color: var(--muted); }
+.repetition-dots { position: absolute; bottom: calc(100% + 27px); left: 50%; transform: translateX(-50%); display: flex; gap: 3px; width: max-content; height: 5px; pointer-events: none; }
+.repetition-dots > span { width: 4px; height: 4px; border: 1px solid var(--muted); border-radius: 50%; }
+.repetition-dots > span[data-filled='true'] { background: var(--accent); border-color: var(--accent); }
 .practice-surface[data-unfocused='true'] .target-words { filter: blur(4px); opacity: .5; }
 .practice-surface[data-unfocused='true'] .cursor-before::before, .practice-surface[data-unfocused='true'] .cursor-end::after { opacity: 0; }
 .practice-focus { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; gap: 8px; padding: 16px; border: 0; border-radius: 0; color: var(--ink); background: transparent; font: 400 14px/20px 'Roboto Mono',monospace; opacity: 0; pointer-events: none; transition: opacity 160ms ease-out; }
@@ -305,6 +311,7 @@ kbd { font: inherit; color: var(--page); background: var(--muted); border-radius
   .test-stage { position: relative; margin-top: clamp(90px, 20vh, 180px); }
   .practice-surface { --line-height: 56px; font-size: 25px; line-height: 32px; }
   .practice-word { line-height: 32px; }
+  .practice-surface[data-repetitions='true'] { --line-height: 72px; }
   .session-clock { font-size: 25px; line-height: 32px; }
   .session-hint p { font-size: min(var(--hint-text-size), 20px); }
   .session-hint .steno-key { font-size: 8px; }

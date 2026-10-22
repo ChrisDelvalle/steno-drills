@@ -88,7 +88,7 @@ it('validates, persists, and migrates line and hint display settings', () => {
   expect(importBackup(exportBackup(profile)).session).toEqual(profile.session);
   const old = JSON.parse(exportBackup(profile));
   for (const key of ['lines', 'hintPosition', 'hintTextSize', 'hintKeyboardSize']) delete old.profile.session[key];
-  expect(importBackup(JSON.stringify(old)).session).toMatchObject({ lines: 3, hintPosition: 'above', hintTextSize: 'large', hintKeyboardSize: 'large' });
+  expect(importBackup(JSON.stringify(old)).session).toMatchObject({ lines: 3, hintPosition: 'above', hintTextSize: 'extra-large', hintKeyboardSize: 'extra-large' });
   expect(() => importBackup(exportBackup({ ...profile, session: { ...profile.session, lines: 0 } }))).toThrow();
 });
 it('migrates the unsupported final-S rule out of earlier profiles', () => {
@@ -99,4 +99,15 @@ it('migrates the unsupported final-S rule out of earlier profiles', () => {
   expect(migrated.learned).not.toContain('special.final-s-f');
   expect(migrated.filter.concepts!.selected).toEqual(['initial.j']);
   expect(migrated.filter.focus).toBe('');
+});
+
+it('round-trips word options and preserves explicit hint sizes while migrating old profiles', () => {
+  const p = defaultProfile();
+  p.session = { ...p.session, inputMode: 'steno', repetitions: 10, requireCorrect: true, hintTextSize: 'small', hintKeyboardSize: 'large' };
+  expect(importBackup(exportBackup(p))).toEqual(p);
+  const old = JSON.parse(exportBackup(p));
+  for (const key of ['inputMode', 'repetitions', 'requireCorrect']) delete old.profile.session[key];
+  expect(importBackup(JSON.stringify(old)).session).toMatchObject({ inputMode: 'text', repetitions: 1, requireCorrect: false, hintTextSize: 'small', hintKeyboardSize: 'large' });
+  for (const repetitions of [0, 11, 2.5, '3']) expect(() => importBackup(exportBackup({ ...p, session: { ...p.session, repetitions } } as never))).toThrow();
+  expect(() => importBackup(exportBackup({ ...p, session: { ...p.session, inputMode: 'other' } } as never))).toThrow();
 });

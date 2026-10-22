@@ -35,7 +35,7 @@ export function App() {
     if (!location.shared) return personal;
     const effective = applySharedTest(personal, location.shared);
     return draft ? { ...effective, practice: draft.practice, filter: draft.filter,
-      session: { ...effective.session, mode: draft.session.mode, duration: draft.session.duration, count: draft.session.count, hints: draft.session.hints } } : effective;
+      session: { ...effective.session, mode: draft.session.mode, duration: draft.session.duration, count: draft.session.count, hints: draft.session.hints, inputMode: draft.session.inputMode, repetitions: draft.session.repetitions, requireCorrect: draft.session.requireCorrect } } : effective;
   };
   const testProfile = useMemo(() => effectiveTest(profile, location, state.draft), [profile, shared, state.draft]);
   const setTestProfile = (update: SetStateAction<Profile>) => setState(s => {

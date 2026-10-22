@@ -190,3 +190,39 @@ it('preserves ordinary routes and auxiliary query parameters, with canonical sha
   expect(parseTestLocation('#/exercises?word=bad')).toMatchObject({ route: 'exercises', query: 'word=bad', shared: null });
   expect(parseTestLocation('#/practice?t=' + token + '&t=' + token).error).toBeTruthy();
 });
+
+it('round-trips all word options with v2 and preserves v1 when options are inactive', () => {
+  for (const source of ['bank', 'drills']) for (const inputMode of ['text', 'steno'] as const) for (const requireCorrect of [false, true]) for (let repetitions = 1; repetitions <= 10; repetitions++) {
+    const p = defaultProfile(); p.practice.source = source;
+    p.session = { ...p.session, inputMode, repetitions, requireCorrect };
+    const test = snapshot(p), token = roundTrip(test);
+    const plain = defaultProfile(); plain.practice.source = source;
+    expect(token.length).toBe(encodeSharedTest(snapshot(plain)).length + Number(test.version === 2));
+    const effective = applySharedTest(defaultProfile(), test);
+    expect(effective.session).toMatchObject({ inputMode, repetitions, requireCorrect });
+    expect(saveSharedTest(defaultProfile(), test).session).toEqual(effective.session);
+  }
+  const p = defaultProfile(); p.session = { ...p.session, inputMode: 'steno', repetitions: 10, requireCorrect: true };
+  p.practice.source = 'numbers';
+  expect(snapshot(p).version).toBe(1);
+  expect(applySharedTest(p, snapshot()).session).toMatchObject({ inputMode: 'text', repetitions: 1, requireCorrect: false });
+});
+it('freezes v2 fixtures and rejects malformed extensions and incompatible exercises', () => {
+  const p = defaultProfile(); p.session.inputMode = 'steno'; p.session.repetitions = 3; p.session.requireCorrect = true;
+  expect(encodeSharedTest(snapshot(p))).toBe('QCCZA');
+  const valid = encodeSharedTest(snapshot(p));
+  expect(decodeSharedTest(valid.slice(0, -1)).ok).toBe(false);
+  // Replace the 4-bit repeat count with reserved value 15.
+  const old = new BitWriter(); old.write(2, 3); old.write(0, 4); old.write(1, 4); old.write(0, 1);
+  old.write(0, 1); old.write(0, 1); old.write(0, 2); old.write(2, 2); old.write(0, 1);
+  old.write(1, 1); old.write(1, 1); old.write(15, 4);
+  expect(decodeSharedTest(old.token()).ok).toBe(false);
+  const incompatible = new BitWriter(); incompatible.write(2, 3); incompatible.write(8, 4); incompatible.write(0, 5); incompatible.write(1, 6);
+  expect(decodeSharedTest(incompatible.token()).ok).toBe(false);
+});
+it('rejects invalid options when creating a word snapshot rather than dropping them', () => {
+  for (const repetitions of [0, 11, 1.5, NaN]) {
+    const p = defaultProfile(); p.session.repetitions = repetitions;
+    expect(normalizeSharedTest(p).ok).toBe(false);
+  }
+});

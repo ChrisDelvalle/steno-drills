@@ -39,3 +39,9 @@ Decode returns a typed success/error result. It rejects unsupported versions, no
 Verified token sizes: starter/60 seconds `ICCA` (4 characters); starter plus initial V `ICGjw` (5). Arbitrary concepts fit within 19; focus and word-length limits within 22; a drill mix plus concepts and focus within 31. Production URLs add 35 characters. No runtime services or compression dependencies are used.
 
 The codec tests exhaust small subset catalogs, all 5,050 length ranges, all built-in drills and finger patterns, session options, real-catalog randomized selections, malformed tokens, golden fixtures, and the length bounds. App tests cover fresh users, personal-data isolation, reload/navigation, save/exit, assistance toggles, clipboard fallback, and invalid links.
+
+## V2 word practice
+
+V2 reuses the complete v1 source payload and appends six bits: raw-input flag (1), Require correct flag (1), and repetitions minus one (4, valid values 0–9). It is supported for Words and word drills, including saved filters resolved to Words. Unsupported sources and reserved repeat values are rejected. No visual settings or personal dictionary data are encoded. The encoder emits v1 when word options are at their defaults, so all existing v1 fixtures and size bounds remain unchanged. Nondefault word options add exactly one character.
+
+The fixed fixture `QCCZA` means starter concepts, 60 seconds, hints off, raw steno, three repetitions, and Require correct. Old v1 links explicitly select translated text, one repetition, and Require correct off, independently of the recipient's personal defaults. Editing, reloading, saving, and exiting v2 links follow the same profile isolation rules as v1.

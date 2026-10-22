@@ -66,6 +66,11 @@ export interface PracticePreferences {
   quoteLength: 'short' | 'medium' | 'long';
   symbolVariants: boolean;
 }
+export interface WordPracticeOptions {
+  inputMode: 'text' | 'steno';
+  repetitions: number;
+  requireCorrect: boolean;
+}
 export type HintSize = 'small' | 'medium' | 'large' | 'extra-large';
 export interface Profile {
   version: 1;
@@ -78,7 +83,7 @@ export interface Profile {
   theme: 'system' | 'light' | 'dark';
   customText: string;
   practice: PracticePreferences;
-  session: { mode: 'timed' | 'count'; duration: number; count: number; hints: boolean; lines: number; hintPosition: 'above' | 'below'; hintTextSize: HintSize; hintKeyboardSize: HintSize };
+  session: WordPracticeOptions & { mode: 'timed' | 'count'; duration: number; count: number; hints: boolean; lines: number; hintPosition: 'above' | 'below'; hintTextSize: HintSize; hintKeyboardSize: HintSize };
 }
 export interface Evaluation {
   eligible: boolean;

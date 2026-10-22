@@ -22,7 +22,7 @@ The index includes literal lowercase words and contractions. Commands, formattin
 
 Personal corrections replace the chosen word's outlines and syllable metadata without mutating bundled data. Supply a CMU/ARPAbet pronunciation for a new word to allow sound-based classification. With a blank pronunciation the bundled one is retained, if available. Providing an outline alone does not certify that its rules are learned. Unexplained words can still be practiced in an explicitly unrestricted list.
 
-Personal exclusions apply to automatic practice and restricted lists. Unrestricted lists deliberately use their exact membership, including unknown or excluded words. Custom text is also unrestricted. Translated Plover input cannot tell the browser which physical outline was used, so the app checks the resulting text and suggests an eligible outline; it does not claim to verify strokes.
+Personal exclusions apply to automatic practice and restricted lists. Unrestricted lists deliberately use their exact membership, including unknown or excluded words. Custom text is also unrestricted. Translated Plover input cannot tell the browser which physical outline was used, so the app checks the resulting text and suggests an eligible outline. Optional raw input translates outline text through the effective dictionary, accepting any unambiguous outline for the target word; concept filters still select vocabulary and hints. Neither mode claims to observe physical key presses.
 
 ## Extending coverage
 

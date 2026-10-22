@@ -242,3 +242,62 @@ it('can edit a shared single-drill mix and change finger books with a high activ
   expect(screen.getByRole('combobox', { name: 'Section' })).toHaveValue('0');
   expect(screen.getByRole('combobox', { name: 'Pattern' })).toHaveValue('0');
 });
+
+it('isolates and round-trips v2 word options through shared editing, reload, save, and exit', async () => {
+  const teacher = defaultProfile(); teacher.session = { ...teacher.session, inputMode: 'steno', repetitions: 3, requireCorrect: true };
+  const normalized = normalizeSharedTest(teacher); if (!normalized.ok) throw new Error(normalized.error);
+  const token = encodeSharedTest(normalized.value);
+  const personal = defaultProfile(); personal.theme = 'light'; personal.learned = []; personal.session.hintTextSize = 'small';
+  localStorage.setItem(profileKey, JSON.stringify(personal));
+  window.location.hash = sharedHash('test-settings', token);
+  const app = render(<App/>);
+  expect(await screen.findByRole('checkbox', { name: 'Raw steno input' })).toBeChecked();
+  expect(screen.getByRole('checkbox', { name: 'Require correct' })).toBeChecked();
+  fireEvent.change(screen.getByRole('combobox', { name: 'Repetitions' }), { target: { value: '10' } });
+  const updated = window.location.hash;
+  expect(updated).not.toBe(sharedHash('test-settings', token));
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
+  app.unmount(); render(<App/>);
+  expect(await screen.findByRole('combobox', { name: 'Repetitions' })).toHaveValue('10');
+  fireEvent.click(screen.getByRole('button', { name: 'Save settings' }));
+  expect(JSON.parse(localStorage.getItem(profileKey)!).session).toMatchObject({ inputMode: 'steno', repetitions: 10, requireCorrect: true, hintTextSize: 'small' });
+  expect(JSON.parse(localStorage.getItem(profileKey)!).learned).toEqual([]);
+  await navigate(sharedHash('test-settings', token));
+  fireEvent.click(screen.getByRole('button', { name: 'Exit' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'Test settings' }));
+  expect(await screen.findByRole('combobox', { name: 'Repetitions' })).toHaveValue('10');
+});
+it('translates raw outlines using the effective dictionary and keeps native hint punctuation editable', async () => {
+  const p = defaultProfile(); p.session = { ...p.session, inputMode: 'steno', repetitions: 2, hints: true };
+  p.corrections = [{ word: 'bad', outlines: ['PWA*D'], syllables: 1, pronunciation: 'B AE1 D' }];
+  p.lists = [{ id: 'raw', name: 'Raw', words: ['bad'] }]; p.practice.source = 'list:raw'; p.practice.restricted = false;
+  localStorage.setItem(profileKey, JSON.stringify(p)); render(<App/>);
+  const input = await screen.findByRole('textbox', { name: 'Practice input' });
+  // Corrected outline replaces the bundled mapping in personal practice.
+  const word = document.querySelector('.session-hint strong')!.textContent!;
+  const outline = word === 'bad' ? 'PWA*D' : 'TKEUPL';
+  fireEvent.change(input, { target: { value: outline + '?' } });
+  expect(input).toHaveValue(outline + '?');
+  expect(screen.getByRole('status', { name: '1 of 2 repetitions' })).toBeInTheDocument();
+  expect(screen.queryByRole('group', { name: 'Hints' })).not.toBeInTheDocument();
+  expect(screen.getByLabelText('Practice passage').querySelector('.word-mistake')).not.toBeInTheDocument();
+});
+it('hides word-only options for other exercise types without losing saved word preferences', async () => {
+  window.location.hash = '/test-settings'; render(<App/>);
+  fireEvent.change(await screen.findByRole('combobox', { name: 'Repetitions' }), { target: { value: '4' } });
+  fireEvent.change(screen.getByRole('combobox', { name: 'Exercise' }), { target: { value: 'numbers' } });
+  expect(screen.queryByRole('checkbox', { name: 'Raw steno input' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('combobox', { name: 'Repetitions' })).not.toBeInTheDocument();
+  fireEvent.change(screen.getByRole('combobox', { name: 'Exercise' }), { target: { value: 'bank' } });
+  expect(screen.getByRole('combobox', { name: 'Repetitions' })).toHaveValue('4');
+});
+it('keeps unresolved list membership while excluding impossible raw targets', async () => {
+  const p = defaultProfile(); p.lists = [{ id: 'unknown', name: 'Unknown', words: ['zzzzzzzzzz'] }];
+  p.practice.source = 'list:unknown'; p.practice.restricted = false;
+  p.session.inputMode = 'steno'; p.session.requireCorrect = true;
+  localStorage.setItem(profileKey, JSON.stringify(p)); render(<App/>);
+  expect(await screen.findByText('No matching words.')).toBeInTheDocument();
+  fireEvent.click(screen.getAllByRole('button', { name: 'Test settings' })[0]);
+  expect(await screen.findByText(/1 unavailable in raw mode/)).toBeInTheDocument();
+  expect(JSON.parse(localStorage.getItem(profileKey)!).lists).toEqual(p.lists);
+});

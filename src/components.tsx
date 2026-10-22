@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { ReactNode, MouseEventHandler } from 'react';
 import { PlayIcon, CheckCircleIcon, BookOpenIcon, DocumentTextIcon, Cog6ToothIcon, ArrowRightIcon, ArrowLeftIcon, PlusIcon, ArrowDownTrayIcon, ArrowPathIcon, XMarkIcon, LightBulbIcon, LinkIcon, CursorArrowRaysIcon } from '@heroicons/react/24/outline';
 import { concepts, conceptBanks, conceptLabel } from './domain/concepts';
 import { selectedConcepts } from './domain/vocabulary';
@@ -13,6 +13,10 @@ export function Icon({ name, size = 20 }: { name: string; size?: number }) {
   };
   const Component = icons[name as keyof typeof icons] || BookOpenIcon;
   return <Component width={size} height={size} aria-hidden="true"/>;
+}
+
+export function Brand({ href, onClick }: { href: string; onClick?: MouseEventHandler<HTMLAnchorElement> }) {
+  return <a className="session-brand" aria-label="Steno Drills" href={href} onClick={onClick}><span className="brand-author">Christopher Delvalle</span><span>Steno Drills</span></a>;
 }
 
 export function Empty({ title, children }: { title: string; children: ReactNode }) {
