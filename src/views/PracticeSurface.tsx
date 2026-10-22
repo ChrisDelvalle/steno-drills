@@ -117,7 +117,8 @@ export function PracticeSurface({ targets, input, tokens, completed, onInput, in
     const fit = () => {
       const style = getComputedStyle(frame);
       const font = parseFloat(style.fontSize) || 32;
-      const width = frame.getBoundingClientRect().width || 800;
+      const gutter = parseFloat(style.getPropertyValue('--group-gutter')) || 0;
+      const width = Math.max(1, (frame.getBoundingClientRect().width || 800) - gutter * 2);
       const widths = [...ruler.children].map((node, i) => {
         const letters = [...node.children].reduce((sum, letter) => sum + letter.getBoundingClientRect().width, 0);
         // A small subpixel allowance keeps overflow ellipses from appearing
