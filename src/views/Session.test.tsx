@@ -405,3 +405,31 @@ it('shows pending, incorrect, and correct dot states and keeps red until the att
   fireEvent.change(input, { target: { value: 'bad bad' } });
   expect(states()).toEqual(['correct', 'correct', 'pending']);
 });
+
+it('repeats groups in order, loops hints, and shows one bracket spanning the active words', () => {
+  render(<PracticeSession config={{ ...config, groupSize: 2, repetitions: 2 }} onExit={() => {}}/>);
+  const input = screen.getByRole('textbox');
+  expect(document.querySelectorAll('.group-bracket')).toHaveLength(2);
+  fireEvent.change(input, { target: { value: 'bad dim' } });
+  expect(screen.getByRole('status', { name: '1 of 2 repetitions' })).toBeInTheDocument();
+  expect(document.querySelector('.session-hint strong')).toHaveTextContent('bad');
+  fireEvent.change(input, { target: { value: 'bad dim bad dim ' } });
+  expect(document.querySelectorAll('.group-bracket')).toHaveLength(1);
+  expect(document.querySelector('.session-hint strong')).toHaveTextContent('name');
+  fireEvent.change(input, { target: { value: 'bad dim bad dim name name' } });
+  expect(screen.getByRole('region', { name: 'Practice results' })).toHaveTextContent('100%');
+});
+it('resets group recovery after a mistake even when the failed word is later corrected', () => {
+  render(<PracticeSession config={{ ...config, groupSize: 2, repeatOnError: true, errorRepetitions: 2 }} onExit={() => {}}/>);
+  const input = screen.getByRole('textbox');
+  fireEvent.change(input, { target: { value: 'bad wrong bad dim bad wrong ' } });
+  expect(screen.getByRole('status', { name: '0 of 2 repetitions' })).toBeInTheDocument();
+  fireEvent.change(input, { target: { value: 'bad wrong bad dim bad dim' } });
+  expect(screen.getByRole('status', { name: '1 of 2 repetitions' })).toBeInTheDocument();
+  expect(document.querySelector('.session-hint strong')).toHaveTextContent('bad');
+  fireEvent.change(input, { target: { value: 'bad wrong bad dim bad dim bad dim name' } });
+  expect(screen.getByRole('region', { name: 'Practice results' })).toHaveTextContent('80%');
+  fireEvent.keyDown(screen.getByRole('region', { name: 'Practice results' }), { key: 'Enter' });
+  expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  expect(document.querySelectorAll('.group-bracket')).toHaveLength(2);
+});

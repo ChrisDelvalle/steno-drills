@@ -61,7 +61,7 @@ it('lets practice use custom concepts without editing learned skills', async () 
   fireEvent.change(screen.getByRole('combobox', { name: 'Concepts' }), { target: { value: 'custom' } });
   fireEvent.click(screen.getByRole('checkbox', { name: 'initial D (TK)' }));
   expect(JSON.parse(localStorage.getItem(profileKey)!).learned).toEqual(learned);
-  expect(screen.getByText('1 word')).toBeInTheDocument();
+  expect(screen.getByText('1 word', { selector: 'div' })).toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: 'Done' }));
   await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
   expect(screen.getByLabelText('Practice passage')).not.toHaveTextContent('dim');
@@ -365,4 +365,19 @@ it('applies per-group custom concept actions to the shared test without altering
     expect(new Set(selectedIds())).toEqual(new Set(others));
     expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
   }
+});
+
+it('isolates, reloads, and saves shared group settings without changing learned Skills', async () => {
+  const personal = defaultProfile(); personal.session.groupSize = 7;
+  localStorage.setItem(profileKey, JSON.stringify(personal));
+  window.location.hash = '#/test-settings?t=gCCBGQ';
+  const app = render(<App/>);
+  expect(await screen.findByRole('combobox', { name: 'Group size' })).toHaveValue('3');
+  fireEvent.change(screen.getByRole('combobox', { name: 'Group size' }), { target: { value: '5' } });
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
+  app.unmount(); render(<App/>);
+  expect(await screen.findByRole('combobox', { name: 'Group size' })).toHaveValue('5');
+  fireEvent.click(screen.getByRole('button', { name: 'Save settings' }));
+  expect(JSON.parse(localStorage.getItem(profileKey)!).session.groupSize).toBe(5);
+  expect(JSON.parse(localStorage.getItem(profileKey)!).learned).toEqual(personal.learned);
 });

@@ -13,6 +13,8 @@ export interface PracticeCell {
 export interface WordAttempt {
   unit: number;
   target: number;
+  group: number;
+  passStart: number;
   translation: TranslationUnit;
   correct: boolean;
   expected: string;
@@ -25,6 +27,9 @@ export interface WordPracticeProjection {
   offset: number;
   hint: number;
   progress: number;
+  groupStart: number;
+  groupEnd: number;
+  groupWrong: boolean;
   required: number;
   recovering: boolean;
   dotError: boolean;
@@ -34,12 +39,13 @@ export interface WordPracticeProjection {
   correctChars: number;
   translatedText: string;
 }
-export const wordPracticeDefaults = (): WordPracticeOptions => ({ inputMode: 'text', repetitions: 1, requireCorrect: false, repeatOnError: false, errorRepetitions: 3 });
-export const assistedPractice = (options: Partial<WordPracticeOptions>) => options.inputMode === 'steno' || (options.repetitions || 1) > 1 || Boolean(options.requireCorrect) || Boolean(options.repeatOnError);
+export const wordPracticeDefaults = (): WordPracticeOptions => ({ inputMode: 'text', groupSize: 1, repetitions: 1, requireCorrect: false, repeatOnError: false, errorRepetitions: 3 });
+export const assistedPractice = (options: Partial<WordPracticeOptions>) => (options.groupSize || 1) > 1 || options.inputMode === 'steno' || (options.repetitions || 1) > 1 || Boolean(options.requireCorrect) || Boolean(options.repeatOnError);
 const equal = (a: string | undefined, b: string) => a?.toLowerCase() === b.toLowerCase();
 
 // Anchors survive corrections: fixing a failed attempt cannot restore the
 // consecutive successes discarded by that failure. They reset with the test.
+// Group's first target index -> native source offset of its latest failed pass.
 export type RecoveryHistory = ReadonlyMap<number, number>;
 export function rebaseRecovery(history: RecoveryHistory, before: string, after: string): Map<number, number> {
   let prefix = 0, suffix = 0;
@@ -54,12 +60,22 @@ export function rebaseRecovery(history: RecoveryHistory, before: string, after: 
 export function projectWordPractice(targets: PracticeWord[], translated: TranslationResult, options: WordPracticeOptions, finalized = false, history: RecoveryHistory = new Map()): WordPracticeProjection {
   const cells: PracticeCell[] = [];
   const attempts: WordAttempt[] = [];
-  let target = 0, progress = 0, offset = 0, hint = 0, correct = 0, correctChars = 0;
+  const size = options.groupSize;
+  let groupStart = 0, groupEnd = Math.min(size, targets.length), target = 0;
+  let progress = 0, offset = 0, hint = 0, correct = 0, correctChars = 0;
   let floor = options.repeatOnError ? history.get(0) : undefined;
   let recovering = floor !== undefined, dotError = recovering;
   let required = recovering ? Math.max(options.repetitions, options.errorRepetitions) : options.repetitions;
-  for (let i = 0; i < translated.units.length && target < targets.length; i++) {
+  let passStart = 0, passFailed = false, newPass = true;
+  const clearPass = () => {
+    for (let n = groupStart; n < groupEnd; n++) cells[n] = { typed: '', annotation: '', wrong: false, neutral: false, complete: false };
+  };
+  for (let i = 0; i < translated.units.length && groupStart < targets.length; i++) {
     const unit = translated.units[i], expected = targets[target].word;
+    if (newPass) {
+      passStart = unit.start; passFailed = false; newPass = false;
+      clearPass();
+    }
     const matches = unit.status === 'resolved' && equal(unit.text, expected);
     const neutral = options.inputMode === 'steno' && !unit.submitted && !matches;
     const typed = unit.text || unit.source;
@@ -68,34 +84,49 @@ export function projectWordPractice(targets: PracticeWord[], translated: Transla
     offset = neutral ? 0 : Math.min(typed.length, expected.length);
     dotError ||= wrong;
     if (!unit.submitted && !matches) { hint = target; break; }
-    // Earlier attempts still contribute to speed and accuracy, but cannot
-    // contribute to a streak restarted by a later, remembered mistake.
-    const beforeFloor = floor !== undefined && unit.start < floor;
-    if (!matches && options.repeatOnError && !beforeFloor) {
-      recovering = true; floor = unit.start; progress = 0; dotError = true;
-      required = Math.max(options.repetitions, options.errorRepetitions);
+    if (!matches) {
+      passFailed = true;
+      // Remember the start of the failed pass, so editing its mistake starts a
+      // fresh streak without reviving correct passes discarded by that failure.
+      if (options.repeatOnError && (floor === undefined || unit.end > floor)) {
+        recovering = true; floor = passStart; progress = 0; dotError = true;
+        required = Math.max(options.repetitions, options.errorRepetitions);
+      }
     }
-    const nextProgress = progress + Number(matches && !beforeFloor);
-    const finalMatch = matches && nextProgress === required && target === targets.length - 1;
-    attempts.push({ unit: i, target, translation: unit, correct: matches, expected, scored: unit.submitted || finalMatch || finalized && matches });
+    const lastWord = target === groupEnd - 1;
+    const passCorrect = !passFailed;
+    const beforeFloor = floor !== undefined && unit.end <= floor;
+    const nextProgress = progress + Number(lastWord && passCorrect && !beforeFloor);
+    const passed = lastWord && (nextProgress >= required || (!passCorrect && !options.repeatOnError && options.repetitions === 1 && !options.requireCorrect));
+    const finalMatch = matches && passed && groupEnd === targets.length;
+    attempts.push({ unit: i, target, group: groupStart, passStart, translation: unit, correct: matches, expected, scored: unit.submitted || finalMatch || finalized && matches });
     if (matches && (unit.submitted || finalMatch || finalized)) { correct++; correctChars += expected.length + 1; }
     if (!matches && options.requireCorrect) {
       cell.annotation = translated.units.slice(i).map(u => u.text || u.source).join(' ');
       hint = target; break;
     }
-    if (matches && !beforeFloor) { progress++; dotError = false; }
-    const passed = progress >= required || (!matches && !options.repeatOnError && options.repetitions === 1 && !options.requireCorrect);
-    hint = Math.min(target + Number(passed), Math.max(0, targets.length - 1));
-    if (passed && (unit.submitted || finalMatch || finalized)) {
-      cell.complete = true; target++; progress = 0; offset = 0;
-      floor = options.repeatOnError ? history.get(target) : undefined;
-      recovering = floor !== undefined; dotError = recovering;
-      required = recovering ? Math.max(options.repetitions, options.errorRepetitions) : options.repetitions;
-    } else if (unit.submitted) offset = 0;
+    if (lastWord && passCorrect && !beforeFloor) { progress = nextProgress; dotError = false; }
+    hint = lastWord ? passed ? Math.min(groupEnd, targets.length - 1) : groupStart : target + 1;
+    if (unit.submitted || finalMatch || finalized) {
+      cell.complete = matches;
+      offset = 0;
+      if (!lastWord) { target++; }
+      else {
+        if (passed) {
+          groupStart = groupEnd; groupEnd = Math.min(groupStart + size, targets.length); progress = 0;
+          passFailed = false;
+          floor = options.repeatOnError ? history.get(groupStart) : undefined;
+          recovering = floor !== undefined; dotError = recovering;
+          required = recovering ? Math.max(options.repetitions, options.errorRepetitions) : options.repetitions;
+        } else if (passCorrect) clearPass();
+        target = groupStart; newPass = true;
+      }
+      hint = Math.min(target, Math.max(0, targets.length - 1));
+    }
   }
   const current = Math.min(target, Math.max(0, targets.length - 1));
-  return { cells, attempts, current, offset, hint: Math.max(current, hint), progress, required, recovering, dotError,
-    completed: target, done: targets.length > 0 && target === targets.length, correct, correctChars,
+  return { cells, attempts, current, offset, hint, progress, groupStart, groupEnd, groupWrong: passFailed || dotError, required, recovering, dotError,
+    completed: groupStart, done: targets.length > 0 && groupStart === targets.length, correct, correctChars,
     translatedText: attempts.filter(a => a.scored).map(a => a.translation.text ? a.translation.text + ' ' : '').join(''),
   };
 }
@@ -108,7 +139,7 @@ export function wordPracticeMetrics(before: WordPracticeProjection, after: WordP
     if (!attempt.translation.submitted || attempt.correct) continue;
     const previous = previousAttempts.get(attempt.unit);
     if (previous && !previous.correct && previous.translation.submitted && previous.target === attempt.target && previous.translation.source === attempt.translation.source) continue;
-    failures.push({ target: attempt.target, start: attempt.translation.start });
+    failures.push({ target: attempt.group, start: attempt.passStart });
     mistakes.push({ index: attempt.target, typed: attempt.translation.text || attempt.translation.source, expected: attempt.expected });
     if (attempt.translation.text) incorrectChars += attempt.translation.text.length + 1;
   }

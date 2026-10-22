@@ -51,3 +51,9 @@ The fixed fixture `QCCZA` means starter concepts, 60 seconds, hints off, raw ste
 V3 preserves the v1 source payload and v2 word options, then adds a 4-bit error repetition count (1–10). Its presence enables Repeat on error; zero and values 11–15 are invalid. Recovery uses the larger of this count and the normal repetition count. Only Words and word drills support the extension. The encoder continues to emit the original v1/v2 tokens when recovery is disabled, ignoring its inactive count.
 
 Fixed fixtures: `YCCAG` is starter concepts, 60 seconds, hints off, translated text, one normal repetition, Require correct off, and three error repetitions. `YCCZG` additionally selects raw input, three normal repetitions, and Require correct. V1/v2 links explicitly disable recovery, regardless of the recipient's profile. Live attempt history and streak-reset anchors are local to the current session and are never shared or backed up. Settings retain the existing reload, edit, Save settings, and Exit behavior.
+
+## V4 word groups
+
+V4 retains the v1 source payload and six v2 word-option bits, followed by a 4-bit recovery count and a 4-bit group size minus one. Recovery count 0 disables recovery; 1–10 enables it with that many consecutive correct passes. Group sizes are 1–10. Reserved values, incomplete fields, unexpected trailing bits, and non-word sources are rejected. The encoder emits v4 only for groups larger than one; all existing v1–v3 fixtures remain unchanged. Earlier links explicitly use group size 1, independently of personal defaults.
+
+`gCCBAQ` is starter concepts, 60 seconds, hints off, groups of three words, three normal repetitions, translated input, and Require correct off. `gCCBGQ` adds three error repetitions. Shared group sizes remain temporary through navigation and reload; Save settings persists the size without changing learned Skills.

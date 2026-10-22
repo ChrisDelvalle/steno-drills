@@ -120,3 +120,11 @@ it('migrates, validates, and backs up error-recovery settings', () => {
   for (const errorRepetitions of [0, 11, 1.5, null]) expect(() => importBackup(exportBackup({ ...p, session: { ...p.session, errorRepetitions } } as never))).toThrow();
   expect(() => importBackup(exportBackup({ ...p, session: { ...p.session, repeatOnError: 'true' } } as never))).toThrow();
 });
+
+it('migrates group size and validates it through backups', () => {
+  const p = defaultProfile(); p.session.groupSize = 10;
+  expect(importBackup(exportBackup(p)).session.groupSize).toBe(10);
+  const old = JSON.parse(exportBackup(p)); delete old.profile.session.groupSize;
+  expect(importBackup(JSON.stringify(old)).session.groupSize).toBe(1);
+  for (const groupSize of [0, 11, 1.5, null, '3']) expect(() => importBackup(exportBackup({ ...p, session: { ...p.session, groupSize } } as never))).toThrow();
+});

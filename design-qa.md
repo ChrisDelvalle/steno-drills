@@ -78,3 +78,11 @@ Repeat on error checked on 2026-10-22:
 - At 393px, ten dots fit inside the passage above a one-letter word. Triggering recovery and entering a 400-character error changed no word coordinates; three complete rows and second-row active positioning remain intact. Evidence: steno-error-recovery-desktop.png and steno-error-recovery-mobile.png (local captures).
 - Correct dots use a deeper green in both themes. The author label aligns to the right edge of Steno Drills; the README screenshot was refreshed.
 - Skills and custom concept sections each offer Select all and Clear. Browser checks at 1440px, 393px, and 320px covered scoped selection, persistence, keyboard activation, both themes, and existing drill mix actions without horizontal overflow. Shared concept changes leave personal Skills unchanged.
+
+Word groups checked on 2026-10-22:
+
+- Group size 1 retains existing practice. Sizes 2–10 repeat whole contiguous groups; the shorter final group retains the test's target word count. Hints point back to the first word between passes, including an exact unfinished final word.
+- A thin bracket marks the active group across wrapped rows. Failed passes turn it red; individual mistakes retain their annotations. Dots count whole correct passes. Successful submitted passes clear for the next pass without moving word coordinates.
+- Production-build browser QA covered ordinary repetition, repeated recovery resets, correction of a failed pass, raw outlines with Require correct, final completion, two graph error events for two submitted mistakes, restart, shared edit/reload/Exit, and both themes. No app runtime errors.
+- At 393px and 320px, three complete rows remain visible. Wrapped brackets and ten dots remain inside the passage; a 400-character blocked raw attempt changes no word coordinates or horizontal bounds. Local captures: steno-groups-desktop.png, steno-groups-mobile.png, and steno-groups-mobile-narrow.png.
+- All 141 tests, type checking, dictionary validation, production build, and Wrangler dry run pass. V1–v3 fixtures remain unchanged; v4 carries group size and recovery options. Old backups and links default to one-word groups.

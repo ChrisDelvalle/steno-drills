@@ -105,13 +105,14 @@ export function validateProfile(v: unknown): Profile {
   const repeatOnError = session.repeatOnError === undefined ? false : session.repeatOnError;
   if (typeof repeatOnError !== 'boolean') throw new Error('Invalid repeat-on-error setting.');
   const errorRepetitions = session.errorRepetitions === undefined ? 3 : integer(session.errorRepetitions, 1, 10);
+  const groupSize = session.groupSize === undefined ? 1 : integer(session.groupSize, 1, 10);
   const duration = integer(session.duration, 30, 300), count = integer(session.count, 10, 500);
   if (![30, 60, 90, 120, 300].includes(duration) || ![10, 25, 50, 100, 250, 500].includes(count)) throw new Error('Unsupported practice length.');
   const practice = p.practice === undefined ? defaultPractice() : validatePractice(p.practice);
   return {
     version: 1, learned: conceptList(p.learned), lists, exercises, corrections,
     excluded: [...new Set(array(p.excluded, word))], filter: validateFilter(p.filter),
-    theme: p.theme as Profile['theme'], customText: p.customText, practice, session: { inputMode, repetitions, requireCorrect, repeatOnError, errorRepetitions, mode: session.mode, duration, count, hints: session.hints, lines, hintPosition, hintTextSize, hintKeyboardSize },
+    theme: p.theme as Profile['theme'], customText: p.customText, practice, session: { inputMode, groupSize, repetitions, requireCorrect, repeatOnError, errorRepetitions, mode: session.mode, duration, count, hints: session.hints, lines, hintPosition, hintTextSize, hintKeyboardSize },
   };
 }
 

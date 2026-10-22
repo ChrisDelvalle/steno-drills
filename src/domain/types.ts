@@ -68,6 +68,7 @@ export interface PracticePreferences {
 }
 export interface WordPracticeOptions {
   inputMode: 'text' | 'steno';
+  groupSize: number;
   repetitions: number;
   requireCorrect: boolean;
   repeatOnError: boolean;

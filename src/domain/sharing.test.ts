@@ -259,3 +259,41 @@ it('freezes v3 fixtures and rejects invalid recovery payloads', () => {
   p.session.repeatOnError = false; p.session.errorRepetitions = 10;
   expect(encodeSharedTest(snapshot(p))).toBe('QCCZA');
 });
+
+it('round-trips v4 groups and all word options while retaining earlier fixtures', () => {
+  for (const source of ['bank', 'drills']) for (let groupSize = 2; groupSize <= 10; groupSize++) for (const repeatOnError of [false, true]) for (const inputMode of ['text', 'steno'] as const) {
+    const p = defaultProfile(); p.practice.source = source;
+    p.session = { ...p.session, groupSize, repetitions: groupSize, repeatOnError, errorRepetitions: 11 - groupSize, inputMode, requireCorrect: true };
+    const test = snapshot(p); expect(test.version).toBe(4); roundTrip(test);
+    expect(applySharedTest(defaultProfile(), test).session).toMatchObject({ groupSize, repeatOnError });
+    expect(saveSharedTest(defaultProfile(), test).session.groupSize).toBe(groupSize);
+  }
+  const p = defaultProfile(); p.session.groupSize = 3; p.session.repetitions = 3;
+  expect(encodeSharedTest(snapshot(p))).toBe('gCCBAQ');
+  p.session.repeatOnError = true;
+  expect(encodeSharedTest(snapshot(p))).toBe('gCCBGQ');
+  for (const token of ['ICCA', 'QCCZA', 'YCCAG', 'YCCZG']) {
+    const decoded = decodeSharedTest(token); if (!decoded.ok) throw new Error(decoded.error);
+    expect(encodeSharedTest(decoded.value)).toBe(token);
+    p.session.groupSize = 10;
+    expect(applySharedTest(p, decoded.value).session.groupSize).toBe(1);
+  }
+});
+it('rejects invalid v4 group and recovery fields, truncated data, and incompatible sources', () => {
+  const p = defaultProfile(); p.session.groupSize = 3;
+  const token = encodeSharedTest(snapshot(p));
+  for (const bad of [token.slice(0, -1), token + 'A']) expect(decodeSharedTest(bad).ok).toBe(false);
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+  const bits = [...token].map(c => alphabet.indexOf(c).toString(2).padStart(6, '0')).join('');
+  for (const invalid of [10, 11, 12, 13, 14, 15]) {
+    const w = new BitWriter(); w.bits = bits.slice(0, 29); w.write(invalid, 4);
+    expect(decodeSharedTest(w.token()).ok).toBe(false);
+  }
+  for (const invalid of [11, 12, 13, 14, 15]) {
+    const w = new BitWriter(); w.bits = bits.slice(0, 25); w.write(invalid, 4); w.write(2, 4);
+    expect(decodeSharedTest(w.token()).ok).toBe(false);
+  }
+  const w = new BitWriter(); w.bits = '1000010' + bits.slice(7, 33);
+  expect(decodeSharedTest(w.token()).ok).toBe(false);
+  p.session.groupSize = 11; expect(normalizeSharedTest(p).ok).toBe(false);
+});

@@ -217,6 +217,14 @@ summary { width: fit-content; }
 .practice-surface { --line-height: 64px; font: 400 32px/40px 'Roboto Mono', monospace; }
 .target-words { position: relative; overflow: hidden; color: #7e8083; transition: filter 160ms ease-out, opacity 160ms ease-out; }
 .practice-surface[data-repetitions='true'] { --line-height: 80px; }
+.practice-surface[data-groups='true'] { --line-height: 80px; }
+.practice-surface[data-groups='true'][data-repetitions='true'] { --line-height: 96px; }
+.practice-surface[data-groups='true'] .practice-line { padding-bottom: 12px; }
+.group-bracket { position: absolute; left: 0; right: -.75em; bottom: -9px; height: 5px; border-bottom: 1px solid var(--muted); pointer-events: none; }
+.group-bracket[data-first='true'] { border-left: 1px solid var(--muted); }
+.group-bracket[data-last='true'] { border-right: 1px solid var(--muted); }
+.group-bracket[data-end='true'] { right: 0; }
+.group-bracket[data-wrong='true'] { border-color: var(--error); }
 .word-mistake.pending { color: var(--muted); }
 .repetition-dots { position: absolute; bottom: calc(100% + 27px); left: 50%; transform: translateX(-50%); display: flex; gap: 3px; width: max-content; height: 5px; pointer-events: none; }
 .repetition-dots > span { width: 4px; height: 4px; background: var(--muted); border-radius: 50%; }
@@ -314,6 +322,8 @@ kbd { font: inherit; color: var(--page); background: var(--muted); border-radius
   .practice-surface { --line-height: 56px; font-size: 25px; line-height: 32px; }
   .practice-word { line-height: 32px; }
   .practice-surface[data-repetitions='true'] { --line-height: 72px; }
+  .practice-surface[data-groups='true'] { --line-height: 72px; }
+  .practice-surface[data-groups='true'][data-repetitions='true'] { --line-height: 88px; }
   .session-clock { font-size: 25px; line-height: 32px; }
   .session-hint p { font-size: min(var(--hint-text-size), 20px); }
   .session-hint .steno-key { font-size: 8px; }

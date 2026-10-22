@@ -13,9 +13,9 @@ const MeasureWords = memo(function MeasureWords({ targets }: { targets: Practice
   return <>{targets.map((target, i) => <span key={i}>{[...target.word].map((letter, n) => <span key={n}>{letter}</span>)}</span>)}</>;
 });
 
-const Word = memo(function Word({ word, typed = '', complete, active, offset, width, view, repetitions = 1, progress = 0, showDots = repetitions > 1, dotError = false, recovering = false }: {
+const Word = memo(function Word({ word, typed = '', complete, active, offset, width, view, repetitions = 1, progress = 0, showDots = repetitions > 1, dotError = false, recovering = false, group, segmentEnd = false }: {
   word: string; typed?: string; complete: boolean; active: boolean; offset: number;
-  width?: number; view?: PracticeCell; repetitions?: number; progress?: number; showDots?: boolean; dotError?: boolean; recovering?: boolean;
+  width?: number; view?: PracticeCell; repetitions?: number; progress?: number; showDots?: boolean; dotError?: boolean; recovering?: boolean; group?: { first: boolean; last: boolean; wrong: boolean }; segmentEnd?: boolean;
 }) {
   const cell = useRef<HTMLSpanElement>(null);
   const annotation = useRef<HTMLSpanElement>(null);
@@ -61,17 +61,18 @@ const Word = memo(function Word({ word, typed = '', complete, active, offset, wi
   }, [annotationText]);
   return <span ref={cell} style={{ width }} title={word} className={`practice-word${wrong ? ' wrong' : complete ? ' correct' : ''}`}>
     {annotationText && <span className={`word-mistake${view?.neutral ? ' pending' : ''}`} ref={annotation} title={annotationText} aria-hidden="true">{annotationText}</span>}
-    {active && showDots && <span ref={dots} className="repetition-dots" data-recovery={recovering} role="status" aria-description={`${showError ? 'Incorrect attempt. ' : ''}${recovering ? 'Consecutive correct entries required.' : ''}`} aria-label={`${progress} of ${repetitions} repetitions`} title={`${progress} of ${repetitions} ${recovering ? 'consecutive ' : ''}repetitions`}>{Array.from({ length: repetitions }, (_, i) => <span key={i} data-state={i < progress ? 'correct' : i === progress && showError ? 'incorrect' : 'pending'} aria-hidden="true"/>)}</span>}
+    {active && showDots && <span ref={dots} className="repetition-dots" data-recovery={recovering} role="status" aria-description={`${showError ? 'Incorrect attempt. ' : ''}${recovering ? 'Consecutive correct passes required.' : ''}`} aria-label={`${progress} of ${repetitions} repetitions`} title={`${progress} of ${repetitions} ${recovering ? 'consecutive ' : ''}repetitions`}>{Array.from({ length: repetitions }, (_, i) => <span key={i} data-state={i < progress ? 'correct' : i === progress && showError ? 'incorrect' : 'pending'} aria-hidden="true"/>)}</span>}
+    {group && <span className="group-bracket" data-first={group.first} data-last={group.last} data-end={segmentEnd} data-wrong={group.wrong} aria-hidden="true"/>}
     <span className="expected-word">{letters.map((letter, i) => <span key={i} className={`${active && i === offset ? 'cursor-before ' : ''}${active && i < offset && !wrong ? 'typed-letter' : ''}`}>{letter}</span>)}{active && offset >= letters.length && <span className="cursor-end"/>}</span>
   </span>;
 });
 
-export function PracticeSurface({ targets, input, tokens, completed, onInput, inputRef, lines = 3, onHintChange, questionHints = false, suspended = false, projection, project, repetitions = 1, rawInput = false, repeatOnError = false }: {
+export function PracticeSurface({ targets, input, tokens, completed, onInput, inputRef, lines = 3, onHintChange, questionHints = false, suspended = false, projection, project, repetitions = 1, rawInput = false, repeatOnError = false, groupSize = 1 }: {
   targets: PracticeWord[]; input: string; tokens: string[]; completed: number;
   onInput: (value: string) => void; inputRef: RefObject<HTMLTextAreaElement | null>; lines?: number;
   onHintChange?: (index: number) => void;
   questionHints?: boolean; suspended?: boolean;
-  projection?: WordPracticeProjection; project?: (input: string) => WordPracticeProjection; repetitions?: number; rawInput?: boolean; repeatOnError?: boolean;
+  projection?: WordPracticeProjection; project?: (input: string) => WordPracticeProjection; repetitions?: number; rawInput?: boolean; repeatOnError?: boolean; groupSize?: number;
 }) {
   const [caret, setCaret] = useState(0);
   const [focused, setFocused] = useState(false);
@@ -131,23 +132,23 @@ export function PracticeSurface({ targets, input, tokens, completed, onInput, in
     return () => observer.disconnect();
   }, [targets]);
   const visible = passageWindow(layout.rows, current, lines);
-  return <div ref={surface} className="practice-surface" data-repetitions={repetitions > 1 || repeatOnError} data-unfocused={unfocused} onPointerDown={event => {
+  return <div ref={surface} className="practice-surface" data-repetitions={repetitions > 1 || repeatOnError} data-groups={groupSize > 1} data-unfocused={unfocused} onPointerDown={event => {
     if (event.button !== 0) return;
     event.preventDefault(); inputRef.current?.focus();
     if (!unfocused) { inputRef.current?.setSelectionRange(input.length, input.length); setCaret(input.length); }
   }}>
     <div ref={measure} className="passage-measure" aria-hidden="true"><MeasureWords targets={targets}/></div>
-    <div className="target-words" aria-label="Practice passage" style={{ height: `calc(var(--line-height) * ${lines})` }}>
+    <div className="target-words" aria-label="Practice passage" aria-description={groupSize > 1 && cursorProjection ? `Current group: ${targets.slice(cursorProjection.groupStart, cursorProjection.groupEnd).map(w => w.word).join(" ")}. ${cursorProjection.progress} of ${cursorProjection.required} repetitions.` : undefined} style={{ height: `calc(var(--line-height) * ${lines})` }}>
       {visible.lines.map((row, r) => <div className="practice-line" key={row.start} data-line={visible.start + r} data-active={visible.start + r === visible.active || undefined}>
         {targets.slice(row.start, row.end).map((target, n) => {
           const i = row.start + n;
-          return <Fragment key={i}><Word word={target.word} view={projection?.cells[i]} repetitions={cursorProjection?.required || repetitions} showDots={(cursorProjection?.required || repetitions) > 1 || Boolean(cursorProjection?.recovering)} recovering={cursorProjection?.recovering} dotError={i === current && cursorProjection?.dotError} progress={i === current ? cursorProjection?.progress || 0 : 0} width={layout.widths[i]} typed={tokens[i]} complete={i < completed} active={i === current} offset={i === current ? offset : 0}/>{' '}</Fragment>;
+          return <Fragment key={i}><Word word={target.word} view={projection?.cells[i]} repetitions={cursorProjection?.required || repetitions} showDots={(cursorProjection?.required || repetitions) > 1 || Boolean(cursorProjection?.recovering)} recovering={cursorProjection?.recovering} dotError={i === current && cursorProjection?.dotError} progress={i === current ? cursorProjection?.progress || 0 : 0} group={groupSize > 1 && cursorProjection && i >= cursorProjection.groupStart && i < cursorProjection.groupEnd ? { first: i === cursorProjection.groupStart, last: i === cursorProjection.groupEnd - 1, wrong: cursorProjection.groupWrong } : undefined} segmentEnd={i === Math.min(row.end, cursorProjection?.groupEnd || row.end) - 1} width={layout.widths[i]} typed={tokens[i]} complete={i < completed} active={i === current} offset={i === current ? offset : 0}/>{' '}</Fragment>;
         })}
       </div>)}
     </div>
     <button type="button" className="practice-focus" aria-label="Focus test" aria-hidden={!unfocused} tabIndex={unfocused ? 0 : -1} onClick={restoreFocus}><Icon name="focus" size={18}/><span>Click or press any key to focus</span></button>
     <label className="sr-only" htmlFor="practice-capture">Practice input</label>
-    <span className="sr-only" id="practice-help">{rawInput ? 'Type steno outlines, separated by spaces. Use / between strokes.' : 'Type the displayed words.'} Backspace corrects your input. Enter restarts the test. Escape opens settings.{questionHints && (rawInput ? ' Question mark toggles hints.' : ' Question mark toggles hints (H-F in Plover).')}</span>
+    <span className="sr-only" id="practice-help">{groupSize > 1 && `Practice groups of ${groupSize} words. The underline marks the current group; dots count complete correct passes. `}{rawInput ? 'Type steno outlines, separated by spaces. Use / between strokes.' : 'Type the displayed words.'} Backspace corrects your input. Enter restarts the test. Escape opens settings.{questionHints && (rawInput ? ' Question mark toggles hints.' : ' Question mark toggles hints (H-F in Plover).')}</span>
     <textarea id="practice-capture" ref={inputRef} className="practice-capture" aria-describedby="practice-help" autoCapitalize="off" autoComplete="off" autoCorrect="off" spellCheck={false} value={input} onFocus={syncFocus} onBlur={() => setFocused(false)} onSelect={e => setCaret(e.currentTarget.selectionStart)} onChange={e => { setCaret(e.target.selectionStart); onInput(e.target.value); }}/>
   </div>;
 }
