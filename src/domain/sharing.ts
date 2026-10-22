@@ -1,16 +1,17 @@
-import type { Filter, Profile, WordPracticeOptions } from './types';
+import type { Filter, Profile, WordPracticeOptions, ListeningOptions } from './types';
 import { defaultFilter, defaultPractice } from './profile';
 import { selectedConcepts } from './vocabulary';
 import { fingerSections, techniqueSections } from './exercises';
 import { shareCatalog as v1 } from './shareCatalog';
 import { wordPracticeDefaults, assistedPractice } from './wordPractice';
+import { listeningDefaults, speechRates, validateListening } from './listening';
 import { BitReader, BitWriter, readSet, writeSet } from './shareBits';
 
 export type ShareResult<T> = { ok: true; value: T } | { ok: false; error: string };
 type SharedConcepts = { concepts: string[]; focus: string };
 type SharedFilter = SharedConcepts & { pool: 'common' | 'all'; minLength: number; maxLength: number };
 type SharedSession = { mode: 'timed'; duration: number } | { mode: 'count'; count: number };
-type SharedBase = { version: 1 | 2 | 3 | 4; session: SharedSession; hints: boolean; wordPractice?: WordPracticeOptions };
+type SharedBase = { version: 1 | 2 | 3 | 4 | 5; listening?: ListeningOptions; session: SharedSession; hints: boolean; wordPractice?: WordPracticeOptions };
 export type SharedTest = SharedBase & (
   { source: 'bank'; filter: SharedFilter } |
   { source: 'drills'; drills: string[]; filter: SharedConcepts | null } |
@@ -63,7 +64,8 @@ export function normalizeSharedTest(profile: Profile): ShareResult<SharedTest> {
       { mode: 'count', count: ['fingers', 'quotes', 'two-key'].includes(source) ? 25 : profile.session.count };
     const wordPractice: WordPracticeOptions = source === 'bank' || source === 'drills' ? { inputMode: profile.session.inputMode, groupSize: profile.session.groupSize, repetitions: profile.session.repetitions, requireCorrect: profile.session.requireCorrect, repeatOnError: profile.session.repeatOnError, errorRepetitions: profile.session.repeatOnError ? profile.session.errorRepetitions : 3 } : wordPracticeDefaults();
     checkWordOptions(wordPractice);
-    const base: SharedBase = { version: wordPractice.groupSize > 1 ? 4 : wordPractice.repeatOnError ? 3 : assistedPractice(wordPractice) ? 2 : 1, session, hints: profile.session.hints, ...(assistedPractice(wordPractice) ? { wordPractice } : {}) };
+    const listening = source === 'bank' || source === 'drills' ? validateListening(profile.session.listening) : listeningDefaults();
+    const base: SharedBase = { ...(listening.enabled ? { listening } : {}), version: listening.enabled ? 5 : wordPractice.groupSize > 1 ? 4 : wordPractice.repeatOnError ? 3 : assistedPractice(wordPractice) ? 2 : 1, session, hints: profile.session.hints, ...(assistedPractice(wordPractice) ? { wordPractice } : {}) };
     let test: SharedTest;
     switch (source) {
       case 'bank': test = { ...base, source, filter: { ...focused(), pool: filter.pool, minLength: filter.minLength, maxLength: filter.maxLength } }; break;
@@ -116,15 +118,16 @@ export function rangeUnrank(rank: number) {
   return { minLength: min, maxLength: min + rank };
 }
 
-/** V1/V2/V3/V4: MSB first; direct six-bit URL alphabet; no JSON, byte padding, or compression. */
+/** V1–V5: MSB first; direct six-bit URL alphabet; no JSON, byte padding, or compression. */
 export function encodeSharedTest(test: SharedTest): string {
   const w = new BitWriter();
-  if (test.version !== 1 && test.version !== 2 && test.version !== 3 && test.version !== 4) throw new Error('Unsupported test link version.');
+  if (test.version !== 1 && test.version !== 2 && test.version !== 3 && test.version !== 4 && test.version !== 5) throw new Error('Unsupported test link version.');
   const options = test.wordPractice || wordPracticeDefaults();
-  const extended = assistedPractice(options);
+  const listening = validateListening(test.listening);
+  const extended = assistedPractice(options) || listening.enabled;
   if (extended && test.source !== 'bank' && test.source !== 'drills') throw new Error('Word options require a word exercise.');
   checkWordOptions(options);
-  w.write(options.groupSize > 1 ? 4 : options.repeatOnError ? 3 : extended ? 2 : 1, 3); w.write(index(v1.sources as readonly string[], test.source), 4);
+  w.write(listening.enabled ? 5 : options.groupSize > 1 ? 4 : options.repeatOnError ? 3 : extended ? 2 : 1, 3); w.write(index(v1.sources as readonly string[], test.source), 4);
   w.write(test.session.mode === 'timed' ? index(v1.durations as readonly number[], test.session.duration) : 5 + index(v1.counts as readonly number[], test.session.count), 4);
   w.write(flag(test.hints), 1);
   switch (test.source) {
@@ -161,15 +164,16 @@ export function encodeSharedTest(test: SharedTest): string {
     case 'symbols': w.write(flag(test.variants), 1); break;
   }
   if (extended) { w.write(options.inputMode === 'steno' ? 1 : 0, 1); w.write(flag(options.requireCorrect), 1); w.write(options.repetitions - 1, 4); }
-  if (options.groupSize > 1) { w.write(options.repeatOnError ? options.errorRepetitions : 0, 4); w.write(options.groupSize - 1, 4); }
+  if (options.groupSize > 1 || listening.enabled) { w.write(options.repeatOnError ? options.errorRepetitions : 0, 4); w.write(options.groupSize - 1, 4); }
   else if (options.repeatOnError) w.write(options.errorRepetitions, 4);
+  if (listening.enabled) { w.write(index(['full', 'current', 'hidden'], listening.display), 2); w.write(index(speechRates as readonly number[], listening.rate), 4); }
   return w.token();
 }
 export function decodeSharedTest(token: string): ShareResult<SharedTest> {
   try {
     const r = new BitReader(token);
     const version = r.read(3);
-    if (version !== 1 && version !== 2 && version !== 3 && version !== 4) return { ok: false, error: 'Unsupported test link version.' };
+    if (version !== 1 && version !== 2 && version !== 3 && version !== 4 && version !== 5) return { ok: false, error: 'Unsupported test link version.' };
     const source = v1.sources[r.read(4)], sessionId = r.read(4);
     if (!source || sessionId > 10) throw new Error('Invalid test settings.');
     const base: SharedBase = { version, session: sessionId < 5 ? { mode: 'timed', duration: v1.durations[sessionId] } : { mode: 'count', count: v1.counts[sessionId - 5] }, hints: Boolean(r.read(1)) };
@@ -212,11 +216,16 @@ export function decodeSharedTest(token: string): ShareResult<SharedTest> {
       test.wordPractice!.repeatOnError = true;
       test.wordPractice!.errorRepetitions = bounded(r.read(4), 1, 10);
     }
-    if (version === 4) {
+    if (version >= 4) {
       const recovery = bounded(r.read(4), 0, 10);
       test.wordPractice!.repeatOnError = recovery > 0;
       test.wordPractice!.errorRepetitions = recovery || 3;
       test.wordPractice!.groupSize = bounded(r.read(4) + 1, 1, 10);
+    }
+    if (version === 5) {
+      const display = (['full', 'current', 'hidden'] as const)[r.read(2)], rate = speechRates[r.read(4)];
+      if (!display) throw new Error('Invalid audio display.');
+      test.listening = validateListening({ enabled: true, display, rate });
     }
     r.finish();
     encodeSharedTest(test);
@@ -238,7 +247,7 @@ function patches(test: SharedTest) {
     case 'quotes': practice.quoteLength = test.length; break;
     case 'symbols': practice.symbolVariants = test.variants; break;
   }
-  return { practice, filter, session: { ...test.session, hints: test.hints, ...wordPracticeDefaults(), ...test.wordPractice } };
+  return { practice, filter, session: { listening: test.listening || listeningDefaults(), ...test.session, hints: test.hints, ...wordPracticeDefaults(), ...test.wordPractice } };
 }
 export function applySharedTest(personal: Profile, test: SharedTest): Profile {
   const patch = patches(test);

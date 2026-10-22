@@ -8,6 +8,9 @@ import type { Filter, HintSize, PracticePreferences, PracticeWord } from '../dom
 import { ConceptPicker, Empty, FilterControls, Icon, Brand } from '../components';
 
 import { createOutlineTranslator } from '../domain/translation';
+import { listeningDefaults, speechRates } from '../domain/listening';
+import { browserSpeech } from '../domain/speech';
+import { useSpeechVoices } from '../useSpeechVoices';
 import { wordPracticeDefaults } from '../domain/wordPractice';
 import { PracticeSession } from './Session';
 import { TestSettings } from './TestSettings';
@@ -24,6 +27,9 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
   navigation: ReactNode; settingsContent?: ReactNode; warning: string;
 }) {
   const { testProfile: profile, setTestProfile: setProfile, testWords: words, testWordMap: wordMap, source, setSource, shared, saveShared, exitShared, routeHash } = useApp();
+  const { profile: personal, setProfile: setPersonal } = useApp();
+  const speech = useMemo(() => browserSpeech(), []);
+  const voices = useSpeechVoices(speech);
   const preferences = profile.practice;
   const { restricted, drill, mixed, keyboardSet, fingerBook, section, pattern, repeats, customPatterns, quoteLength, symbolVariants } = preferences;
   const setter = <K extends keyof PracticePreferences,>(key: K) => (value: PracticePreferences[K] | ((current: PracticePreferences[K]) => PracticePreferences[K])) => {
@@ -86,8 +92,8 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
   const translator = useMemo(() => isWords && session.inputMode === 'steno' ? createOutlineTranslator(words) : undefined, [isWords, session.inputMode, words]);
   const inputPractice = useMemo(() => translator ? { ...practice, pool: practice.pool.filter(word => translator.hasWord(word.word)) } : practice, [practice, translator]);
   const unavailableRaw = practice.pool.length - inputPractice.pool.length;
-  const config = useMemo(() => ({ title, ...inputPractice, ordered, ...session, ...(!isWords ? wordPracticeDefaults() : {}), translator }), [title, inputPractice, ordered, session, isWords, translator]);
-  const sessionKey = JSON.stringify({ preferences, filter, learned: profile.learned, corrections: profile.corrections, excluded: profile.excluded, text: profile.customText, lists: profile.lists, mode: session.mode, duration: session.duration, count: session.count, inputMode: session.inputMode, groupSize: session.groupSize, repetitions: session.repetitions, requireCorrect: session.requireCorrect, repeatOnError: session.repeatOnError, errorRepetitions: session.errorRepetitions });
+  const config = useMemo(() => ({ title, ...inputPractice, ordered, ...session, ...(!isWords ? { ...wordPracticeDefaults(), listening: listeningDefaults() } : {}), voice: personal.voice, translator }), [title, inputPractice, ordered, session, isWords, translator, personal.voice]);
+  const sessionKey = JSON.stringify({ listening: isWords ? session.listening : null, preferences, filter, learned: profile.learned, corrections: profile.corrections, excluded: profile.excluded, text: profile.customText, lists: profile.lists, mode: session.mode, duration: session.duration, count: session.count, inputMode: session.inputMode, groupSize: session.groupSize, repetitions: session.repetitions, requireCorrect: session.requireCorrect, repeatOnError: session.repeatOnError, errorRepetitions: session.errorRepetitions });
   const controls = <section className="practice-setup" aria-label="Practice setup">
     {shared && <div className="shared-test"><span className="small muted">Shared test</span><button className="text-button small" onClick={saveShared}>Save settings</button><button className="text-button small" onClick={exitShared}>Exit</button></div>}
     <label className="field">Exercise<select aria-label="Exercise" value={source} onChange={e => setSource(e.target.value)}>
@@ -129,6 +135,13 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
       <label className="check-line"><input type="checkbox" checked={session.repeatOnError} onChange={e => updateSession({ repeatOnError: e.target.checked })}/>Repeat on error</label>
       {session.repeatOnError && <label className="field">Error repetitions<select aria-label="Error repetitions" value={session.errorRepetitions} onChange={e => updateSession({ errorRepetitions: +e.target.value })}>{Array.from({ length: 10 }, (_, i) => <option key={i} value={i + 1}>{i + 1}</option>)}</select><span className="field-help">Mistakes restart the count.</span></label>}
     </div>}
+    {isWords && <div className="listening-options">
+      <label className="check-line"><input type="checkbox" checked={session.listening.enabled} onChange={e => updateSession({ listening: { ...session.listening, enabled: e.target.checked } })}/>Audio</label>
+      {session.listening.enabled && <>
+        <label className="field">Voice<select aria-label="Voice" value={personal.voice} onChange={e => setPersonal(p => ({ ...p, voice: e.target.value }))}><option value="">Automatic · local English</option>{personal.voice && !voices.some(v => v.id === personal.voice) && <option value={personal.voice}>Saved voice · unavailable</option>}{voices.map(v => <option key={v.id} value={v.id}>{v.name} · {v.lang}</option>)}</select>{!voices.length && <span className="field-help">No local English voice available on this device.</span>}</label>
+        <div className="session-options"><label>Speed<select aria-label="Speed" value={session.listening.rate} onChange={e => updateSession({ listening: { ...session.listening, rate: +e.target.value } })}>{speechRates.map(n => <option key={n} value={n}>{n}×</option>)}</select></label><label>Text<select aria-label="Text display" value={session.listening.display} onChange={e => updateSession({ listening: { ...session.listening, display: e.target.value as typeof session.listening.display } })}><option value="full">Full</option><option value="current">Current</option><option value="hidden">Hidden</option></select></label></div>
+      </>}
+    </div>}
     <label className="check-line"><input type="checkbox" checked={session.hints} onChange={e => updateSession({ hints: e.target.checked })}/>Hints</label>
     <div className="session-options"><label>Lines<select aria-label="Lines" value={session.lines} onChange={e => updateSession({ lines: +e.target.value })}>{[3,4,5,6,7,8].map(n => <option key={n}>{n}</option>)}</select></label><label>Hint position<select aria-label="Hint position" value={session.hintPosition} onChange={e => updateSession({ hintPosition: e.target.value as 'above' | 'below' })}><option value="above">Above</option><option value="below">Below</option></select></label></div>
     <div className="session-options hint-size-options">{(['hintTextSize','hintKeyboardSize'] as const).map(key => <label key={key}>{key === 'hintTextSize' ? 'Hint text size' : 'Keyboard size'}<select aria-label={key === 'hintTextSize' ? 'Hint text size' : 'Keyboard size'} value={session[key]} onChange={e => updateSession({ [key]: e.target.value as HintSize })}>{(['small','medium','large','extra-large'] as const).map(value => <option key={value} value={value}>{value === 'extra-large' ? 'Extra large' : value[0].toUpperCase() + value.slice(1)}</option>)}</select></label>)}</div>
@@ -136,7 +149,7 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
     <div className="test-settings-actions"><button className="primary start-button" disabled={!inputPractice.pool.length} onClick={onClose}>Done</button><ShareControls profile={profile} disabled={!inputPractice.pool.length}/></div>
   </section>;
   return <>
-    {inputPractice.pool.length ? <PracticeSession key={sessionKey} config={config} onExit={onSettings} suspended={settingsOpen} onOptionsChange={updateSession} practiceHref={routeHash('practice')}/> :
+    {inputPractice.pool.length ? <PracticeSession key={sessionKey} config={config} speechAdapter={speech} onExit={onSettings} suspended={settingsOpen} onOptionsChange={updateSession} practiceHref={routeHash('practice')}/> :
       <main className="session-shell"><header className="session-header"><Brand href={routeHash('practice')}/><button className="icon-button" aria-label="Test settings" onClick={onSettings}><Icon name="settings"/></button></header><div className="home-empty">{readingError || (isReading && reading?.key !== readingKey ? 'Loading exercise…' : 'No matching words.')}<button className="text-button" onClick={onSettings}>Test settings</button></div></main>}
     {warning && !settingsOpen && <p className="storage-warning" role="status">{warning} <a href={routeHash('settings')}>Backup & recovery</a></p>}
     {settingsOpen && <TestSettings onClose={onClose} navigation={navigation}>{warning && <p className="notice warning" role="status">{warning} <a href={routeHash('settings')}>Backup & recovery</a></p>}{settingsContent || controls}</TestSettings>}

@@ -74,6 +74,11 @@ export interface WordPracticeOptions {
   repeatOnError: boolean;
   errorRepetitions: number;
 }
+export interface ListeningOptions {
+  enabled: boolean;
+  display: 'full' | 'current' | 'hidden';
+  rate: number;
+}
 export type HintSize = 'small' | 'medium' | 'large' | 'extra-large';
 export interface Profile {
   version: 1;
@@ -86,7 +91,8 @@ export interface Profile {
   theme: 'system' | 'light' | 'dark';
   customText: string;
   practice: PracticePreferences;
-  session: WordPracticeOptions & { mode: 'timed' | 'count'; duration: number; count: number; hints: boolean; lines: number; hintPosition: 'above' | 'below'; hintTextSize: HintSize; hintKeyboardSize: HintSize };
+  voice: string;
+  session: WordPracticeOptions & { listening: ListeningOptions; mode: 'timed' | 'count'; duration: number; count: number; hints: boolean; lines: number; hintPosition: 'above' | 'below'; hintTextSize: HintSize; hintKeyboardSize: HintSize };
 }
 export interface Evaluation {
   eligible: boolean;

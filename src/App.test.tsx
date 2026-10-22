@@ -381,3 +381,34 @@ it('isolates, reloads, and saves shared group settings without changing learned 
   expect(JSON.parse(localStorage.getItem(profileKey)!).session.groupSize).toBe(5);
   expect(JSON.parse(localStorage.getItem(profileKey)!).learned).toEqual(personal.learned);
 });
+
+it('isolates v5 audio settings through edits, navigation, reload, save and exit, keeping voice personal', async () => {
+  const personal = defaultProfile(); personal.voice = 'saved-local'; personal.session.hints = true;
+  localStorage.setItem(profileKey, JSON.stringify(personal));
+  const teacher = defaultProfile(); teacher.session.listening = { enabled: true, display: 'hidden', rate: .7 };
+  const result = normalizeSharedTest(teacher); if (!result.ok) throw new Error(result.error);
+  const token = encodeSharedTest(result.value);
+  window.location.hash = sharedHash('test-settings', token);
+  let app = render(<App/>);
+  await screen.findByRole('combobox', { name: 'Speed' });
+  expect(screen.getByRole('combobox', { name: 'Speed' })).toHaveValue('0.7');
+  fireEvent.change(screen.getByRole('combobox', { name: 'Text display' }), { target: { value: 'current' } });
+  fireEvent.change(screen.getByRole('combobox', { name: 'Speed' }), { target: { value: '1.3' } });
+  await waitFor(() => expect(window.location.hash).not.toBe(sharedHash('test-settings', token)));
+  const edited = window.location.hash;
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
+  await navigate(sharedHash('skills', edited.split('t=')[1]));
+  fireEvent.click(screen.getByRole('link', { name: 'Test' }));
+  await navigate(sharedHash('test-settings', edited.split('t=')[1]));
+  app.unmount(); app = render(<App/>);
+  expect(await screen.findByRole('combobox', { name: 'Speed' })).toHaveValue('1.3');
+  expect(screen.getByRole('combobox', { name: 'Text display' })).toHaveValue('current');
+  expect(screen.getByRole('combobox', { name: 'Voice' })).toHaveValue('saved-local');
+  fireEvent.click(screen.getByRole('button', { name: 'Exit' }));
+  expect(await screen.findByRole('textbox', { name: 'Practice input' })).toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Play' })).not.toBeInTheDocument();
+  await navigate(edited); fireEvent.click(await screen.findByRole('button', { name: 'Save settings' }));
+  await waitFor(() => expect(JSON.parse(localStorage.getItem(profileKey)!).session.listening).toEqual({ enabled: true, display: 'current', rate: 1.3 }));
+  expect(JSON.parse(localStorage.getItem(profileKey)!).voice).toBe('saved-local');
+  expect(JSON.parse(localStorage.getItem(profileKey)!).learned).toEqual(personal.learned);
+});

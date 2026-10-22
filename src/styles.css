@@ -252,6 +252,16 @@ summary { width: fit-content; }
 textarea.practice-capture { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; pointer-events: none; resize: none; padding: 0; margin: 0; border: 0; caret-color: transparent; }
 .test-actions { height: 64px; display: flex; justify-content: center; align-items: center; gap: 16px; }
 .test-actions .text-button { color: var(--muted); font-size: 11px; }
+.test-actions .audio-play { display: inline-flex; align-items: center; gap: 6px; color: var(--accent); font-size: 13px; min-width: 72px; }
+.speech-status { height: 40px; text-align: center; font-size: 12px; line-height: 18px; }
+.listening-hidden { position: relative; height: 100%; overflow: hidden; }
+.listening-entered { color: var(--ink); }
+.hidden-line > span, .hidden-line > span > span { position: relative; }
+.hidden-line > span { display: block; max-width: 100%; }
+.hidden-line .cursor-end { display: inline-block; width: 2px; height: 1.2em; vertical-align: text-bottom; }
+.listening-entered.wrong { color: var(--error); }
+.listening-dots { top: 12px; bottom: auto; left: 0; transform: none; }
+.listening-pending { top: 24px; bottom: auto; }
 .session-finish:disabled { visibility: hidden; }
 .hint-toggle[aria-pressed='true'] { color: var(--accent); text-decoration: none; }
 .session-shell { --hint-text-size: 24px; --hint-key-size: 30px; --hint-key-font: 14px; --hint-key-height: 150px; --hint-text-height: 130px; --hint-height: max(var(--hint-key-height),var(--hint-text-height)); }

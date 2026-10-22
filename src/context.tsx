@@ -4,6 +4,8 @@ import type { Dictionary, HintSize, PracticeWord, Profile, WordEntry, WordPracti
 import type { SharedTest } from './domain/sharing';
 
 export interface SessionConfig extends Partial<WordPracticeOptions> {
+  listening?: import('./domain/types').ListeningOptions;
+  voice?: string;
   translator?: import('./domain/translation').InputTranslator;
   title: string;
   kind: 'words' | 'chords' | 'text';

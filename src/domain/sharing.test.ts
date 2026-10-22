@@ -297,3 +297,53 @@ it('rejects invalid v4 group and recovery fields, truncated data, and incompatib
   expect(decodeSharedTest(w.token()).ok).toBe(false);
   p.session.groupSize = 11; expect(normalizeSharedTest(p).ok).toBe(false);
 });
+
+it('round-trips v5 listening settings with all rates, displays, and supported word sources', () => {
+  for (const source of ['bank', 'drills', 'filter:everything']) for (const display of ['full', 'current', 'hidden'] as const) for (let n = 0; n < 16; n++) {
+    const p = defaultProfile(); p.practice.source = source;
+    p.session.listening = { enabled: true, display, rate: (.5 * 10 + n) / 10 };
+    p.session.groupSize = n % 10 + 1; p.session.inputMode = n % 2 ? 'steno' : 'text';
+    p.session.repetitions = n % 10 + 1; p.session.repeatOnError = Boolean(n % 2); p.session.requireCorrect = true;
+    const test = snapshot(p); expect(test.version).toBe(5); roundTrip(test);
+    expect(applySharedTest(defaultProfile(), test).session.listening).toEqual(p.session.listening);
+    expect(saveSharedTest(defaultProfile(), test).session.listening).toEqual(p.session.listening);
+  }
+});
+it('isolates shared audio and voice settings, and explicitly disables audio for v1–v4 links', () => {
+  const personal = defaultProfile(); personal.voice = 'device-voice'; personal.session.listening = { enabled: true, display: 'hidden', rate: 2 };
+  const original = JSON.stringify(personal);
+  for (const token of ['ICCA', 'QCCZA', 'YCCAG', 'YCCZG', 'gCCBAQ', 'gCCBGQ']) {
+    const result = decodeSharedTest(token); if (!result.ok) throw new Error(result.error);
+    expect(encodeSharedTest(result.value)).toBe(token);
+    expect(applySharedTest(personal, result.value)).toMatchObject({ voice: 'device-voice', session: { listening: { enabled: false, display: 'full', rate: 1 } } });
+  }
+  const shared = snapshot(personal), applied = applySharedTest(defaultProfile(), shared);
+  expect(applied.voice).toBe(''); expect(shared).not.toHaveProperty('voice');
+  expect(JSON.stringify(personal)).toBe(original);
+  expect(saveSharedTest(personal, shared).voice).toBe('device-voice');
+  personal.session.listening.enabled = false;
+  expect(encodeSharedTest(snapshot(personal))).toBe('ICCA');
+});
+it('rejects invalid v5 displays, trailing bits, truncated fields, and nonword sources', () => {
+  const p = defaultProfile(); p.session.listening.enabled = true;
+  const token = encodeSharedTest(snapshot(p));
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+  const bits = [...token].map(c => alphabet.indexOf(c).toString(2).padStart(6, '0')).join('');
+  // Default source is 19 bits, word options 6 + recovery 4 + group 4, display 2, rate 4.
+  const reserved = new BitWriter(); reserved.bits = bits.slice(0, 33); reserved.write(3, 2); reserved.write(5, 4);
+  expect(decodeSharedTest(reserved.token()).ok).toBe(false);
+  for (const invalid of [token.slice(0, -1), token + 'A']) expect(decodeSharedTest(invalid).ok).toBe(false);
+  const incompatible = new BitWriter(); incompatible.bits = '1010010' + bits.slice(7, 39);
+  expect(decodeSharedTest(incompatible.token()).ok).toBe(false);
+  for (const source of ['quotes', 'numbers', 'fingers']) { p.practice.source = source; expect(snapshot(p).version).toBe(1); }
+});
+
+it('freezes v5 audio fixtures', () => {
+  const p = defaultProfile(); p.session.listening.enabled = true;
+  for (const [display, token] of [['full', 'oCCAAAo'], ['current', 'oCCAACo'], ['hidden', 'oCCAAEo']] as const) {
+    p.session.listening.display = display;
+    expect(encodeSharedTest(snapshot(p))).toBe(token);
+    const result = decodeSharedTest(token); if (!result.ok) throw new Error(result.error);
+    expect(encodeSharedTest(result.value)).toBe(token);
+  }
+});

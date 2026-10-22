@@ -1,6 +1,7 @@
 import { conceptMap, starterSkills } from './concepts';
 import { parseStroke, phoneSet, syllableCount } from './classifier';
 import type { Filter, Profile, WordCorrection } from './types';
+import { listeningDefaults, validateListening } from './listening';
 import { wordPracticeDefaults } from './wordPractice';
 import { fingerSections, keyboardSets, wordDrills } from './exercises';
 
@@ -10,7 +11,7 @@ export const defaultPractice = (): Profile['practice'] => ({ source: 'bank', res
 export const defaultProfile = (): Profile => ({
   version: 1, learned: [...starterSkills], lists: [], corrections: [], excluded: [],
   exercises: [{ id: 'everything', name: 'Skills', filter: defaultFilter() }],
-  filter: defaultFilter(), theme: 'dark', customText: '', practice: defaultPractice(), session: { ...wordPracticeDefaults(), mode: 'timed', duration: 60, count: 25, hints: false, lines: 3, hintPosition: 'above', hintTextSize: 'extra-large', hintKeyboardSize: 'extra-large' },
+  voice: '', filter: defaultFilter(), theme: 'dark', customText: '', practice: defaultPractice(), session: { listening: listeningDefaults(), ...wordPracticeDefaults(), mode: 'timed', duration: 60, count: 25, hints: false, lines: 3, hintPosition: 'above', hintTextSize: 'extra-large', hintKeyboardSize: 'extra-large' },
 });
 
 const object = (value: unknown): Record<string, unknown> => {
@@ -85,7 +86,10 @@ export function validateProfile(v: unknown): Profile {
   }
   if (!['system', 'light', 'dark'].includes(String(p.theme))) throw new Error('Invalid theme.');
   if (typeof p.customText !== 'string' || p.customText.length > 100_000) throw new Error('Custom text must contain at most 100,000 characters.');
+  const voice = p.voice === undefined ? '' : p.voice;
+  if (typeof voice !== 'string' || voice.length > 1000) throw new Error('Invalid voice preference.');
   const session = object(p.session);
+  const listening = validateListening(session.listening);
   if (session.mode !== 'timed' && session.mode !== 'count') throw new Error('Invalid session mode.');
   if (typeof session.hints !== 'boolean') throw new Error('Invalid hints setting.');
   const lines = session.lines === undefined ? 3 : integer(session.lines, 3, 8);
@@ -110,9 +114,9 @@ export function validateProfile(v: unknown): Profile {
   if (![30, 60, 90, 120, 300].includes(duration) || ![10, 25, 50, 100, 250, 500].includes(count)) throw new Error('Unsupported practice length.');
   const practice = p.practice === undefined ? defaultPractice() : validatePractice(p.practice);
   return {
-    version: 1, learned: conceptList(p.learned), lists, exercises, corrections,
+    version: 1, voice, learned: conceptList(p.learned), lists, exercises, corrections,
     excluded: [...new Set(array(p.excluded, word))], filter: validateFilter(p.filter),
-    theme: p.theme as Profile['theme'], customText: p.customText, practice, session: { inputMode, groupSize, repetitions, requireCorrect, repeatOnError, errorRepetitions, mode: session.mode, duration, count, hints: session.hints, lines, hintPosition, hintTextSize, hintKeyboardSize },
+    theme: p.theme as Profile['theme'], customText: p.customText, practice, session: { listening, inputMode, groupSize, repetitions, requireCorrect, repeatOnError, errorRepetitions, mode: session.mode, duration, count, hints: session.hints, lines, hintPosition, hintTextSize, hintKeyboardSize },
   };
 }
 

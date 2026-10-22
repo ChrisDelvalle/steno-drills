@@ -5,15 +5,26 @@ import type { ErrorSample, SpeedSample, TypingEvent } from '../domain/practice';
 import { Icon, StenoKeyboard, Brand } from '../components';
 import { textTranslator } from '../domain/translation';
 import { assistedPractice, projectWordPractice, wordPracticeDefaults, wordPracticeMetrics, scoreWordPractice, rebaseRecovery } from '../domain/wordPractice';
+import { browserSpeech, PromptSpeaker } from '../domain/speech';
+import type { SpeechAdapter } from '../domain/speech';
+import { listeningDefaults } from '../domain/listening';
 import { PracticeSurface } from './PracticeSurface';
 
 const ResultsChart = lazy(() => import('./ResultsChart'));
 const makeTargets = (c: SessionConfig) => c.ordered || c.kind === 'text' ? c.pool : generateWords(c.pool, c.mode === 'timed' ? 200 : c.count);
 
-export function PracticeSession({ config, onExit, onOptionsChange, suspended = false, practiceHref = '#/practice' }: {
-  config: SessionConfig; onExit: () => void; onOptionsChange?: (options: { hints: boolean }) => void; suspended?: boolean; practiceHref?: string;
+export function PracticeSession({ config, onExit, onOptionsChange, suspended = false, practiceHref = '#/practice', speechAdapter }: {
+  speechAdapter?: SpeechAdapter; config: SessionConfig; onExit: () => void; onOptionsChange?: (options: { hints: boolean }) => void; suspended?: boolean; practiceHref?: string;
 }) {
   const [active, setActive] = useState(config);
+  const listening = active.listening || listeningDefaults();
+  const audio = active.kind === 'words' && listening.enabled;
+  const display = audio ? listening.display : 'full';
+  const [speechError, setSpeechError] = useState('');
+  const [activated, setActivated] = useState(false);
+  const [epoch, setEpoch] = useState(0);
+  const [revealedPrompt, setRevealedPrompt] = useState('');
+  const adapter = useMemo(() => speechAdapter || browserSpeech(), [speechAdapter]);
   const [targets, setTargets] = useState(() => makeTargets(config));
   const [input, setInput] = useState('');
   const [startedAt, setStartedAt] = useState<number | null>(null);
@@ -27,18 +38,44 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
   const errors = useRef<ErrorSample[]>([]);
   const typing = useRef<TypingEvent[]>([]);
   const latestInput = useRef('');
+  const playbackAllowed = useRef(true);
   const suspendedRef = useRef(suspended);
   suspendedRef.current = suspended;
   const recovery = useRef(new Map<number, number>());
   const options = useMemo(() => ({ ...wordPracticeDefaults(), inputMode: active.inputMode || 'text', groupSize: active.groupSize || 1, repetitions: active.repetitions || 1, requireCorrect: active.requireCorrect || false, repeatOnError: active.repeatOnError || false, errorRepetitions: active.errorRepetitions || 3 }), [active.inputMode, active.groupSize, active.repetitions, active.requireCorrect, active.repeatOnError, active.errorRepetitions]);
-  const assisted = assistedPractice(options);
+  const assisted = assistedPractice(options) || audio;
   const incorrectChars = useRef(0);
   const project = useCallback((value: string, finalized = false) => projectWordPractice(targets, (active.translator || textTranslator).translate(value, active.questionHints), options, finalized, recovery.current), [targets, active.translator, active.questionHints, options]);
   const projection = useMemo(() => assisted ? project(input) : undefined, [assisted, project, input]);
   const evaluate = (value: string, ms: number, finalized = finished) => assisted ? scoreWordPractice(project(value, finalized), targets, ms, errors.current.flatMap(e => e.mistakes), incorrectChars.current) : scoreInput(targets, practiceText(value, active.questionHints), ms);
   const score = evaluate(input, elapsed);
   const remaining = Math.max(0, active.duration * 1000 - elapsed);
-  const current = targets[cursor];
+  const prompt = projection?.prompt;
+  const promptId = `${epoch}:${prompt?.id || '0:0'}`;
+  useEffect(() => { setRevealedPrompt(''); }, [promptId]);
+  const revealed = display !== 'hidden' || revealedPrompt === promptId;
+  const hintsVisible = display === 'hidden' ? revealedPrompt === promptId : active.hints;
+  const current = targets[audio ? projection?.hint || 0 : cursor];
+  const speechCallbacks = useRef({ start: () => {}, error: (_message: string) => {} });
+  speechCallbacks.current = {
+    start: () => { const at = performance.now(); setSpeechError(''); setStartedAt(previous => previous ?? at); },
+    error: message => { setSpeechError(message); setControlsHidden(false); },
+  };
+  const speaker = useMemo(() => new PromptSpeaker(adapter, { start: () => speechCallbacks.current.start(), error: message => speechCallbacks.current.error(message) }), [adapter]);
+  const spokenPrompt = audio && prompt && prompt.start < prompt.end ? { id: promptId, text: targets.slice(prompt.start, prompt.end).map(w => w.word).join(' ') } : null;
+  useEffect(() => {
+    speaker.update(!suspended && !finished ? spokenPrompt : null, active.voice || '', listening.rate, playbackAllowed.current && document.hasFocus() && document.visibilityState !== 'hidden');
+  }, [speaker, spokenPrompt?.id, suspended, finished, active.voice, listening.rate]);
+  useEffect(() => {
+    const cancel = () => speaker.cancel();
+    const visibility = () => { if (document.visibilityState === 'hidden') cancel(); };
+    window.addEventListener('blur', cancel); window.addEventListener('pagehide', cancel); document.addEventListener('visibilitychange', visibility);
+    return () => { window.removeEventListener('blur', cancel); window.removeEventListener('pagehide', cancel); document.removeEventListener('visibilitychange', visibility); speaker.cancel(); };
+  }, [speaker]);
+  const play = () => {
+    if (!spokenPrompt || suspended || finished) return;
+    playbackAllowed.current = true; setActivated(true); setSpeechError(''); speaker.play(spokenPrompt, active.voice || '', listening.rate); focus();
+  };
   const capture = (ms: number, value = latestInput.current, finalized = false) => {
     const lastTime = history.current.at(-1)?.seconds || 0;
     const errorCount = errors.current.filter(e => (history.current.length === 0 ? e.seconds >= 0 : e.seconds > lastTime) && e.seconds <= ms / 1000).reduce((sum, e) => sum + e.count, 0);
@@ -50,14 +87,15 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     else history.current.push(point);
   };
   const focus = () => requestAnimationFrame(() => { if (!suspendedRef.current) inputRef.current?.focus(); });
-  const reset = (next: SessionConfig = active) => {
+  const reset = (next: SessionConfig = active, replay = true) => {
+    playbackAllowed.current = replay; speaker.cancel(); setEpoch(n => n + 1); setSpeechError(''); setRevealedPrompt('');
     setActive(next); setTargets(makeTargets(next)); setInput(''); latestInput.current = '';
     setStartedAt(null); setElapsed(0); setFinished(false); setControlsHidden(false); setCursor(0); history.current = []; errors.current = []; typing.current = []; incorrectChars.current = 0; recovery.current.clear(); focus();
   };
   const previousSuspended = useRef(suspended);
   useLayoutEffect(() => {
     if (previousSuspended.current !== suspended) {
-      previousSuspended.current = suspended; reset(config);
+      previousSuspended.current = suspended; reset(config, false);
     } else if (!suspended) focus();
   }, [suspended]);
   useEffect(() => {
@@ -96,26 +134,28 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     if (startedAt !== null) { const ms = performance.now() - startedAt; setElapsed(ms); capture(ms, latestInput.current, true); setFinished(true); }
   };
   const toggleHints = () => {
+    if (display === 'hidden') { setRevealedPrompt(previous => previous === promptId ? '' : promptId); focus(); return; }
     const hints = !active.hints;
     setActive(previous => ({ ...previous, hints })); onOptionsChange?.({ hints }); focus();
   };
-  const hint = <div className="session-hint" role="group" aria-label="Hints" aria-hidden={!active.hints} data-visible={active.hints}><p><strong>{current?.word}</strong><code>{current?.outline || 'No dictionary hint'}</code></p><StenoKeyboard outline={current?.outline}/></div>;
+  const hint = <div className="session-hint" role="group" aria-label="Hints" aria-hidden={!hintsVisible} data-visible={hintsVisible}>{revealed && <><p><strong>{current?.word}</strong><code>{current?.outline || 'No dictionary hint'}</code></p><StenoKeyboard outline={current?.outline}/></>}</div>;
   return <main className="session-shell" aria-label="Practice" data-controls-hidden={controlsHidden && startedAt !== null && !finished && !suspended} data-hint-position={active.hintPosition || 'above'} data-hint-text={active.hintTextSize || 'extra-large'} data-hint-keyboard={active.hintKeyboardSize || 'extra-large'} onFocusCapture={e => {
     if (e.target !== inputRef.current) setControlsHidden(false);
   }} onKeyDown={e => {
     if (suspended || e.nativeEvent.isComposing) return;
     if (e.key === 'Tab') setControlsHidden(false);
-    if (e.key === 'Escape') { e.preventDefault(); onExit(); }
+    if (e.key === 'Escape') { e.preventDefault(); speaker.cancel(); onExit(); }
     if (e.key === 'Enter' && !(e.target instanceof HTMLButtonElement) && !(e.target instanceof HTMLAnchorElement)) { e.preventDefault(); reset(); }
   }}>
-    <header className="session-header"><Brand href={practiceHref} onClick={e => { e.preventDefault(); reset(); }}/><button className="icon-button session-controls" aria-label="Test settings" title="Test settings" onClick={onExit}><Icon name="settings"/></button></header>
+    <header className="session-header"><Brand href={practiceHref} onClick={e => { e.preventDefault(); reset(); }}/><button className="icon-button session-controls" aria-label="Test settings" title="Test settings" onClick={() => { speaker.cancel(); onExit(); }}><Icon name="settings"/></button></header>
     {!finished ? <div className="test-stage">
       {active.hintPosition !== 'below' && <div className="hint-slot hint-above">{hint}</div>}
       <div className="test-status"><span className="session-clock" aria-label={active.mode === 'timed' ? 'Time left' : 'Elapsed time'}>{active.mode === 'timed' ? Math.ceil(remaining / 1000) : Math.floor(elapsed / 1000)}</span></div>
-      <PracticeSurface lines={active.lines || 3} targets={targets} input={input} projection={projection} project={assisted ? project : undefined} repetitions={options.repetitions} groupSize={options.groupSize} repeatOnError={options.repeatOnError} rawInput={options.inputMode === 'steno'} tokens={score.tokens} completed={score.completed} inputRef={inputRef} questionHints={active.questionHints} suspended={suspended} onHintChange={setCursor} onInput={value => {
+      <PracticeSurface display={display} revealed={revealed} lines={active.lines || 3} targets={targets} input={input} projection={projection} project={assisted ? project : undefined} repetitions={options.repetitions} groupSize={options.groupSize} repeatOnError={options.repeatOnError} rawInput={options.inputMode === 'steno'} tokens={score.tokens} completed={score.completed} inputRef={inputRef} questionHints={active.questionHints} suspended={suspended} onHintChange={setCursor} onInput={value => {
         if (/[\r\n]/.test(value)) { reset(); return; }
         const previous = practiceText(latestInput.current, active.questionHints), text = practiceText(value, active.questionHints);
         if (active.questionHints && [...insertedText(latestInput.current, value)].filter(char => char === '?').length % 2) toggleHints();
+        if (audio && startedAt === null) return;
         if (text !== previous) setControlsHidden(true);
         const now = performance.now(), ms = startedAt === null ? 0 : now - startedAt;
         if (assisted) {
@@ -134,11 +174,12 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
           if (metrics.inserted) typing.current.push({ at: ms, characters: metrics.inserted });
           if (metrics.errors) errors.current.push({ seconds: ms / 1000, count: metrics.errors, mistakes: metrics.mistakes });
         }
-        if (startedAt === null && text.trim()) setStartedAt(now);
+        if (!audio && startedAt === null && text.trim()) setStartedAt(now);
         latestInput.current = value; setInput(value);
       }}/>
-      <div className="test-actions session-controls"><button className="icon-button" aria-label="Restart" title="Restart (Enter)" onClick={() => reset()}><Icon name="refresh"/></button><button className="icon-button hint-toggle" aria-label="Hints" title={active.questionHints ? options.inputMode === 'steno' ? 'Hints (?)' : 'Hints (? / H-F)' : 'Hints'} aria-pressed={active.hints} onClick={toggleHints}><Icon name="hint"/></button><button className="text-button small session-finish" disabled={startedAt === null} onClick={finish}>Finish</button></div>
+      <div className="test-actions session-controls">{audio && <button className="text-button audio-play" onClick={play}><Icon name="practice" size={18}/>{activated ? 'Replay' : 'Play'}</button>}<button className="icon-button" aria-label="Restart" title="Restart (Enter)" onClick={() => reset()}><Icon name="refresh"/></button><button className="icon-button hint-toggle" aria-label="Hints" title={active.questionHints ? options.inputMode === 'steno' ? 'Hints (?)' : 'Hints (? / H-F)' : 'Hints'} aria-pressed={hintsVisible} onClick={toggleHints}><Icon name="hint"/></button><button className="text-button small session-finish" disabled={startedAt === null} onClick={finish}>Finish</button></div>
       {active.hintPosition === 'below' && <div className="hint-slot hint-below">{hint}</div>}
+      {audio && <div className="speech-status" role="status">{speechError && <span className="error">{speechError}</span>}</div>}
       {active.attribution && <p className="small muted passage-source session-controls">{active.attribution}</p>}
       <span className="sr-only">{score.completed} {active.kind === 'chords' ? 'chords' : 'words'} submitted{active.mode === 'count' ? ` of ${targets.length}` : ''}</span>
     </div> : <section className="session-results" tabIndex={-1} ref={resultsRef} aria-label="Practice results">

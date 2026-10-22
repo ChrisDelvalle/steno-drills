@@ -57,3 +57,9 @@ Fixed fixtures: `YCCAG` is starter concepts, 60 seconds, hints off, translated t
 V4 retains the v1 source payload and six v2 word-option bits, followed by a 4-bit recovery count and a 4-bit group size minus one. Recovery count 0 disables recovery; 1–10 enables it with that many consecutive correct passes. Group sizes are 1–10. Reserved values, incomplete fields, unexpected trailing bits, and non-word sources are rejected. The encoder emits v4 only for groups larger than one; all existing v1–v3 fixtures remain unchanged. Earlier links explicitly use group size 1, independently of personal defaults.
 
 `gCCBAQ` is starter concepts, 60 seconds, hints off, groups of three words, three normal repetitions, translated input, and Require correct off. `gCCBGQ` adds three error repetitions. Shared group sizes remain temporary through navigation and reload; Save settings persists the size without changing learned Skills.
+
+## V5 self-paced audio
+
+V5 preserves the v1 source payload and all v4 word fields (six v2 bits, four recovery bits, four group bits), then appends two display bits and four speed bits. Version 5 enables audio; no extra enable bit is needed. Display IDs are Full=0, Current=1, Hidden=2; 3 is reserved. Speed IDs 0–15 are 0.5× through 2× in 0.1 steps, frozen in `speechRates`. Only Words and word drills support v5; saved filters resolve to Words. Voice IDs remain personal and are never encoded.
+
+With starter concepts, 60 seconds and ordinary word options, fixed fixtures are `oCCAAAo` (Full), `oCCAACo` (Current), and `oCCAAEo` (Hidden), all at 1× with hints off. Audio-off links continue to emit the existing v1–v4 formats, regardless of inactive listening preferences. All old links explicitly disable audio. Editing, reload, Save settings and Exit preserve the same shared-profile isolation. A shared audio test is ready immediately but requires its initial Play action before typing and timing begin.

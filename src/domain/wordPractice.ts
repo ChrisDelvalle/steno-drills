@@ -20,7 +20,20 @@ export interface WordAttempt {
   expected: string;
   scored: boolean;
 }
+export interface PracticePrompt {
+  id: string;
+  start: number;
+  end: number;
+  pass: number;
+  sourceStart: number;
+  preview: boolean;
+  recovering: boolean;
+  error: boolean;
+  progress: number;
+  required: number;
+}
 export interface WordPracticeProjection {
+  prompt: PracticePrompt;
   cells: PracticeCell[];
   attempts: WordAttempt[];
   current: number;
@@ -66,7 +79,8 @@ export function projectWordPractice(targets: PracticeWord[], translated: Transla
   let floor = options.repeatOnError ? history.get(0) : undefined;
   let recovering = floor !== undefined, dotError = recovering;
   let required = recovering ? Math.max(options.repetitions, options.errorRepetitions) : options.repetitions;
-  let passStart = 0, passFailed = false, newPass = true;
+  let passStart = 0, passFailed = false, newPass = true, pass = 0;
+  let preview: PracticePrompt | undefined;
   const clearPass = () => {
     for (let n = groupStart; n < groupEnd; n++) cells[n] = { typed: '', annotation: '', wrong: false, neutral: false, complete: false };
   };
@@ -107,6 +121,13 @@ export function projectWordPractice(targets: PracticeWord[], translated: Transla
     }
     if (lastWord && passCorrect && !beforeFloor) { progress = nextProgress; dotError = false; }
     hint = lastWord ? passed ? Math.min(groupEnd, targets.length - 1) : groupStart : target + 1;
+    if (lastWord && matches && !unit.submitted && !finalMatch && !finalized) {
+      const start = passed ? groupEnd : groupStart;
+      const nextRecovering = passed ? Boolean(options.repeatOnError && history.has(start)) : recovering;
+      preview = { id: `${start}:${pass + 1}`, start, end: Math.min(start + size, targets.length), pass: pass + 1,
+        sourceStart: unit.end, preview: true, recovering: nextRecovering, error: passed ? nextRecovering : dotError,
+        progress: passed ? 0 : progress, required: passed ? nextRecovering ? Math.max(options.repetitions, options.errorRepetitions) : options.repetitions : required };
+    }
     if (unit.submitted || finalMatch || finalized) {
       cell.complete = matches;
       offset = 0;
@@ -119,13 +140,14 @@ export function projectWordPractice(targets: PracticeWord[], translated: Transla
           recovering = floor !== undefined; dotError = recovering;
           required = recovering ? Math.max(options.repetitions, options.errorRepetitions) : options.repetitions;
         } else if (passCorrect) clearPass();
-        target = groupStart; newPass = true;
+        target = groupStart; newPass = true; pass++; passStart = unit.end;
       }
       hint = Math.min(target, Math.max(0, targets.length - 1));
     }
   }
   const current = Math.min(target, Math.max(0, targets.length - 1));
-  return { cells, attempts, current, offset, hint, progress, groupStart, groupEnd, groupWrong: passFailed || dotError, required, recovering, dotError,
+  const prompt: PracticePrompt = preview || { id: `${groupStart}:${pass}`, start: groupStart, end: groupEnd, pass, sourceStart: passStart, preview: false, recovering, error: dotError, progress, required };
+  return { prompt, cells, attempts, current, offset, hint, progress, groupStart, groupEnd, groupWrong: passFailed || dotError, required, recovering, dotError,
     completed: groupStart, done: targets.length > 0 && groupStart === targets.length, correct, correctChars,
     translatedText: attempts.filter(a => a.scored).map(a => a.translation.text ? a.translation.text + ' ' : '').join(''),
   };
