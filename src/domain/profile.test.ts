@@ -111,3 +111,12 @@ it('round-trips word options and preserves explicit hint sizes while migrating o
   for (const repetitions of [0, 11, 2.5, '3']) expect(() => importBackup(exportBackup({ ...p, session: { ...p.session, repetitions } } as never))).toThrow();
   expect(() => importBackup(exportBackup({ ...p, session: { ...p.session, inputMode: 'other' } } as never))).toThrow();
 });
+it('migrates, validates, and backs up error-recovery settings', () => {
+  const p = defaultProfile(); p.session.repeatOnError = true; p.session.errorRepetitions = 10;
+  expect(importBackup(exportBackup(p))).toEqual(p);
+  const old = JSON.parse(exportBackup(p));
+  delete old.profile.session.repeatOnError; delete old.profile.session.errorRepetitions;
+  expect(importBackup(JSON.stringify(old)).session).toMatchObject({ repeatOnError: false, errorRepetitions: 3 });
+  for (const errorRepetitions of [0, 11, 1.5, null]) expect(() => importBackup(exportBackup({ ...p, session: { ...p.session, errorRepetitions } } as never))).toThrow();
+  expect(() => importBackup(exportBackup({ ...p, session: { ...p.session, repeatOnError: 'true' } } as never))).toThrow();
+});

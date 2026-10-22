@@ -29,7 +29,7 @@ The homepage is a ready-to-type test. Start typing; the clock begins on input. C
 
 If the test loses focus, its words blur behind a focus prompt. Click the passage or start typing to resume; the first character is retained. Tab and settings controls keep their normal navigation. In word drills, `?` toggles hints using Plover's existing `H-F` stroke (left H + right F). Question marks remain punctuation in text, symbol, and other exercises that need them. The app does not modify Plover dictionaries or configuration.
 
-Share in Test settings copies a compact link to a ready test. Links carry supported test parameters and explicit concepts, leaving recipients' Skills and appearance unchanged. Shared settings are temporary until Save settings; Exit restores the previous personal test. See [shared tests and the v1 format](docs/sharing.md).
+Share in Test settings copies a compact link to a ready test. Links carry supported test parameters and explicit concepts, leaving recipients' Skills and appearance unchanged. Shared settings are temporary until Save settings; Exit restores the previous personal test. See [shared test formats](docs/sharing.md).
 
 The gear menu contains:
 
@@ -39,11 +39,15 @@ The gear menu contains:
 - **Exercises:** the restored exercise catalog, personal word lists, saved filters, and outline/pronunciation corrections. Explicit lists keep their membership as skills change.
 - **Settings:** themes, backup import/export, source coverage, and exclusions.
 
+Each Skills and custom concept group has Select all and Clear controls that affect only that group. The drill mix also offers Select all and Clear.
+
 Expected words are measured into explicit rows. Only complete active rows render; the active row stays second until the finite passage ends. Expected words determine the typing layout. Incorrect input appears in a fixed-width annotation above the target and can be corrected with backspace or Plover replacements. Long errors shrink to a readable minimum, then truncate; their full value is available on hover. WPM, word accuracy, raw and burst speed, elapsed seconds, a speed/error graph, and missed words appear only after the test. Graph data has an accessible table. Error markers record submissions at their actual times. Their tooltips show the submitted word in red above the expected word, without a timestamp. Burst measures translated characters inserted in the preceding second, expressed as WPM; it does not estimate physical chord rate. Results are kept only for the current session.
 
 Word exercises also offer Raw steno input, Repetitions (1–10), and Require correct. Raw mode translates literal dictionary outlines: `PHAEUPB TPHET` becomes `main net`; spaces separate attempts and `/` joins strokes within an outline. Input can be uppercase or lowercase. Any unambiguous dictionary outline for the target word is accepted, including alternatives to the hint. Personal corrections apply to personal tests; shared tests use the bundled dictionary. Words without a usable mapping are omitted from raw practice without changing list membership. Formatting commands, phrases, and affixes are not interpreted. The app does not capture simultaneous physical key presses.
 
 Repetitions require that many correct entries before moving to the next target word. Dots above the active word show progress; mistakes retain completed repetitions. Require correct holds an incorrect submitted attempt until it is edited, including any further blocked input. Otherwise, repeated practice allows a fresh attempt at the same word. A 25-word test with three repetitions requires 75 correct entries. Matching unfinished input previews progress and the next hint; edits reverse that preview. In these modes, submitted errors remain in accuracy and the error graph after correction. Speed uses translated character counts, including correct repetitions, rather than outline-string lengths.
+
+Repeat on error optionally switches a missed word to consecutive-correct practice. Choose 1–10 error repetitions (default 3); the next word returns to the normal repetition count. A submitted mistake during recovery resets its progress to zero, and correcting that attempt starts a fresh streak. Recovery requires at least the normal repetition count when both settings are enabled. Pending dots are solid gray, incorrect attempts red, and correct entries green. Recovery space is reserved before typing, so its dots appear without moving the words. This option also works with raw outlines and Require correct.
 
 Your data is saved in this browser. Export a backup before clearing browser storage or moving to another device or domain. An unreadable saved profile is preserved until you explicitly replace it. There are no accounts, external analytics, or device synchronization.
 

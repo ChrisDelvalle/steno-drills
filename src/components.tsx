@@ -22,6 +22,11 @@ export function Brand({ href, onClick }: { href: string; onClick?: MouseEventHan
 export function Empty({ title, children }: { title: string; children: ReactNode }) {
   return <div className="empty"><p>{title}</p><p>{children}</p></div>;
 }
+export function SelectionActions({ selected, total, onSelectAll, onClear }: {
+  selected: number; total: number; onSelectAll: () => void; onClear: () => void;
+}) {
+  return <span className="selection-actions"><button type="button" className="text-button" disabled={selected === total} onClick={onSelectAll}>Select all</button><button type="button" className="text-button" disabled={!selected} onClick={onClear}>Clear</button></span>;
+}
 export function ConceptPicker({ filter, learned, onChange }: { filter: Filter; learned: string[]; onChange: (filter: Filter) => void }) {
   const mode = filter.concepts?.mode || 'personal';
   const selected = selectedConcepts(filter, learned);
@@ -34,9 +39,7 @@ export function ConceptPicker({ filter, learned, onChange }: { filter: Filter; l
       <div className="concept-actions"><button type="button" className="text-button" onClick={() => update([...learned])}>Use skills</button><button type="button" className="text-button" onClick={() => update(concepts.map(c => c.id))}>Select all</button><button type="button" className="text-button" onClick={() => update([])}>Clear</button></div>
       {conceptBanks.map(([bank, label]) => {
         const group = concepts.filter(c => c.bank === bank);
-        const all = group.every(c => selected.includes(c.id));
-        return <fieldset key={bank} className="concept-group"><legend>{label}</legend>
-          <button type="button" className="text-button group-toggle" onClick={() => update(all ? selected.filter(id => !group.some(c => c.id === id)) : [...new Set([...selected, ...group.map(c => c.id)])])}>{all ? 'Clear' : 'Select all'}<span className="sr-only"> {label}</span></button>
+        return <fieldset key={bank} className="concept-group" aria-label={label}><legend><span>{label}</span><SelectionActions selected={group.filter(c => selected.includes(c.id)).length} total={group.length} onSelectAll={() => update([...new Set([...selected, ...group.map(c => c.id)])])} onClear={() => update(selected.filter(id => !group.some(c => c.id === id)))}/></legend>
           <div className="concept-grid">{group.map(c => <label className="concept" key={c.id}><input type="checkbox" aria-label={`${c.position} ${c.label} (${c.keys})`} checked={selected.includes(c.id)} onChange={() => update(selected.includes(c.id) ? selected.filter(id => id !== c.id) : [...selected, c.id])}/><span>{c.label}</span><code>{c.keys}</code></label>)}</div>
         </fieldset>;
       })}

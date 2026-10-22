@@ -13,9 +13,9 @@ const MeasureWords = memo(function MeasureWords({ targets }: { targets: Practice
   return <>{targets.map((target, i) => <span key={i}>{[...target.word].map((letter, n) => <span key={n}>{letter}</span>)}</span>)}</>;
 });
 
-const Word = memo(function Word({ word, typed = '', complete, active, offset, width, view, repetitions = 1, progress = 0 }: {
+const Word = memo(function Word({ word, typed = '', complete, active, offset, width, view, repetitions = 1, progress = 0, showDots = repetitions > 1, dotError = false, recovering = false }: {
   word: string; typed?: string; complete: boolean; active: boolean; offset: number;
-  width?: number; view?: PracticeCell; repetitions?: number; progress?: number;
+  width?: number; view?: PracticeCell; repetitions?: number; progress?: number; showDots?: boolean; dotError?: boolean; recovering?: boolean;
 }) {
   const cell = useRef<HTMLSpanElement>(null);
   const annotation = useRef<HTMLSpanElement>(null);
@@ -23,10 +23,16 @@ const Word = memo(function Word({ word, typed = '', complete, active, offset, wi
   complete = view?.complete ?? complete;
   const dots = useRef<HTMLSpanElement>(null);
   const wrong = view?.wrong ?? (Boolean(typed) && (complete ? word.toLowerCase() !== typed.toLowerCase() : !word.toLowerCase().startsWith(typed.toLowerCase())));
+  const [feedback, setFeedback] = useState({ progress, error: false });
+  const exact = typed.toLowerCase() === word.toLowerCase();
+  const showError = dotError || wrong || (feedback.progress === progress && feedback.error && !exact);
+  useLayoutEffect(() => {
+    setFeedback(current => current.progress === progress && current.error === (active && showError) ? current : { progress, error: active && showError });
+  }, [active, progress, showError]);
   const annotationText = view?.annotation ?? (wrong ? typed : '');
   const letters = [...word];
   useLayoutEffect(() => {
-    if (!active || repetitions < 2 || !dots.current || !cell.current) return;
+    if (!active || !showDots || !dots.current || !cell.current) return;
     const wordCell = cell.current, indicator = dots.current;
     const frame = wordCell.closest('.target-words')!;
     const fit = () => {
@@ -39,7 +45,7 @@ const Word = memo(function Word({ word, typed = '', complete, active, offset, wi
     if (typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver(fit); observer.observe(frame); observer.observe(wordCell);
     return () => observer.disconnect();
-  }, [active, repetitions, width]);
+  }, [active, repetitions, width, showDots]);
   useLayoutEffect(() => {
     if (!annotationText || !cell.current || !annotation.current) return;
     const fit = () => {
@@ -55,17 +61,17 @@ const Word = memo(function Word({ word, typed = '', complete, active, offset, wi
   }, [annotationText]);
   return <span ref={cell} style={{ width }} title={word} className={`practice-word${wrong ? ' wrong' : complete ? ' correct' : ''}`}>
     {annotationText && <span className={`word-mistake${view?.neutral ? ' pending' : ''}`} ref={annotation} title={annotationText} aria-hidden="true">{annotationText}</span>}
-    {active && repetitions > 1 && <span ref={dots} className="repetition-dots" role="status" aria-label={`${progress} of ${repetitions} repetitions`} title={`${progress} of ${repetitions} repetitions`}>{Array.from({ length: repetitions }, (_, i) => <span key={i} data-filled={i < progress} aria-hidden="true"/>)}</span>}
+    {active && showDots && <span ref={dots} className="repetition-dots" data-recovery={recovering} role="status" aria-description={`${showError ? 'Incorrect attempt. ' : ''}${recovering ? 'Consecutive correct entries required.' : ''}`} aria-label={`${progress} of ${repetitions} repetitions`} title={`${progress} of ${repetitions} ${recovering ? 'consecutive ' : ''}repetitions`}>{Array.from({ length: repetitions }, (_, i) => <span key={i} data-state={i < progress ? 'correct' : i === progress && showError ? 'incorrect' : 'pending'} aria-hidden="true"/>)}</span>}
     <span className="expected-word">{letters.map((letter, i) => <span key={i} className={`${active && i === offset ? 'cursor-before ' : ''}${active && i < offset && !wrong ? 'typed-letter' : ''}`}>{letter}</span>)}{active && offset >= letters.length && <span className="cursor-end"/>}</span>
   </span>;
 });
 
-export function PracticeSurface({ targets, input, tokens, completed, onInput, inputRef, lines = 3, onHintChange, questionHints = false, suspended = false, projection, project, repetitions = 1, rawInput = false }: {
+export function PracticeSurface({ targets, input, tokens, completed, onInput, inputRef, lines = 3, onHintChange, questionHints = false, suspended = false, projection, project, repetitions = 1, rawInput = false, repeatOnError = false }: {
   targets: PracticeWord[]; input: string; tokens: string[]; completed: number;
   onInput: (value: string) => void; inputRef: RefObject<HTMLTextAreaElement | null>; lines?: number;
   onHintChange?: (index: number) => void;
   questionHints?: boolean; suspended?: boolean;
-  projection?: WordPracticeProjection; project?: (input: string) => WordPracticeProjection; repetitions?: number; rawInput?: boolean;
+  projection?: WordPracticeProjection; project?: (input: string) => WordPracticeProjection; repetitions?: number; rawInput?: boolean; repeatOnError?: boolean;
 }) {
   const [caret, setCaret] = useState(0);
   const [focused, setFocused] = useState(false);
@@ -125,7 +131,7 @@ export function PracticeSurface({ targets, input, tokens, completed, onInput, in
     return () => observer.disconnect();
   }, [targets]);
   const visible = passageWindow(layout.rows, current, lines);
-  return <div ref={surface} className="practice-surface" data-repetitions={repetitions > 1} data-unfocused={unfocused} onPointerDown={event => {
+  return <div ref={surface} className="practice-surface" data-repetitions={repetitions > 1 || repeatOnError} data-unfocused={unfocused} onPointerDown={event => {
     if (event.button !== 0) return;
     event.preventDefault(); inputRef.current?.focus();
     if (!unfocused) { inputRef.current?.setSelectionRange(input.length, input.length); setCaret(input.length); }
@@ -135,7 +141,7 @@ export function PracticeSurface({ targets, input, tokens, completed, onInput, in
       {visible.lines.map((row, r) => <div className="practice-line" key={row.start} data-line={visible.start + r} data-active={visible.start + r === visible.active || undefined}>
         {targets.slice(row.start, row.end).map((target, n) => {
           const i = row.start + n;
-          return <Fragment key={i}><Word word={target.word} view={projection?.cells[i]} repetitions={repetitions} progress={cursorProjection?.progress || 0} width={layout.widths[i]} typed={tokens[i]} complete={i < completed} active={i === current} offset={i === current ? offset : 0}/>{' '}</Fragment>;
+          return <Fragment key={i}><Word word={target.word} view={projection?.cells[i]} repetitions={cursorProjection?.required || repetitions} showDots={(cursorProjection?.required || repetitions) > 1 || Boolean(cursorProjection?.recovering)} recovering={cursorProjection?.recovering} dotError={i === current && cursorProjection?.dotError} progress={i === current ? cursorProjection?.progress || 0 : 0} width={layout.widths[i]} typed={tokens[i]} complete={i < completed} active={i === current} offset={i === current ? offset : 0}/>{' '}</Fragment>;
         })}
       </div>)}
     </div>

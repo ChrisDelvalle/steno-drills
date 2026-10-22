@@ -70,3 +70,11 @@ Raw input and repetitions checked on 2026-10-22:
 - Production-build browser QA covered raw outlines, three repetitions, strict blocking, corrections, completion, restart, clipboard fallback, shared reloads, and a single retained error event. No browser runtime errors.
 - At 393px, ten 4px dots plus gaps fit inside the 345px passage, including above a one-letter word. A 400-character mistake changed no word coordinates. Three complete rows remain visible, with the active row second after progression. Both themes and enabled/disabled hints passed.
 - The README capture shows the updated author label and extra-large hints. Dot progress and error text use separate reserved rows. Existing v1 link fixtures are unchanged; word options add one character in v2.
+
+Repeat on error checked on 2026-10-22:
+
+- Gray, red, and green dots retain their size and position. Partial corrections keep a failed dot red until the word matches. Recovery failures discard the consecutive streak, including after backspacing to correct the failed attempt.
+- Browser checks covered ordinary input, raw outlines with Require correct, repeated failures, final completion, one graph event per submitted mistake, restart, sharing, reload, and light/dark themes. No runtime or console errors.
+- At 393px, ten dots fit inside the passage above a one-letter word. Triggering recovery and entering a 400-character error changed no word coordinates; three complete rows and second-row active positioning remain intact. Evidence: steno-error-recovery-desktop.png and steno-error-recovery-mobile.png (local captures).
+- Correct dots use a deeper green in both themes. The author label aligns to the right edge of Steno Drills; the README screenshot was refreshed.
+- Skills and custom concept sections each offer Select all and Clear. Browser checks at 1440px, 393px, and 320px covered scoped selection, persistence, keyboard activation, both themes, and existing drill mix actions without horizontal overflow. Shared concept changes leave personal Skills unchanged.

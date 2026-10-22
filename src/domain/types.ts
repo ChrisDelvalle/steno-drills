@@ -70,6 +70,8 @@ export interface WordPracticeOptions {
   inputMode: 'text' | 'steno';
   repetitions: number;
   requireCorrect: boolean;
+  repeatOnError: boolean;
+  errorRepetitions: number;
 }
 export type HintSize = 'small' | 'medium' | 'large' | 'extra-large';
 export interface Profile {

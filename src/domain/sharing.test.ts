@@ -226,3 +226,36 @@ it('rejects invalid options when creating a word snapshot rather than dropping t
     expect(normalizeSharedTest(p).ok).toBe(false);
   }
 });
+it('round-trips every recovery count with v3 and keeps old links independent of recipient defaults', () => {
+  for (const source of ['bank', 'drills']) for (const inputMode of ['text', 'steno'] as const) for (const requireCorrect of [false, true]) for (let errorRepetitions = 1; errorRepetitions <= 10; errorRepetitions++) {
+    const p = defaultProfile(); p.practice.source = source;
+    p.session = { ...p.session, repeatOnError: true, errorRepetitions, inputMode, requireCorrect, repetitions: 2 };
+    const test = snapshot(p), token = roundTrip(test);
+    expect(test.version).toBe(3);
+    expect(applySharedTest(defaultProfile(), test).session).toMatchObject({ repeatOnError: true, errorRepetitions });
+    expect(saveSharedTest(defaultProfile(), test).session).toMatchObject({ repeatOnError: true, errorRepetitions });
+    expect(token.length).toBeLessThanOrEqual(encodeSharedTest(snapshot()).length + 2 + Number(source === 'drills'));
+  }
+  const personal = defaultProfile(); personal.session.repeatOnError = true; personal.session.errorRepetitions = 8;
+  const old = decodeSharedTest('QCCZA'); if (!old.ok) throw new Error(old.error);
+  expect(applySharedTest(personal, old.value).session).toMatchObject({ repeatOnError: false, errorRepetitions: 3 });
+  personal.session.repeatOnError = false;
+  expect(encodeSharedTest(snapshot(personal))).toBe('ICCA');
+});
+it('freezes v3 fixtures and rejects invalid recovery payloads', () => {
+  const p = defaultProfile(); p.session.repeatOnError = true;
+  expect(encodeSharedTest(snapshot(p))).toBe('YCCAG');
+  p.session.inputMode = 'steno'; p.session.requireCorrect = true; p.session.repetitions = 3;
+  expect(encodeSharedTest(snapshot(p))).toBe('YCCZG');
+  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+  const bits = [...'YCCAG'].map(c => alphabet.indexOf(c).toString(2).padStart(6, '0')).join('');
+  for (const count of [0, 11, 12, 13, 14, 15]) {
+    const w = new BitWriter(); w.bits = bits.slice(0, 25); w.write(count, 4);
+    expect(decodeSharedTest(w.token()).ok).toBe(false);
+  }
+  for (const invalid of ['YCCA', 'YCCAGA', 'YCCAH']) expect(decodeSharedTest(invalid).ok).toBe(false);
+  const wrongSource = new BitWriter(); wrongSource.bits = '0110010' + bits.slice(7, 29);
+  expect(decodeSharedTest(wrongSource.token()).ok).toBe(false);
+  p.session.repeatOnError = false; p.session.errorRepetitions = 10;
+  expect(encodeSharedTest(snapshot(p))).toBe('QCCZA');
+});

@@ -86,7 +86,9 @@ hr { height: 1px; border: 0; background: var(--border); margin: 28px 0; }
 .notice.warning button { margin-top: 15px; }
 .skills-overview { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 35px; }
 .skill-section { margin-bottom: 35px; }
-.skill-section legend { width: 100%; display: flex; gap: 10px; }
+.skill-section legend, .concept-group legend { width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
+.selection-actions { display: inline-flex; flex-shrink: 0; gap: 14px; margin-left: auto; }
+.selection-actions .text-button { font-size: 12px; color: var(--muted); }
 .skill-section .concept-grid, .concept-checklist .concept-grid { --concept-column-gap: 24px; column-gap: var(--concept-column-gap); overflow: hidden; }
 .skill-section .concept, .concept-checklist .concept { position: relative; }
 .skill-section .concept::after, .concept-checklist .concept::after { content: ''; position: absolute; top: -5px; bottom: -5px; right: calc(var(--concept-column-gap) / -2); width: 1px; background: var(--soft-border); pointer-events: none; }
@@ -180,9 +182,8 @@ summary { width: fit-content; }
 .concept-picker { margin-top: 20px; }
 .concept-checklist, .drill-checklist { border: 1px solid var(--border); border-radius: 12px; margin-top: 12px; padding: 16px; max-height: 380px; overflow: auto; }
 .concept-actions { display: flex; flex-wrap: wrap; gap: 18px; margin-bottom: 18px; font-size: 12px; }
-.concept-group { position: relative; margin: 22px 0 0; }
+.concept-group { margin: 22px 0 0; }
 .concept-group legend { font-size: 13px; margin-bottom: 8px; }
-.concept-group .group-toggle { position: absolute; right: 0; top: -38px; font-size: 12px; color: var(--muted); }
 .concept-checklist .concept-grid { --concept-column-gap: 12px; grid-template-columns: repeat(auto-fill,minmax(160px,1fr)); gap: 2px var(--concept-column-gap); }
 .concept-checklist .concept { font-size: 12px; padding: 8px 4px; }
 .legacy-focus { margin-top: 12px; color: var(--muted); }
@@ -205,7 +206,7 @@ summary { width: fit-content; }
 .session-shell { max-width: 1120px; min-height: 100svh; margin: 0 auto; padding: 40px 40px 24px; display: flex; flex-direction: column; font-family: 'Roboto Mono', monospace; }
 .session-header { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 36px; }
 .session-brand { display: flex; flex-direction: column; font: 400 26px/36px 'Roboto Mono', monospace; letter-spacing: -1px; color: var(--ink); text-decoration: none; }
-.brand-author { font: 400 10px/12px 'Roboto Mono',monospace; letter-spacing: 0; color: var(--muted); }
+.brand-author { align-self: flex-end; font: 400 10px/12px 'Roboto Mono',monospace; letter-spacing: 0; color: var(--muted); }
 .icon-button { width: 40px; height: 40px; min-height: 40px; padding: 8px; background: transparent; color: var(--muted); border: 0; border-radius: 6px; }
 .icon-button:hover { color: var(--ink); background: transparent; filter: none; }
 .icon-button:focus-visible { outline-color: var(--accent); }
@@ -218,8 +219,9 @@ summary { width: fit-content; }
 .practice-surface[data-repetitions='true'] { --line-height: 80px; }
 .word-mistake.pending { color: var(--muted); }
 .repetition-dots { position: absolute; bottom: calc(100% + 27px); left: 50%; transform: translateX(-50%); display: flex; gap: 3px; width: max-content; height: 5px; pointer-events: none; }
-.repetition-dots > span { width: 4px; height: 4px; border: 1px solid var(--muted); border-radius: 50%; }
-.repetition-dots > span[data-filled='true'] { background: var(--accent); border-color: var(--accent); }
+.repetition-dots > span { width: 4px; height: 4px; background: var(--muted); border-radius: 50%; }
+.repetition-dots > span[data-state='correct'] { background: var(--correct); }
+.repetition-dots > span[data-state='incorrect'] { background: var(--error); }
 .practice-surface[data-unfocused='true'] .target-words { filter: blur(4px); opacity: .5; }
 .practice-surface[data-unfocused='true'] .cursor-before::before, .practice-surface[data-unfocused='true'] .cursor-end::after { opacity: 0; }
 .practice-focus { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; gap: 8px; padding: 16px; border: 0; border-radius: 0; color: var(--ink); background: transparent; font: 400 14px/20px 'Roboto Mono',monospace; opacity: 0; pointer-events: none; transition: opacity 160ms ease-out; }

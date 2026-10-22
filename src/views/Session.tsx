@@ -4,7 +4,7 @@ import { burstSpeed, generateWords, inputMetrics, insertedText, practiceText, sc
 import type { ErrorSample, SpeedSample, TypingEvent } from '../domain/practice';
 import { Icon, StenoKeyboard, Brand } from '../components';
 import { textTranslator } from '../domain/translation';
-import { assistedPractice, projectWordPractice, wordPracticeDefaults, wordPracticeMetrics, scoreWordPractice } from '../domain/wordPractice';
+import { assistedPractice, projectWordPractice, wordPracticeDefaults, wordPracticeMetrics, scoreWordPractice, rebaseRecovery } from '../domain/wordPractice';
 import { PracticeSurface } from './PracticeSurface';
 
 const ResultsChart = lazy(() => import('./ResultsChart'));
@@ -29,10 +29,11 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
   const latestInput = useRef('');
   const suspendedRef = useRef(suspended);
   suspendedRef.current = suspended;
-  const options = useMemo(() => ({ ...wordPracticeDefaults(), inputMode: active.inputMode || 'text', repetitions: active.repetitions || 1, requireCorrect: active.requireCorrect || false }), [active.inputMode, active.repetitions, active.requireCorrect]);
+  const recovery = useRef(new Map<number, number>());
+  const options = useMemo(() => ({ ...wordPracticeDefaults(), inputMode: active.inputMode || 'text', repetitions: active.repetitions || 1, requireCorrect: active.requireCorrect || false, repeatOnError: active.repeatOnError || false, errorRepetitions: active.errorRepetitions || 3 }), [active.inputMode, active.repetitions, active.requireCorrect, active.repeatOnError, active.errorRepetitions]);
   const assisted = assistedPractice(options);
   const incorrectChars = useRef(0);
-  const project = useCallback((value: string, finalized = false) => projectWordPractice(targets, (active.translator || textTranslator).translate(value, active.questionHints), options, finalized), [targets, active.translator, active.questionHints, options]);
+  const project = useCallback((value: string, finalized = false) => projectWordPractice(targets, (active.translator || textTranslator).translate(value, active.questionHints), options, finalized, recovery.current), [targets, active.translator, active.questionHints, options]);
   const projection = useMemo(() => assisted ? project(input) : undefined, [assisted, project, input]);
   const evaluate = (value: string, ms: number, finalized = finished) => assisted ? scoreWordPractice(project(value, finalized), targets, ms, errors.current.flatMap(e => e.mistakes), incorrectChars.current) : scoreInput(targets, practiceText(value, active.questionHints), ms);
   const score = evaluate(input, elapsed);
@@ -51,7 +52,7 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
   const focus = () => requestAnimationFrame(() => { if (!suspendedRef.current) inputRef.current?.focus(); });
   const reset = (next: SessionConfig = active) => {
     setActive(next); setTargets(makeTargets(next)); setInput(''); latestInput.current = '';
-    setStartedAt(null); setElapsed(0); setFinished(false); setControlsHidden(false); setCursor(0); history.current = []; errors.current = []; typing.current = []; incorrectChars.current = 0; focus();
+    setStartedAt(null); setElapsed(0); setFinished(false); setControlsHidden(false); setCursor(0); history.current = []; errors.current = []; typing.current = []; incorrectChars.current = 0; recovery.current.clear(); focus();
   };
   const previousSuspended = useRef(suspended);
   useLayoutEffect(() => {
@@ -111,14 +112,17 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     {!finished ? <div className="test-stage">
       {active.hintPosition !== 'below' && <div className="hint-slot hint-above">{hint}</div>}
       <div className="test-status"><span className="session-clock" aria-label={active.mode === 'timed' ? 'Time left' : 'Elapsed time'}>{active.mode === 'timed' ? Math.ceil(remaining / 1000) : Math.floor(elapsed / 1000)}</span></div>
-      <PracticeSurface lines={active.lines || 3} targets={targets} input={input} projection={projection} project={assisted ? project : undefined} repetitions={options.repetitions} rawInput={options.inputMode === 'steno'} tokens={score.tokens} completed={score.completed} inputRef={inputRef} questionHints={active.questionHints} suspended={suspended} onHintChange={setCursor} onInput={value => {
+      <PracticeSurface lines={active.lines || 3} targets={targets} input={input} projection={projection} project={assisted ? project : undefined} repetitions={options.repetitions} repeatOnError={options.repeatOnError} rawInput={options.inputMode === 'steno'} tokens={score.tokens} completed={score.completed} inputRef={inputRef} questionHints={active.questionHints} suspended={suspended} onHintChange={setCursor} onInput={value => {
         if (/[\r\n]/.test(value)) { reset(); return; }
         const previous = practiceText(latestInput.current, active.questionHints), text = practiceText(value, active.questionHints);
         if (active.questionHints && [...insertedText(latestInput.current, value)].filter(char => char === '?').length % 2) toggleHints();
         if (text !== previous) setControlsHidden(true);
         const now = performance.now(), ms = startedAt === null ? 0 : now - startedAt;
         if (assisted) {
-          const metrics = wordPracticeMetrics(project(latestInput.current), project(value));
+          const before = project(latestInput.current);
+          recovery.current = rebaseRecovery(recovery.current, latestInput.current, value);
+          const metrics = wordPracticeMetrics(before, project(value));
+          if (options.repeatOnError) for (const failure of metrics.failures) recovery.current.set(failure.target, failure.start);
           if (metrics.inserted) typing.current.push({ at: ms, characters: metrics.inserted });
           if (metrics.mistakes.length) {
             const mistakes = metrics.mistakes;
@@ -140,7 +144,7 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     </div> : <section className="session-results" tabIndex={-1} ref={resultsRef} aria-label="Practice results">
       <div className="results-grid"><div><span>{active.kind === 'chords' ? 'chords/min' : 'wpm'}</span><strong>{Math.round(rate)}</strong></div><div><span>word accuracy</span><strong>{Math.round(score.accuracy)}%</strong></div></div>
       <Suspense fallback={<div className="results-chart" role="status">Loading chart…</div>}><ResultsChart samples={history.current} errors={errors.current} chords={active.kind === 'chords'}/></Suspense>
-      <dl className="result-details"><div><dt>test</dt><dd>{active.title}<small>{active.mode === 'timed' ? `${active.duration}s` : `${targets.length} ${active.kind === 'chords' ? 'chords' : 'words'}`}{options.repetitions > 1 ? ` · ${options.repetitions} reps` : ''}{options.inputMode === 'steno' ? ' · raw steno' : ''}</small></dd></div>{active.kind !== 'chords' && <div><dt>raw wpm</dt><dd>{Math.round(score.rawWpm)}</dd></div>}<div><dt>time</dt><dd>{(elapsed / 1000).toFixed(1)}s</dd></div><div><dt>words</dt><dd>{score.correct}<small>{score.missed.length} incorrect</small></dd></div></dl>
+      <dl className="result-details"><div><dt>test</dt><dd>{active.title}<small>{active.mode === 'timed' ? `${active.duration}s` : `${targets.length} ${active.kind === 'chords' ? 'chords' : 'words'}`}{options.repetitions > 1 ? ` · ${options.repetitions} reps` : ''}{options.inputMode === 'steno' ? ' · raw steno' : ''}{options.repeatOnError ? ` · error ×${Math.max(options.repetitions, options.errorRepetitions)}` : ''}</small></dd></div>{active.kind !== 'chords' && <div><dt>raw wpm</dt><dd>{Math.round(score.rawWpm)}</dd></div>}<div><dt>time</dt><dd>{(elapsed / 1000).toFixed(1)}s</dd></div><div><dt>words</dt><dd>{score.correct}<small>{score.missed.length} incorrect</small></dd></div></dl>
       {missed.length > 0 && <details className="missed-words"><summary>{missed.length} missed {missed.length === 1 ? 'word' : 'words'}</summary><table><thead><tr><th>Word</th><th>Outline</th></tr></thead><tbody>{missed.map(w => <tr key={w.word}><td>{w.word}</td><td><code>{w.outline || '—'}</code></td></tr>)}</tbody></table><button className="text-button" onClick={() => reset({ ...active, title: 'Missed words', kind: active.kind === 'chords' ? 'chords' : 'words', pool: missed, ordered: false, attribution: undefined, mode: 'count', count: Math.max(10, missed.length) })}>Practice missed words</button></details>}
       <div className="button-row center"><button className="icon-button" aria-label="Restart" title="Restart (Enter)" onClick={() => reset(config)}><Icon name="refresh"/></button></div>
     </section>}

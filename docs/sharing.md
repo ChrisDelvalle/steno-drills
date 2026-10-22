@@ -45,3 +45,9 @@ The codec tests exhaust small subset catalogs, all 5,050 length ranges, all buil
 V2 reuses the complete v1 source payload and appends six bits: raw-input flag (1), Require correct flag (1), and repetitions minus one (4, valid values 0–9). It is supported for Words and word drills, including saved filters resolved to Words. Unsupported sources and reserved repeat values are rejected. No visual settings or personal dictionary data are encoded. The encoder emits v1 when word options are at their defaults, so all existing v1 fixtures and size bounds remain unchanged. Nondefault word options add exactly one character.
 
 The fixed fixture `QCCZA` means starter concepts, 60 seconds, hints off, raw steno, three repetitions, and Require correct. Old v1 links explicitly select translated text, one repetition, and Require correct off, independently of the recipient's personal defaults. Editing, reloading, saving, and exiting v2 links follow the same profile isolation rules as v1.
+
+## V3 error recovery
+
+V3 preserves the v1 source payload and v2 word options, then adds a 4-bit error repetition count (1–10). Its presence enables Repeat on error; zero and values 11–15 are invalid. Recovery uses the larger of this count and the normal repetition count. Only Words and word drills support the extension. The encoder continues to emit the original v1/v2 tokens when recovery is disabled, ignoring its inactive count.
+
+Fixed fixtures: `YCCAG` is starter concepts, 60 seconds, hints off, translated text, one normal repetition, Require correct off, and three error repetitions. `YCCZG` additionally selects raw input, three normal repetitions, and Require correct. V1/v2 links explicitly disable recovery, regardless of the recipient's profile. Live attempt history and streak-reset anchors are local to the current session and are never shared or backed up. Settings retain the existing reload, edit, Save settings, and Exit behavior.

@@ -1,10 +1,11 @@
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { App } from './App';
 import { makeEntry } from './domain/classifier';
 import { defaultProfile, exportBackup, profileKey } from './domain/profile';
 import type { Dictionary } from './domain/types';
 import { decodeSharedTest, encodeSharedTest, normalizeSharedTest, sharedHash } from './domain/sharing';
+import { concepts, conceptBanks } from './domain/concepts';
 
 const dictionary: Dictionary = { version: 1, words: [makeEntry('bad', ['PWAD'], [['B','AE1','D']], 1), makeEntry('dim', ['TKEUPL'], [['D','IH1','M']], 2)], report: { entries: 2, words: 2, monosyllables: 2, classified: 2, starter: 2, starterCommon: 2, missingPronunciation: 0, unexplained: 0 } };
 beforeEach(() => {
@@ -300,4 +301,68 @@ it('keeps unresolved list membership while excluding impossible raw targets', as
   fireEvent.click(screen.getAllByRole('button', { name: 'Test settings' })[0]);
   expect(await screen.findByText(/1 unavailable in raw mode/)).toBeInTheDocument();
   expect(JSON.parse(localStorage.getItem(profileKey)!).lists).toEqual(p.lists);
+});
+it('keeps recovery settings isolated in shared links through reload, save, and exercise changes', async () => {
+  const personal = defaultProfile(); personal.learned = []; personal.theme = 'light';
+  localStorage.setItem(profileKey, JSON.stringify(personal));
+  window.location.hash = '#/test-settings?t=YCCAG';
+  const app = render(<App/>);
+  expect(await screen.findByRole('checkbox', { name: 'Repeat on error' })).toBeChecked();
+  expect(screen.getByRole('combobox', { name: 'Error repetitions' })).toHaveValue('3');
+  fireEvent.change(screen.getByRole('combobox', { name: 'Error repetitions' }), { target: { value: '5' } });
+  const sharedHash = window.location.hash;
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
+  app.unmount(); render(<App/>);
+  expect(await screen.findByRole('combobox', { name: 'Error repetitions' })).toHaveValue('5');
+  expect(window.location.hash).toBe(sharedHash);
+  fireEvent.click(screen.getByRole('button', { name: 'Save settings' }));
+  expect(JSON.parse(localStorage.getItem(profileKey)!).session).toMatchObject({ repeatOnError: true, errorRepetitions: 5 });
+  expect(JSON.parse(localStorage.getItem(profileKey)!).learned).toEqual([]);
+  fireEvent.change(screen.getByRole('combobox', { name: 'Exercise' }), { target: { value: 'numbers' } });
+  expect(screen.queryByRole('checkbox', { name: 'Repeat on error' })).not.toBeInTheDocument();
+});
+
+it('selects and clears each Skills group without changing other groups, and persists the result', async () => {
+  window.location.hash = '#/skills';
+  const app = render(<App/>);
+  await screen.findByRole('group', { name: 'Initial sounds' });
+  for (const [bank, title] of [['initial', 'Initial sounds'], ['vowel', 'Vowels'], ['final', 'Final sounds'], ['special', 'Special rules'], ['brief', 'Briefs']]) {
+    const group = within(screen.getByRole('group', { name: title }));
+    const ids = concepts.filter(c => c.bank === bank).map(c => c.id);
+    const otherSkills = JSON.parse(localStorage.getItem(profileKey)!).learned.filter((id: string) => !ids.includes(id));
+    fireEvent.click(group.getByRole('button', { name: 'Select all' }));
+    expect(group.getAllByRole('checkbox').every(box => (box as HTMLInputElement).checked)).toBe(true);
+    expect(group.getByRole('button', { name: 'Select all' })).toBeDisabled();
+    expect(new Set(JSON.parse(localStorage.getItem(profileKey)!).learned)).toEqual(new Set([...otherSkills, ...ids]));
+    fireEvent.click(group.getByRole('button', { name: 'Clear' }));
+    expect(group.getAllByRole('checkbox').every(box => !(box as HTMLInputElement).checked)).toBe(true);
+    expect(group.getByRole('button', { name: 'Clear' })).toBeDisabled();
+    expect(JSON.parse(localStorage.getItem(profileKey)!).learned).toEqual(otherSkills);
+  }
+  app.unmount(); render(<App/>);
+  await screen.findByRole('group', { name: 'Initial sounds' });
+  expect(screen.getAllByRole('checkbox').every(box => !(box as HTMLInputElement).checked)).toBe(true);
+});
+
+it('applies per-group custom concept actions to the shared test without altering personal Skills', async () => {
+  const personal = defaultProfile();
+  localStorage.setItem(profileKey, JSON.stringify(personal));
+  window.location.hash = sharedHash('test-settings', teacherToken());
+  render(<App/>);
+  fireEvent.change(await screen.findByRole('combobox', { name: 'Concepts' }), { target: { value: 'custom' } });
+  for (const [bank, label] of conceptBanks) {
+    const group = within(screen.getByRole('group', { name: label }));
+    const selectedIds = () => {
+      const result = decodeSharedTest(new URLSearchParams(window.location.hash.split('?')[1]).get('t')!);
+      if (!result.ok || result.value.source !== 'bank') throw new Error('Expected shared word test');
+      return result.value.filter.concepts;
+    };
+    const ids = concepts.filter(c => c.bank === bank).map(c => c.id);
+    const others = selectedIds().filter(id => !ids.includes(id));
+    fireEvent.click(group.getByRole('button', { name: 'Select all' }));
+    expect(new Set(selectedIds())).toEqual(new Set([...others, ...ids]));
+    fireEvent.click(group.getByRole('button', { name: 'Clear' }));
+    expect(new Set(selectedIds())).toEqual(new Set(others));
+    expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
+  }
 });
