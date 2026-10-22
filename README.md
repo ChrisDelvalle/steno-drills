@@ -2,6 +2,8 @@
 
 [steno.chrisdelvalle.com](https://steno.chrisdelvalle.com)
 
+[![Steno Drills with extra-large hints](docs/images/practice.png)](https://steno.chrisdelvalle.com)
+
 A static React/TypeScript app for Plover word practice, learned-concept filtering, and custom exercises.
 
 ## Run locally

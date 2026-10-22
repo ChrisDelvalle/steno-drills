@@ -2,7 +2,7 @@ final result: passed
 
 Reviewed the focused Steno Drills redesign against Monkeytype on 2026-10-20. The user's later Monkeytype references supersede the earlier ChatGPT comparison. The homepage opens directly into a ready test, with settings behind the gear. No sidebar, headings, slogans, live speed/accuracy meters, or separate visible typing field remain.
 
-QA screenshots are kept locally.
+QA screenshots are kept locally. The [public practice screenshot](docs/images/practice.png) was captured from the live site with hints enabled and both hint sizes set to Extra large.
 
 - Source visual truth: monkeytype-reference.png, captured from https://monkeytype.com/, plus the supplied active-test and results screenshots.
 - Implementation: steno-drills-ready.png, steno-drills-hints.png, steno-drills-results.png, steno-drills-skills.png, and steno-drills-mobile.png.
