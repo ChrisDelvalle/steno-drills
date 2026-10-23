@@ -35,15 +35,15 @@
     }
   },
   "recipeHash": "951429a96e17e8b9600d7c1d0da7e98859214e057f533f90b6fce927fcd41b40",
-  "catalogSha256": "362a734781e0b4cb89228328f5532ede2113c6a8f71b6c611cc4719afad38399",
+  "catalogSha256": "8edff48fcf927cf9da1410b685fe82e9c6d7feb7aab87fa24ba2e8e1b15e5b18",
   "dictionarySha256": "5d1380cd28e1822e13c22b5fedb4ae4af8c3723dd5922137227fe5b879b3ab33",
   "words": 2360,
   "common": 878,
   "recordedWords": 2360,
   "recordedVariants": 2394,
   "fallback": [],
-  "sprites": 141,
-  "audioBytes": 4571720,
+  "sprites": 178,
+  "audioBytes": 4603789,
   "generationSeconds": 3587.77,
   "encoding": {
     "codec": "libopus",
@@ -66,5 +66,13 @@
     "maximumBytes": 48000,
     "maximumSamples": 960000,
     "encoder": "ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers"
+  },
+  "listeningReview": {
+    "approvalBatch": "data/audio/repairs/listening-2026-10-23.json",
+    "approvalBatchSha256": "81dba61af5dd8f9fe6f2f3131f72dace8373f5fed750b244fcb62bdbaf90da23",
+    "previousManifest": "/audio/instructor/catalog.ab03dbcc1f3df9257bbba428919725da55e9e5ab1b8e5a0b31d2c457bf004172.json",
+    "replacements": 42,
+    "preservedVariants": 2352,
+    "method": "Complete recordings selected by owner listening approval; fixed assets retained without re-encoding other recordings"
   }
 }

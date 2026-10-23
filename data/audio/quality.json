@@ -4,7 +4,7 @@
   "acousticPolicySha256": "65e26c727a61a3cb4926946fff4247ebe9feb47a90f2a4477043f2e50206241a",
   "recognizerRevision": "efb7ae9b88f13db0d42eac8cedbba19739e2a278",
   "maximumPerPhoneLossIncrease": 0.25,
-  "manifest": "/audio/instructor/catalog.ab03dbcc1f3df9257bbba428919725da55e9e5ab1b8e5a0b31d2c457bf004172.json",
+  "manifest": "/audio/instructor/catalog.a5362916de202ba8aa5846be59b9d3c6dae0caab1988c9472d5a1f7fa367624a.json",
   "results": {
     "be|B IY": {
       "seconds": 0.5559,
@@ -57,15 +57,15 @@
       }
     },
     "the|DH AH": {
-      "seconds": 0.2925,
-      "leadingMs": 70,
-      "trailingMs": 82,
-      "quietLeadingMs": 90,
-      "quietTrailingMs": 82,
+      "seconds": 0.6192,
+      "leadingMs": 80,
+      "trailingMs": 79,
+      "quietLeadingMs": 80,
+      "quietTrailingMs": 149,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "fabfaa1c4bc12d722d7e46706017479d33749ea7b82ed4f6989061450cc5607e",
-      "sourceSha256": "848f910c156313797c0e0bf907ad6ca38727304aaef34256864d54a848b6d798",
+      "sha256": "aff3a47b45864d2d153cb8cbec1447f3fbbc5caf8551272fc8667e9dae670113",
+      "sourceSha256": "c29d0f25ee5bcd4f87d6757575b5ba291649c09719f6941cb1e8867de727c354",
       "acoustic": {
         "sourcePhones": [
           "\u00f0",
@@ -75,10 +75,15 @@
           "\u00f0",
           "\u0259"
         ],
-        "perPhoneLossIncrease": -0.038656,
+        "perPhoneLossIncrease": 0.164375,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": true,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/the-approval.json",
+          "sha256": "91c929015a9bb11b544e894dc1583025974442dd6524edac1ff44faace536cc9"
+        },
+        "humanApproved": true
       }
     },
     "the|DH IY": {
@@ -255,30 +260,35 @@
       }
     },
     "that|DH AH T": {
-      "seconds": 0.3592,
-      "leadingMs": 70,
-      "trailingMs": 69,
+      "seconds": 0.6216,
+      "leadingMs": 80,
+      "trailingMs": 82,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 79,
+      "quietTrailingMs": 132,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "da2405c65d7bc22894b7e20d93e1a74af2c6923693b08bbfd10b23f76ad025e2",
-      "sourceSha256": "eb80d1c4ef7887307556aad82f90368787aeb4d5a7fc9249251c822c1b407517",
+      "sha256": "1931b513e8a48c77408af7c26dab68cbe6c37a8c890c70720883e39544f7c3a7",
+      "sourceSha256": "4cad027163aedb446af36d47ae0a26ea6bc9ac6413ac86860653d391640d97e1",
       "acoustic": {
         "sourcePhones": [
           "\u00f0",
-          "\u0259",
+          "\u00e6",
           "t"
         ],
         "decodedPhones": [
           "\u00f0",
-          "\u026a",
+          "\u00e6",
           "t"
         ],
-        "perPhoneLossIncrease": 0.164331,
-        "samePhones": false,
+        "perPhoneLossIncrease": 0.0,
+        "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": true,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/that-approval.json",
+          "sha256": "cdecd8ae14b9ac9fd745565151f3d2bff90f6cebf04eb4b3bc68cd12fff0f2c0"
+        },
+        "humanApproved": true
       }
     },
     "to|T AH": {
@@ -307,28 +317,33 @@
       }
     },
     "to|T IH": {
-      "seconds": 0.4292,
+      "seconds": 0.5409,
       "leadingMs": 70,
-      "trailingMs": 79,
+      "trailingMs": 81,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 149,
+      "quietTrailingMs": 161,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "c4b8fedd6f760cd1987e5abbe16d96a9d7158ed6a6900774aa090bb14cbad423",
-      "sourceSha256": "726e61a0a82d39575f531e974fa3d30e0ae814b11e209f1d175843081ffed664",
+      "sha256": "f3713e79d988ee5369eb0826d46f15364910e46cd110ccaaa02d350ca0f424a9",
+      "sourceSha256": "3f46d70bbaf3ee13bca982a49a61be85c88ece330f97d3b518fe85a1c77c244a",
       "acoustic": {
         "sourcePhones": [
           "t",
-          "\u026a"
+          "u"
         ],
         "decodedPhones": [
           "t",
-          "\u026a"
+          "u"
         ],
-        "perPhoneLossIncrease": -0.670679,
+        "perPhoneLossIncrease": 0.087201,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/to-approval.json",
+          "sha256": "6dc818e85a469624038891d137a45b58e885245a20d746d54defccc4d0f45a9a"
+        },
+        "humanApproved": true
       }
     },
     "to|T UW": {
@@ -382,30 +397,35 @@
       }
     },
     "with|W IH DH": {
-      "seconds": 0.4058,
+      "seconds": 0.5503,
       "leadingMs": 80,
-      "trailingMs": 66,
+      "trailingMs": 80,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 76,
+      "quietTrailingMs": 250,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "1232b3d2c2c5b655b5f485487ec02fe8e389214fa20bdf442d0a5ad1f06f494c",
-      "sourceSha256": "5b25cdeb617a20ce71f0168e6c4ea2aec636ac032f5ad8bebb4d5345f558a5b9",
+      "sha256": "7d5a574f564d2207fec0e54570ad23026b8e89bfec0247cbb82d1b0053511d21",
+      "sourceSha256": "4d3586892392e47a7e750cd3192566e35f822b5ec485c37fc80f7d0f0305fcaa",
       "acoustic": {
         "sourcePhones": [
           "w",
           "\u026a",
-          "\u00f0"
+          "\u03b8"
         ],
         "decodedPhones": [
           "w",
           "\u026a",
-          "\u00f0"
+          "\u03b8"
         ],
-        "perPhoneLossIncrease": 0.217061,
+        "perPhoneLossIncrease": 0.081254,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/with-approval.json",
+          "sha256": "b42a4ac1dd3731a7be5cb3dbd304c17b6a3f24752343a85b7d7ea50b91a2c9e0"
+        },
+        "humanApproved": true
       }
     },
     "with|W IH TH": {
@@ -6827,32 +6847,37 @@
       }
     },
     "pump|P AH M P": {
-      "seconds": 0.4292,
+      "seconds": 0.5025,
       "leadingMs": 70,
-      "trailingMs": 69,
+      "trailingMs": 42,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 79,
+      "quietTrailingMs": 82,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "06301309aad109ac1e199a286ac3556a931a60f8c3654675432ba8b1b65f04e3",
-      "sourceSha256": "3fe3f92e38d4e41acd716f94903593f18d1ac934f86240bca81d786617905279",
+      "sha256": "83c75a3eaea3939701fbac60e099802077c0d5535e3b57feb8f9c37e630ac935",
+      "sourceSha256": "6c87ceb21b3b4148842c326ad44feca5f2b83b4a7f0f4ab4cd5b6df35ee49f96",
       "acoustic": {
         "sourcePhones": [
           "p",
-          "\u0259",
+          "\u0251",
           "m",
           "p"
         ],
         "decodedPhones": [
           "p",
-          "\u0259",
+          "\u0251",
           "m",
           "p"
         ],
-        "perPhoneLossIncrease": 0.015361,
+        "perPhoneLossIncrease": -0.253641,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/pump-approval.json",
+          "sha256": "aca3ad7cc35f4689b5bf16caec17ed2f85ba9f086ae4d62f0e21463ada2587de"
+        },
+        "humanApproved": true
       }
     },
     "pull|P UH L": {
@@ -23765,30 +23790,35 @@
       }
     },
     "was|W AA Z": {
-      "seconds": 0.4125,
+      "seconds": 0.6022,
       "leadingMs": 80,
-      "trailingMs": 52,
+      "trailingMs": 12,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 82,
+      "quietTrailingMs": 32,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "afd28e6224260b27494a6f887282f913bb1534d91a43ce99aa6c01447a17d83d",
-      "sourceSha256": "3f7136ba1ea9ad5ad4a0e0173c74708bc68f9de900bfe701cb3f58b8762e0545",
+      "sha256": "691637814d321976874ed3af620dc76f1f5c6eeb67ab7628a9798270571e9afc",
+      "sourceSha256": "131501c47b796043ddbdcfde422d4867f5078b0491b1b27e148375543267edda",
       "acoustic": {
         "sourcePhones": [
           "w",
-          "\u0251",
+          "\u0259",
           "z"
         ],
         "decodedPhones": [
           "w",
-          "\u0251",
+          "\u0259",
           "z"
         ],
-        "perPhoneLossIncrease": 0.090504,
+        "perPhoneLossIncrease": -0.04561,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/was-approval.json",
+          "sha256": "dd8f6212836ea4a174732884c27c35dbb233f4c20cb284b6299c5ac22dfd9e4b"
+        },
+        "humanApproved": true
       }
     },
     "was|W AH Z": {
@@ -24911,28 +24941,31 @@
       }
     },
     "al|AE L": {
-      "seconds": 0.4058,
+      "seconds": 0.5909,
       "leadingMs": 80,
-      "trailingMs": 76,
+      "trailingMs": 81,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 76,
+      "quietTrailingMs": 121,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "b8aebf75203fc2ca385ed8c07fb5536ca69d873e0b05a163c3aecae95a86fd30",
-      "sourceSha256": "34bea4ab95afd6dbae003321054054436d05dc8ab65c4409a097e46368c0171f",
+      "sha256": "0924eb9d6d1b8009a03638425b4be2ac26b4c9021537d898322d4a64fdc37854",
+      "sourceSha256": "49572f35ad07ac69956e439a2a8d8f648f914fb4fde343dcfc15efad9fc029aa",
       "acoustic": {
         "sourcePhones": [
-          "\u00e6",
-          "l"
+          "a\u028a"
         ],
         "decodedPhones": [
-          "\u00e6",
-          "l"
+          "a\u028a"
         ],
-        "perPhoneLossIncrease": -0.169531,
+        "perPhoneLossIncrease": 0.301179,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/al-approval.json",
+          "sha256": "28ba2d3a521d515beb3b1b6d65f2caddabdd0a0cd12f8a2ad83c0442818c92d2"
+        },
+        "humanApproved": true
       }
     },
     "app|AE P": {
@@ -27420,30 +27453,33 @@
       }
     },
     "howl|HH AW L": {
-      "seconds": 0.5258,
+      "seconds": 0.7223,
       "leadingMs": 80,
-      "trailingMs": 76,
+      "trailingMs": 92,
       "quietLeadingMs": 100,
-      "quietTrailingMs": 76,
+      "quietTrailingMs": 162,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "a0b50f70e6d4e583e3aaa93936380e31717e38bf73d067466b01bf7b56067ff3",
-      "sourceSha256": "466f3d270373f4ae32d7e9af3c62cb2d2fd39d4665c59d3f9471e9f041dfaa7f",
+      "sha256": "bc025b01cc320181bcc572eac7103dbfe2734291f52eedf86925851b0dbc1593",
+      "sourceSha256": "b62d5ef4c4259ba0fb385a70947d8978c47737c0ef44a6849ffcc431726b6b5f",
       "acoustic": {
         "sourcePhones": [
           "h",
-          "a\u028a",
-          "l"
+          "a\u028a"
         ],
         "decodedPhones": [
           "h",
-          "a\u028a",
-          "l"
+          "a\u028a"
         ],
-        "perPhoneLossIncrease": 0.029511,
+        "perPhoneLossIncrease": -0.205081,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/howl-approval.json",
+          "sha256": "eb2ac71b5bed2839978752f6b32b1d39a01b3a0d54d50f50b2f53932f9e9d813"
+        },
+        "humanApproved": true
       }
     },
     "hound|HH AW N D": {
@@ -27640,30 +27676,35 @@
       }
     },
     "hull|HH AH L": {
-      "seconds": 0.4025,
+      "seconds": 0.6948,
       "leadingMs": 80,
-      "trailingMs": 73,
-      "quietLeadingMs": 110,
-      "quietTrailingMs": 73,
+      "trailingMs": 85,
+      "quietLeadingMs": 90,
+      "quietTrailingMs": 125,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "3792048f7ed44619034aa5c876e423aff62c82a947eb2d06d76517ebf46ed449",
-      "sourceSha256": "dfec1bb9c3bcf3b89ba902e4dbaecabacccfd96c89ceda9016dfadf213a516a4",
+      "sha256": "5d8eb79b4bbb655845f479d5813a35eddeef82397715421f545ef6f3db983331",
+      "sourceSha256": "4e5cceeedc8561b8d0630e69ad335da481ea21ba0b01a0c127d611a8e499220e",
       "acoustic": {
         "sourcePhones": [
           "h",
-          "\u0259",
+          "o\u028a",
           "l"
         ],
         "decodedPhones": [
           "h",
-          "\u0259",
+          "o\u028a",
           "l"
         ],
-        "perPhoneLossIncrease": 0.548402,
+        "perPhoneLossIncrease": -0.049199,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/hull-approval.json",
+          "sha256": "068ea718e738f65e8a82993830939a9721985292827b27f0d8eacf8ad978f26d"
+        },
+        "humanApproved": true
       }
     },
     "hum|HH AH M": {
@@ -28074,30 +28115,35 @@
       }
     },
     "lath|L AE TH": {
-      "seconds": 0.4992,
+      "seconds": 0.6538,
       "leadingMs": 80,
-      "trailingMs": 79,
+      "trailingMs": 34,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 109,
+      "quietTrailingMs": 224,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "eeb326e27ef623cdcb78ff4cdfcbedc11b89fab77545568dff66b1640bbd94a0",
-      "sourceSha256": "4c104950dcbca23f9d54621a6176cab0bd36e1ae8dd49affd119da30dbc90b79",
+      "sha256": "3b9dbf13442a57fe01a4f0b0bd72d6e10cfe0961ef3458194bf1cb477ea8ef9a",
+      "sourceSha256": "5b6dcc40f495b422c2f397d229652e479ecb9bb891042045f0131f1f3c261795",
       "acoustic": {
         "sourcePhones": [
           "l",
           "\u00e6",
-          "\u03b8"
+          "f"
         ],
         "decodedPhones": [
           "l",
           "\u00e6",
-          "\u03b8"
+          "f"
         ],
-        "perPhoneLossIncrease": -0.07356,
+        "perPhoneLossIncrease": 0.148674,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/lath-approval.json",
+          "sha256": "1b5d2dfa954ea845491b3e013c3953a783dbe94998d6fde0e0aae696dd55fa10"
+        },
+        "humanApproved": true
       }
     },
     "la|L AA": {
@@ -29455,30 +29501,33 @@
       }
     },
     "lull|L AH L": {
-      "seconds": 0.4425,
+      "seconds": 0.6637,
       "leadingMs": 80,
-      "trailingMs": 62,
+      "trailingMs": 44,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 73,
+      "quietTrailingMs": 84,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "7bae30fa354b521fe5fd601c63e1a069ffc80b7021c578b3de4f1aba29c4eca2",
-      "sourceSha256": "393edc47dbfe109e819c0cfee9f209d1f6e4360271731df655c67353051f6f1a",
+      "sha256": "5ed807aded79c7cb239fc086089350d1a05582352d97dcfcd42b585e1e53d197",
+      "sourceSha256": "9659919b105a8077b43eec45818c67758818e96ff77fcb91feb540fe60b993fb",
       "acoustic": {
         "sourcePhones": [
           "l",
-          "\u0259",
-          "l"
+          "o\u028a"
         ],
         "decodedPhones": [
           "l",
-          "\u0259",
-          "l"
+          "o\u028a"
         ],
-        "perPhoneLossIncrease": -0.090166,
+        "perPhoneLossIncrease": 0.255806,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/lull-approval.json",
+          "sha256": "a21a8f278c714791be5bed6b9379632ac2bc02fe8baae5033410dea824d79017"
+        },
+        "humanApproved": true
       }
     },
     "lulled|L AH L D": {
@@ -29646,30 +29695,35 @@
       }
     },
     "cal|K AE L": {
-      "seconds": 0.4258,
+      "seconds": 0.6425,
       "leadingMs": 70,
-      "trailingMs": 76,
+      "trailingMs": 82,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 76,
+      "quietTrailingMs": 112,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "09151692aa02187d73e0a24d66ca63311fa52ea46058bf30321b645dc7907176",
-      "sourceSha256": "ac5cf443a10dd32d78f59eb807224b756c353ab5cf48eed5106b8ced751484a1",
+      "sha256": "e52a309d4540adb211962371be59e82e995d8f0339ec14ca1cdb223914267578",
+      "sourceSha256": "04860468778c549dce52eaad4cc50e48c9b2eed606e306e77d22aff267deb39c",
       "acoustic": {
         "sourcePhones": [
           "k",
-          "\u00e6",
+          "a\u028a",
           "l"
         ],
         "decodedPhones": [
           "k",
-          "\u00e6",
+          "a\u028a",
           "l"
         ],
-        "perPhoneLossIncrease": -0.028696,
+        "perPhoneLossIncrease": 0.139174,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/cal-approval.json",
+          "sha256": "e72e6b68a17f0d8438cd1966cd320b03ae639bf5e70be3f76d62d45c9142a5c0"
+        },
+        "humanApproved": true
       }
     },
     "canned|K AE N D": {
@@ -32975,32 +33029,35 @@
       }
     },
     "yurt|Y UH R T": {
-      "seconds": 0.5425,
+      "seconds": 0.6076,
       "leadingMs": 80,
-      "trailingMs": 62,
+      "trailingMs": 18,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 72,
-      "internalSilenceMs": 0,
+      "quietTrailingMs": 48,
+      "internalSilenceMs": 40,
       "issues": [],
-      "sha256": "9b710fd8172e3876c3ade01e03daaf2d02fb5e6145f1eaa7829b47130c784b0a",
-      "sourceSha256": "2f823e2abbe322e2db716edef18c9e493809d6ea489c3ba642c5c90d6f51b6f2",
+      "sha256": "74200455f00e8f8e6f373181c43afbd36079a14ce28bb3aef60e13dbe770713c",
+      "sourceSha256": "dc96eea2b6a413e8a860ef5b99346d9fb655be9504af4cee0534a6afe6ba4f9d",
       "acoustic": {
         "sourcePhones": [
           "j",
-          "\u028a",
-          "\u0279",
+          "\u025d",
           "t"
         ],
         "decodedPhones": [
           "j",
-          "\u028a",
-          "\u0279",
+          "\u025d",
           "t"
         ],
-        "perPhoneLossIncrease": -0.19137,
+        "perPhoneLossIncrease": -0.623529,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/yurt-approval.json",
+          "sha256": "41d96286f21acbfbedbcb2e51ff878e9fb2e7419948b3f190ca3e0b5c6c64547"
+        },
+        "humanApproved": true
       }
     },
     "pad|P AE D": {
@@ -33313,30 +33370,37 @@
       }
     },
     "pear|P EH R": {
-      "seconds": 0.4425,
+      "seconds": 0.6326,
       "leadingMs": 70,
-      "trailingMs": 73,
+      "trailingMs": 83,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 73,
+      "quietTrailingMs": 133,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "d7fb067e108e5036233d7b9764bbe3e28ee8dd1e496326ded76739c8906734d1",
-      "sourceSha256": "6873be1e453282f5f8217a58705d92c89c4d919a287b6072572a5828c93c7b8d",
+      "sha256": "409b1aec175b5613d628c8f7072a751197435fa40c411d9a0d88a03a927ddfc9",
+      "sourceSha256": "c04a99002837372fd1bdd8ce2e7cfb2db5a09069534a02d68a49ddbe415e15a5",
       "acoustic": {
         "sourcePhones": [
           "p",
-          "\u025b",
+          "h",
+          "\u026a",
           "\u025d"
         ],
         "decodedPhones": [
           "p",
-          "\u025b",
+          "h",
+          "\u026a",
           "\u025d"
         ],
-        "perPhoneLossIncrease": 0.066941,
+        "perPhoneLossIncrease": 0.052526,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/pear-approval.json",
+          "sha256": "703db3dd4ca345d03f2e39faae9a1e792a5924d53f46a18a7182ba832bc74f98"
+        },
+        "humanApproved": true
       }
     },
     "pave|P EY V": {
@@ -34437,30 +34501,35 @@
       }
     },
     "pith|P IH TH": {
-      "seconds": 0.3925,
+      "seconds": 0.5094,
       "leadingMs": 80,
-      "trailingMs": 73,
+      "trailingMs": 59,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 83,
+      "quietTrailingMs": 199,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "04b03dd04119ff19ba63a3eea2baca51d1051594a60f894e77f24791de23a410",
-      "sourceSha256": "4415f7cc531abf2a61611cccc7874b510aa10ba031213d229a1a9ddc4e1cd188",
+      "sha256": "8371d5a1df6b944e4bfa1e93442302ff58de4ff73c8a2a5d277a91b472e2080a",
+      "sourceSha256": "c3f365e8f341218944d573cd86e083f713d9d0782c4a6083923b4d5caa7a42a1",
       "acoustic": {
         "sourcePhones": [
           "p",
           "\u026a",
-          "\u03b8"
+          "f"
         ],
         "decodedPhones": [
           "p",
           "\u026a",
-          "\u03b8"
+          "f"
         ],
-        "perPhoneLossIncrease": 0.155977,
+        "perPhoneLossIncrease": -2e-06,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/pith-approval.json",
+          "sha256": "e6d870650bb046ba24fd5d6a1612e35c6986ae6c02127894670620f7cd35cd1d"
+        },
+        "humanApproved": true
       }
     },
     "pock|P AA K": {
@@ -34955,30 +35024,36 @@
       }
     },
     "puff|P AH F": {
-      "seconds": 0.4325,
+      "seconds": 0.4518,
       "leadingMs": 70,
-      "trailingMs": 73,
+      "trailingMs": 0,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 82,
+      "quietTrailingMs": 22,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "7fc5e8003816132e3b07e5c7f6f1c22fbb90f71d3a6cda55739f437ba4ba3c35",
-      "sourceSha256": "76a5d23c9b2608a8107df726cefb8e377d9bde3c17a59d15f7687ca03f7957ae",
+      "sha256": "60f61e1ba3f1430e5aef02b15635cd004f77abaa0ebb5a95a0d721d61774dc5b",
+      "sourceSha256": "e3362be7efccd8ad8be2a10a5736ca3c88d86f2c58f344d1ca7d14615be97c7e",
       "acoustic": {
         "sourcePhones": [
           "p",
-          "\u0259",
+          "\u0251",
           "f"
         ],
         "decodedPhones": [
           "p",
-          "\u0259",
+          "h",
+          "\u0251",
           "f"
         ],
-        "perPhoneLossIncrease": 0.041279,
+        "perPhoneLossIncrease": 0.731555,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/puff-approval.json",
+          "sha256": "172146326b68550f7d0c45a170e5cdd8b08e59ed8f7b6aee10912f6309e7995d"
+        },
+        "humanApproved": true
       }
     },
     "pug|P AH G": {
@@ -35011,30 +35086,35 @@
       }
     },
     "pup|P AH P": {
-      "seconds": 0.4458,
+      "seconds": 0.5057,
       "leadingMs": 70,
       "trailingMs": 66,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 76,
-      "internalSilenceMs": 10,
+      "quietTrailingMs": 96,
+      "internalSilenceMs": 20,
       "issues": [],
-      "sha256": "b8d02d2750b6c173dc797f5ca5c5924f388f5603945c5f2f72f6aa343d6bc1b6",
-      "sourceSha256": "03bdbfe13a0d196aaf01749236c08d8e3aaef886266b67a9d6db88e4691fbfb4",
+      "sha256": "b44a76f4bf3a55f3284f388296b5662050f37500badcfc4f93cc2212ba496319",
+      "sourceSha256": "4822e6383ae6f89cf8864b1ba30d35f660402e7b908e78144e563b9d5bc574d9",
       "acoustic": {
         "sourcePhones": [
           "p",
-          "\u0259",
+          "\u0251",
           "p"
         ],
         "decodedPhones": [
           "p",
-          "\u0259",
+          "\u0251",
           "p"
         ],
-        "perPhoneLossIncrease": -0.359042,
+        "perPhoneLossIncrease": -0.103976,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/pup-approval.json",
+          "sha256": "e747fffd68971e99a005a69b62d3b35391e7c644e7fd7ec405fdd9f9ed640e79"
+        },
+        "humanApproved": true
       }
     },
     "pun|P AH N": {
@@ -35453,30 +35533,35 @@
       }
     },
     "mook|M UH K": {
-      "seconds": 0.4925,
+      "seconds": 0.6717,
       "leadingMs": 80,
-      "trailingMs": 73,
-      "quietLeadingMs": 90,
-      "quietTrailingMs": 82,
-      "internalSilenceMs": 20,
+      "trailingMs": 42,
+      "quietLeadingMs": 80,
+      "quietTrailingMs": 92,
+      "internalSilenceMs": 70,
       "issues": [],
-      "sha256": "319e92a32e2b6f5e904d6c0d7787b0628e51e7216eb78e95f47661c646d1a20e",
-      "sourceSha256": "8703061807656855d83d77fc48f71600b8c1d94d71b71de09be00fb277cb78a3",
+      "sha256": "482f327a5ef8521b09818f9e4bb5b134b80b834bc32df6559516cc367048f7a5",
+      "sourceSha256": "528473f11b8812df541bd94744f50acd7fcdf83f3ac05ce8971c8df0aaf1bd63",
       "acoustic": {
         "sourcePhones": [
           "m",
-          "\u028a",
+          "u",
           "k"
         ],
         "decodedPhones": [
           "m",
-          "\u028a",
+          "u",
           "k"
         ],
-        "perPhoneLossIncrease": 0.104623,
+        "perPhoneLossIncrease": -0.100206,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/mook-approval.json",
+          "sha256": "83a23a145022bd896f800ef448809ca6e89c83f7ddfb765685f5085eefa37760"
+        },
+        "humanApproved": true
       }
     },
     "moose|M UW S": {
@@ -36821,30 +36906,35 @@
       }
     },
     "mull|M AH L": {
-      "seconds": 0.4192,
-      "leadingMs": 90,
-      "trailingMs": 69,
+      "seconds": 0.6526,
+      "leadingMs": 80,
+      "trailingMs": 73,
       "quietLeadingMs": 90,
-      "quietTrailingMs": 79,
+      "quietTrailingMs": 123,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "411d4fcb0f9953a25fc184bd2526cb5138cbb6df03c6b8cb965084163da4e05c",
-      "sourceSha256": "e04e93c10ee0a604a60283624dc8162786d46320a1ba725d458b15147f6b8abd",
+      "sha256": "a9de70797f89b80e08f8c28d878b088a1e5981aeef2845abe99311bb4c1de6d2",
+      "sourceSha256": "a30c50a5e31f66966819b4e7f7e770c3658296ad6c5f0116a270fcb4b8681a7c",
       "acoustic": {
         "sourcePhones": [
           "m",
-          "\u0259",
+          "o\u028a",
           "l"
         ],
         "decodedPhones": [
           "m",
-          "\u0259",
+          "o\u028a",
           "l"
         ],
-        "perPhoneLossIncrease": 0.033439,
+        "perPhoneLossIncrease": 0.168887,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/mull-approval.json",
+          "sha256": "0b3fdeee3b7afd4a67de478edf9e9e046d24dfb85b4618ff7f3857cd4754fd70"
+        },
+        "humanApproved": true
       }
     },
     "mulled|M AH L D": {
@@ -37779,15 +37869,15 @@
       }
     },
     "baz|B AE Z": {
-      "seconds": 0.4325,
-      "leadingMs": 80,
-      "trailingMs": 73,
+      "seconds": 0.5811,
+      "leadingMs": 70,
+      "trailingMs": 21,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 73,
+      "quietTrailingMs": 41,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "687e2f913e8efc4b8b047a772f53b1169ca65900803778520408c53cc7661571",
-      "sourceSha256": "7bc185e79d1caafb8cb6524408dd099cf811ae6cb4976850d4ecf2cadcc7e651",
+      "sha256": "7e5168bf989319efc31cd43756963149506106ff3eb1584eb9fa9b0a3084f9f8",
+      "sourceSha256": "56ef13d3f87ebe07ce4663af86eea0cb348c3af171fd5b3d77ef1463a0ad2a77",
       "acoustic": {
         "sourcePhones": [
           "b",
@@ -37799,10 +37889,15 @@
           "\u00e6",
           "z"
         ],
-        "perPhoneLossIncrease": 0.180885,
+        "perPhoneLossIncrease": -0.037328,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": true,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/baz-approval.json",
+          "sha256": "997a7caaecdfb8bbf7fd7d46fddf463e224233be281fff5fb53785698ccb201d"
+        },
+        "humanApproved": true
       }
     },
     "babe|B EY B": {
@@ -38132,30 +38227,35 @@
       }
     },
     "boor|B UH R": {
-      "seconds": 0.4258,
-      "leadingMs": 80,
-      "trailingMs": 76,
+      "seconds": 0.6359,
+      "leadingMs": 70,
+      "trailingMs": 86,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 76,
+      "quietTrailingMs": 116,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "e9afe62df56dcd213ebf3a68cba47c4143c2fdf5d9822ad57b7b780b39fa59e5",
-      "sourceSha256": "1590f6a6b0239b8dabf6a737adda1799037af60298addebfa330d29073f7403c",
+      "sha256": "6614698e9d9bc8cd838687f6a3761c2d7509450b92b370f25544840165bf70b0",
+      "sourceSha256": "a32bb325e34bea834e0a0913cf2aa3ace8790404437d92bad839619831b2a85f",
       "acoustic": {
         "sourcePhones": [
           "b",
-          "\u028a",
+          "u",
           "\u025d"
         ],
         "decodedPhones": [
           "b",
-          "\u028a",
+          "u",
           "\u025d"
         ],
-        "perPhoneLossIncrease": 0.265383,
+        "perPhoneLossIncrease": -0.04743,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/boor-approval.json",
+          "sha256": "70a6b85ba8983599016f2bb1575cc861a518ca7e22b1e18a4d69c8ffc4c97a02"
+        },
+        "humanApproved": true
       }
     },
     "booze|B UW Z": {
@@ -43373,15 +43473,15 @@
       }
     },
     "rogue|R OW G": {
-      "seconds": 0.4858,
+      "seconds": 0.6604,
       "leadingMs": 80,
-      "trailingMs": 66,
+      "trailingMs": 80,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 76,
+      "quietTrailingMs": 120,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "7d56e9440f2023693087488857d2866c4002384c51f4f6dfe4287127f18c2320",
-      "sourceSha256": "db2f052224f1a703c95f8af0b82f2584310cf489bc3806daa72eff20a112f637",
+      "sha256": "629ce934c9c36cf36de2a0444c5006636760aa6a2f26f9b9b6a8b88c7ac98819",
+      "sourceSha256": "86b1bb2bb3905e0bf3fcf0e2049eee834d1c112d1e14b934e9232e295a0e08fe",
       "acoustic": {
         "sourcePhones": [
           "\u0279",
@@ -43391,13 +43491,17 @@
         "decodedPhones": [
           "\u0279",
           "o\u028a",
-          "g",
-          "\u026a"
+          "g"
         ],
-        "perPhoneLossIncrease": 0.141017,
-        "samePhones": false,
+        "perPhoneLossIncrease": 0.0,
+        "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": true,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/rogue-approval.json",
+          "sha256": "9e5852f5a062252a1d1f91c69f443ba125559c22060edefbd5a66fbfa11256c9"
+        },
+        "humanApproved": true
       }
     },
     "rope|R OW P": {
@@ -44215,15 +44319,15 @@
       }
     },
     "seethe|S IY DH": {
-      "seconds": 0.5692,
+      "seconds": 0.7391,
       "leadingMs": 80,
-      "trailingMs": 59,
+      "trailingMs": 79,
       "quietLeadingMs": 90,
-      "quietTrailingMs": 79,
+      "quietTrailingMs": 129,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "e53b9b1a0adb98807af0ae55c3516cacadc01070dd56ea0b2bab5862b425debb",
-      "sourceSha256": "6ba5fcd7b697d656787b7c0aac634c158609b72eba14fe83ee4dd7b6dca77471",
+      "sha256": "8ffa880df8c15e3bd2e9eccf34e517a00c1589afd3f0e61ab8ea8d4d75a88cc2",
+      "sourceSha256": "9f57da19dd40b54adc10b71c1f67e1812f6e7b981f2072c02e65e9aae2de59a4",
       "acoustic": {
         "sourcePhones": [
           "s",
@@ -44235,10 +44339,15 @@
           "i",
           "\u00f0"
         ],
-        "perPhoneLossIncrease": -0.388839,
+        "perPhoneLossIncrease": 0.102793,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": true,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/seethe-approval.json",
+          "sha256": "9b3abcb28d9a9433fd6500fc025195bb169062dd80e76828a5b98c8fe3c0f082"
+        },
+        "humanApproved": true
       }
     },
     "sued|S UW D": {
@@ -49729,32 +49838,37 @@
       }
     },
     "spiel|S P IY L": {
-      "seconds": 0.5658,
+      "seconds": 0.7499,
       "leadingMs": 80,
-      "trailingMs": 66,
-      "quietLeadingMs": 100,
-      "quietTrailingMs": 76,
-      "internalSilenceMs": 30,
+      "trailingMs": 80,
+      "quietLeadingMs": 90,
+      "quietTrailingMs": 130,
+      "internalSilenceMs": 40,
       "issues": [],
-      "sha256": "efb541e3d3638d96119fc8d4155e2b91e27c703b674619ca5bb8a2e9a0fb6de4",
-      "sourceSha256": "b91b075ee72460dd3a419cf8338d9f848ff1d5d0e08817fced1e4068cf319168",
+      "sha256": "a9aad45dfc152cab38d6c41cf6da4700f921731b0da48cff36fdc3f42e151b5b",
+      "sourceSha256": "383a28205576c72efdb0c26687e71be37f2d14c33931be58db833065890fd506",
       "acoustic": {
         "sourcePhones": [
-          "s",
+          "\u0283",
           "p",
           "i",
           "l"
         ],
         "decodedPhones": [
-          "s",
+          "\u0283",
           "p",
           "i",
           "l"
         ],
-        "perPhoneLossIncrease": 0.293072,
+        "perPhoneLossIncrease": -0.513763,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/spiel-approval.json",
+          "sha256": "f0c701405af6536bae4970e108cd9dc68a3290b98103acfeaf4ddd04e7e71a5a"
+        },
+        "humanApproved": true
       }
     },
     "spike|S P AY K": {
@@ -50341,57 +50455,65 @@
       }
     },
     "val|V AE L": {
-      "seconds": 0.4858,
+      "seconds": 0.7272,
       "leadingMs": 80,
-      "trailingMs": 56,
+      "trailingMs": 47,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 76,
+      "quietTrailingMs": 87,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "c8561b06ad516755526e4e15b85a02dcf71908d38a47723ff2ec831598a93a2a",
-      "sourceSha256": "6d434563d13a5ce6fbfe12a1339eba900a0478e51de8de1b54c9e2bd92707b89",
+      "sha256": "2c6337d3dbddfd2fd45f386a2eb3647e3333fe13a7f18ac762375faf3f996106",
+      "sourceSha256": "2112d3815057b0f06582d51138a782588124544a772ea3f7f53c01b5998900d9",
       "acoustic": {
         "sourcePhones": [
           "v",
-          "\u00e6",
-          "l"
+          "a\u028a"
         ],
         "decodedPhones": [
           "v",
-          "\u00e6",
-          "l"
+          "a\u028a"
         ],
-        "perPhoneLossIncrease": -0.004826,
+        "perPhoneLossIncrease": 0.106719,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/val-approval.json",
+          "sha256": "09830a67ac80f779672f1aa4049e0eaeee7da83afc4b51de53a5dafb0e1a3dc3"
+        },
+        "humanApproved": true
       }
     },
     "vase|V AA Z": {
-      "seconds": 0.4858,
+      "seconds": 0.7624,
       "leadingMs": 80,
-      "trailingMs": 76,
+      "trailingMs": 72,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 76,
+      "quietTrailingMs": 102,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "d55f9fd0e3321bb9a57e5b3f9a613ef9880cda0ec1f12e897d7516357f5bb487",
-      "sourceSha256": "5ddabb2a06ebe3de9912dfd85ea07c6f79a6a4df0d370b3d7ca48b56414a5999",
+      "sha256": "a7afa70a18fd55c0661aa31c53dcc8de3fc496b7cee08703088b7ccb37acd4a6",
+      "sourceSha256": "f130fff4cb93478e62912023775aa4ca0a27c2d7f5c4f35374480bc5e096bfce",
       "acoustic": {
         "sourcePhones": [
           "v",
-          "\u0251",
+          "e\u026a",
           "z"
         ],
         "decodedPhones": [
           "v",
-          "\u0251",
+          "e\u026a",
           "z"
         ],
-        "perPhoneLossIncrease": 0.515546,
+        "perPhoneLossIncrease": 0.183072,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/vase-approval.json",
+          "sha256": "5f011763050ebcd5151c1658424a3f5ea9c6633b6af125209e135d661d0df3bd"
+        },
+        "humanApproved": true
       }
     },
     "vase|V EY S": {
@@ -52384,15 +52506,15 @@
       }
     },
     "zing|Z IH NG": {
-      "seconds": 0.4358,
+      "seconds": 0.7003,
       "leadingMs": 80,
-      "trailingMs": 76,
+      "trailingMs": 70,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 76,
+      "quietTrailingMs": 110,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "fdae8b2513f4b3068c2dcbe3c883a21a63390a643caf4bdb455534d8f6931027",
-      "sourceSha256": "5671a7857a7f8862b8e3335cf5a2bfa40ec8f1bfa009b6dad1e393f448a3aa4b",
+      "sha256": "f983b514360305226dd75d0c1d776cc8a52e8f33d4b9cb2795c791c6a1831af2",
+      "sourceSha256": "428722be6850f49c68b1dc523aea89b61c9ef1a437bd4a212b05ea9ad7a6b05a",
       "acoustic": {
         "sourcePhones": [
           "z",
@@ -52401,13 +52523,18 @@
         ],
         "decodedPhones": [
           "z",
-          "i",
+          "\u026a",
           "\u014b"
         ],
-        "perPhoneLossIncrease": 0.216347,
+        "perPhoneLossIncrease": 0.088921,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": true,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/zing-approval.json",
+          "sha256": "9600d41db247db7bad7e3cf15b8e2b5a37d7c15e60fd5b30cf77fd1b10de89f5"
+        },
+        "humanApproved": true
       }
     },
     "tab|T AE B": {
@@ -52604,30 +52731,37 @@
       }
     },
     "tang|T AA NG": {
-      "seconds": 0.4425,
+      "seconds": 0.6436,
       "leadingMs": 80,
-      "trailingMs": 73,
+      "trailingMs": 74,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 73,
+      "quietTrailingMs": 114,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "74adbf7f321d701d1e2cab0d7a7741e60e9073a5336048daf48f7dad0b18e046",
-      "sourceSha256": "a4cc76d0f71d4506f8659c819dfb789dd9a48143c7503cdc7278c765218f1f73",
+      "sha256": "e986d541d92f0fef268e7cdbe166b40f418ddaeaa9ce2e9974db10c1700bf751",
+      "sourceSha256": "16e72ae00ef4875260d4ee9dd8d6b1d1b3737d2160a8ccf5fe3202cfbe9f756f",
       "acoustic": {
         "sourcePhones": [
           "t",
-          "\u0251",
+          "h",
+          "e\u026a",
           "\u014b"
         ],
         "decodedPhones": [
           "t",
-          "\u0251",
+          "h",
+          "e\u026a",
           "\u014b"
         ],
-        "perPhoneLossIncrease": 0.0,
+        "perPhoneLossIncrease": 3.4e-05,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/tang-approval.json",
+          "sha256": "7d23eeb0101c838dbf76f631304b22690d066222fe8834a04c9c19a0a54c861f"
+        },
+        "humanApproved": true
       }
     },
     "tang|T AE NG": {
@@ -52658,30 +52792,35 @@
       }
     },
     "tam|T AE M": {
-      "seconds": 0.4625,
-      "leadingMs": 80,
-      "trailingMs": 73,
+      "seconds": 0.5954,
+      "leadingMs": 70,
+      "trailingMs": 25,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 73,
+      "quietTrailingMs": 65,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "12366f343a17e98537b210b7bd21c30ecaa746946fb6ae0b08f3f079369912ce",
-      "sourceSha256": "d76f1f663e156bda8bd10e12c934d1a78237b33495a3d572cf5e8099116ea84f",
+      "sha256": "f87ae75848473a24caa9d4c142873af660eee39d750e907ac8c010998a8bf452",
+      "sourceSha256": "a2147b215bde12a1df809d734d1c8ed3c7aa43720f189bae5fd0c9085f15a935",
       "acoustic": {
         "sourcePhones": [
           "t",
-          "\u00e6",
+          "\u025b",
           "m"
         ],
         "decodedPhones": [
           "t",
-          "\u00e6",
+          "\u025b",
           "m"
         ],
-        "perPhoneLossIncrease": 0.0,
+        "perPhoneLossIncrease": 0.052642,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/tam-approval.json",
+          "sha256": "8a2fd1ae0d618a340664479f78aa39ae95eee8e22d2e65975f372cc9366b0395"
+        },
+        "humanApproved": true
       }
     },
     "tar|T AA R": {
@@ -54172,15 +54311,15 @@
       }
     },
     "thyme|TH AY M": {
-      "seconds": 0.6865,
-      "leadingMs": 80,
-      "trailingMs": 77,
-      "quietLeadingMs": 120,
-      "quietTrailingMs": 126,
+      "seconds": 0.599,
+      "leadingMs": 70,
+      "trailingMs": 19,
+      "quietLeadingMs": 80,
+      "quietTrailingMs": 39,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "3bc555b8572f876861431d9a78db95e54f8234b0281e2d9cdb8643841a283ed4",
-      "sourceSha256": "e9c2f3be59d6302f12b54e4b201c0485a003703b60b5f2fbe4ddae8a2d813077",
+      "sha256": "fbe9d74299507caee40dcadca0bfa653dc638c64d8aed910bd9cfda05ca3871b",
+      "sourceSha256": "aa7f58b35a88811a2d9127f2660f2d3fc181896096061e723879da09bddb25ce",
       "acoustic": {
         "sourcePhones": [
           "t",
@@ -54188,14 +54327,19 @@
           "m"
         ],
         "decodedPhones": [
-          "\u03b8",
+          "t",
           "a\u026a",
           "m"
         ],
-        "perPhoneLossIncrease": 0.157644,
-        "samePhones": false,
+        "perPhoneLossIncrease": 0.0,
+        "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": true,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/thyme-approval.json",
+          "sha256": "2753286810abd960002b1d51fcbdd0802be1576427464561eeecfd6fc6840660"
+        },
+        "humanApproved": true
       }
     },
     "thighs|TH AY Z": {
@@ -57272,15 +57416,15 @@
       }
     },
     "git|G IH T": {
-      "seconds": 0.3225,
-      "leadingMs": 80,
-      "trailingMs": 73,
+      "seconds": 0.5108,
+      "leadingMs": 70,
+      "trailingMs": 81,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 83,
-      "internalSilenceMs": 0,
+      "quietTrailingMs": 111,
+      "internalSilenceMs": 30,
       "issues": [],
-      "sha256": "4f84a6a56a19252ae73b9211b17f407d16c31c9fef2b7200ac15db3fe9ca5388",
-      "sourceSha256": "67dfd5ac149e458efa13b8b714299cd44785065f87dcfc707a203b9db7dfd187",
+      "sha256": "7a869c428d36a51d1abffa24988017d1b689c4094d92b6d2c115ed7264f90016",
+      "sourceSha256": "6d0f3c68d8ba5687e1ddd0892854972201bb862472d1fd9b4c8bc0940fd93c56",
       "acoustic": {
         "sourcePhones": [
           "g",
@@ -57292,11 +57436,16 @@
           "\u026a",
           "t"
         ],
-        "perPhoneLossIncrease": 0.222967,
+        "perPhoneLossIncrease": 0.0,
         "samePhones": true,
         "passed": true,
-        "requiresPhoneMatch": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": true,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/git-approval.json",
+          "sha256": "ec8778923bb43a2f7e1fd7448c5baf2817b67cb52cf9d284fccd47c2be0dc6cc"
+        },
+        "humanApproved": true,
+        "requiresPhoneMatch": true
       }
     },
     "gob|G AA B": {
@@ -57817,30 +57966,35 @@
       }
     },
     "gut|G AH T": {
-      "seconds": 0.4292,
+      "seconds": 0.4993,
       "leadingMs": 70,
-      "trailingMs": 69,
+      "trailingMs": 79,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 79,
+      "quietTrailingMs": 119,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "0ed3cf87b31fdec351da1aa9007e9cd28da3f3e99b0da61483a840652c2d9c75",
-      "sourceSha256": "f39c2ddb43e230642130c80be72d6b1512e88e2df040dd4e9df2b8eac9ff18af",
+      "sha256": "e3fd51aaa1ad6f6790cda24576efb28ccc31ac7ee48f42d04ae7423f4a1fe016",
+      "sourceSha256": "befba7fd7a6b59f51fcf0af34944a1488840e6ed3a72166fb3672802f0f5c4c7",
       "acoustic": {
         "sourcePhones": [
           "g",
-          "\u0259",
+          "\u0251",
           "t"
         ],
         "decodedPhones": [
           "g",
-          "\u0259",
+          "\u0251",
           "t"
         ],
-        "perPhoneLossIncrease": 0.081584,
+        "perPhoneLossIncrease": -0.415497,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/gut-approval.json",
+          "sha256": "70927198ac1d8ddd64e5138dc886042c08f42b9f79ba3f1c9f0a3692230f79f3"
+        },
+        "humanApproved": true
       }
     },
     "grad|G R AE D": {
@@ -60743,30 +60897,35 @@
       }
     },
     "foal|F OW L": {
-      "seconds": 0.5492,
-      "leadingMs": 90,
-      "trailingMs": 79,
-      "quietLeadingMs": 250,
-      "quietTrailingMs": 79,
+      "seconds": 0.683,
+      "leadingMs": 80,
+      "trailingMs": 73,
+      "quietLeadingMs": 230,
+      "quietTrailingMs": 163,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "4ca3a6a8e9228ce83c542fd6b88f62c1c525c45c6fde92a1ef0342e70be97814",
-      "sourceSha256": "689df4d4285d213ed395a37a6f48ec8362f8c1792874e1c64395ce3aa51e5cc1",
+      "sha256": "34df0979f5eaa6e2c811b7399501e93941c132a86854548b437d682f63f01d58",
+      "sourceSha256": "b1279e86f03a860a798a6a402ee8aa59f72d9de3adc213fa7674d5a6ca70b034",
       "acoustic": {
         "sourcePhones": [
           "f",
-          "o\u028a",
+          "\u028a",
           "l"
         ],
         "decodedPhones": [
           "f",
-          "o\u028a",
+          "\u028a",
           "l"
         ],
-        "perPhoneLossIncrease": 0.196912,
+        "perPhoneLossIncrease": 0.154316,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/foal-approval.json",
+          "sha256": "0b19d8d2a799973d506b64b15ff77262b0d173dae9332326ab709368df8d925e"
+        },
+        "humanApproved": true
       }
     },
     "foam|F OW M": {
@@ -61719,30 +61878,33 @@
       }
     },
     "nel|N EH L": {
-      "seconds": 0.4258,
+      "seconds": 0.5653,
       "leadingMs": 80,
-      "trailingMs": 66,
-      "quietLeadingMs": 80,
-      "quietTrailingMs": 76,
+      "trailingMs": 45,
+      "quietLeadingMs": 100,
+      "quietTrailingMs": 95,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "5dd604ea345c4489a5b42c4fdcfcb124711d48ee46a99eb16f1bbaeb29374706",
-      "sourceSha256": "9290c8aad9f813a0e467b31af30dfcf088847c1454cb0be82f4593bd47e98c1b",
+      "sha256": "d47bebb51bb6dd5e3bad680fb65f422fd0850e7eb0fbbe108e9ec8afb6e7d275",
+      "sourceSha256": "e9a5bed6f3f6c0af36a7c95e70f7cc74e8173fea18beeaa0850d40cf48ad6e90",
       "acoustic": {
         "sourcePhones": [
           "n",
-          "\u025b",
-          "l"
+          "a\u028a"
         ],
         "decodedPhones": [
           "n",
-          "\u025b",
-          "l"
+          "a\u028a"
         ],
-        "perPhoneLossIncrease": 0.205147,
+        "perPhoneLossIncrease": 0.009377,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/nel-approval.json",
+          "sha256": "599aaea333f15e24ec229bc716320b94d5fd8e2d5ca0a8a5bb6cb8ab49216192"
+        },
+        "humanApproved": true
       }
     },
     "knelt|N EH L T": {
@@ -62045,15 +62207,15 @@
       }
     },
     "knoll|N OW L": {
-      "seconds": 0.5392,
+      "seconds": 0.6125,
       "leadingMs": 80,
-      "trailingMs": 79,
-      "quietLeadingMs": 80,
-      "quietTrailingMs": 79,
+      "trailingMs": 73,
+      "quietLeadingMs": 90,
+      "quietTrailingMs": 83,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "c23b4c4a0f0334c9bb97df26497fd73a6446615dba8f2b876c6a810e71ad3770",
-      "sourceSha256": "18336455c8675ff20ef7b13ee3c58e2bf04279c1fb44be97e3c53ec21ddc5cfe",
+      "sha256": "42bd0a0bf5285bb30b1bb25f6375ef253da43826bd1e100c62c3e2f597010e19",
+      "sourceSha256": "d2b3b24e67e0a0ffc30a88356ccaf9c823e0f7aee39b26361567da6230e59b66",
       "acoustic": {
         "sourcePhones": [
           "n",
@@ -62065,10 +62227,15 @@
           "o\u028a",
           "l"
         ],
-        "perPhoneLossIncrease": -0.013663,
+        "perPhoneLossIncrease": 0.0,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": true,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/knoll-approval.json",
+          "sha256": "f1f3001aea80e730628feff799736ddaa703166f16b88a3aa5c6f61f57d9ea08"
+        },
+        "humanApproved": true
       }
     },
     "nope|N OW P": {
@@ -62182,46 +62349,45 @@
       }
     },
     "null|N AH L": {
-      "seconds": 0.4075,
+      "seconds": 0.4668,
       "leadingMs": 80,
-      "trailingMs": 77,
+      "trailingMs": 47,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 77,
+      "quietTrailingMs": 57,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "16dcd8d5cfcb83d5a9547d90fedced8ddf366565ea9252d750afadad5f77d273",
-      "sourceSha256": "bbea7429e5f669bb8ea8edf0d394d7ecc69878fa497dd09d0f0369d61e3ca64f",
+      "sha256": "7e200919b2726395904959dd792ef2c301145de15fddb52899e5e311c8884d14",
+      "sourceSha256": "fe65f86f28085f929a3ee386620ac0ce2313f97816177631e87d0b9343371486",
       "acoustic": {
         "sourcePhones": [
           "n",
-          "o\u028a",
-          "l"
+          "o\u028a"
         ],
         "decodedPhones": [
           "n",
-          "o\u028a",
-          "l"
+          "o\u028a"
         ],
         "perPhoneLossIncrease": 0.0,
         "samePhones": true,
         "passed": true,
         "dictionaryPhonesMatched": false,
         "reviewedRecording": {
-          "metadata": "data/audio/repairs/null.json",
-          "sha256": "0c1836eacccc56ff50c2afdd485de2e91d013cdf441fb36b13bf2fc9789e2bb9"
-        }
+          "metadata": "data/audio/repairs/null-approval.json",
+          "sha256": "4f551e7fb1890557eb559fa574f6702c3ae19c256fbb4eb4396fc1fe1a204eda"
+        },
+        "humanApproved": true
       }
     },
     "nun|N AH N": {
-      "seconds": 0.4025,
+      "seconds": 0.6417,
       "leadingMs": 80,
-      "trailingMs": 73,
+      "trailingMs": 82,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 73,
+      "quietTrailingMs": 122,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "41fca9fe1191e0501a24b311f9de62e416bd6abe811e5f1e04f7bb9b6860642e",
-      "sourceSha256": "809475cbe457e1ca84ffe5170de21c26702e50930764eb0848c236d90511f217",
+      "sha256": "8aa4d07f9f6eae48e736ebc81c8d7d2ea4d2e4149bfa73cb509b6ca7c25d88d3",
+      "sourceSha256": "cef9d1c37d5a6bc42e84b4d5112bd27889249b1091a4244627d02d6ac07da0db",
       "acoustic": {
         "sourcePhones": [
           "n",
@@ -62233,10 +62399,15 @@
           "\u0259",
           "n"
         ],
-        "perPhoneLossIncrease": 0.0,
+        "perPhoneLossIncrease": 0.156528,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": true,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/nun-approval.json",
+          "sha256": "888eba4845d59e722df54cd657b32ad6afc520e4ada2a5583ad746bd467b38f1"
+        },
+        "humanApproved": true
       }
     },
     "nudge|N AH JH": {
@@ -62267,30 +62438,35 @@
       }
     },
     "nut|N AH T": {
-      "seconds": 0.4058,
+      "seconds": 0.5782,
       "leadingMs": 80,
-      "trailingMs": 76,
+      "trailingMs": 78,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 86,
-      "internalSilenceMs": 0,
+      "quietTrailingMs": 118,
+      "internalSilenceMs": 20,
       "issues": [],
-      "sha256": "525b9a648f7c11915bbf2ccdc32ef51387c819eb5104eb11f7ce380b9b8bd6b1",
-      "sourceSha256": "fdba407e1a7bb372853d4c6c67fdbbe28b482c1c60ca893f59108cb5b20132f4",
+      "sha256": "5f41030b5a679de733565e89ce07c3111273029700f455a99c4c7527b09af3eb",
+      "sourceSha256": "5bc5bcb9d7ebab5b20f651fe52f3fe1f1aaaa4f1da26b177530ca922e837aba8",
       "acoustic": {
         "sourcePhones": [
           "n",
-          "\u0259",
+          "\u0251",
           "t"
         ],
         "decodedPhones": [
           "n",
-          "\u0259",
+          "\u0251",
           "t"
         ],
-        "perPhoneLossIncrease": 0.0,
+        "perPhoneLossIncrease": -0.450776,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/nut-approval.json",
+          "sha256": "5accdc4d70aee9bdc3f75594f14acffdc2b37a391da95b1b867dce40334a9ecd"
+        },
+        "humanApproved": true
       }
     },
     "flab|F L AE B": {
@@ -64850,15 +65026,15 @@
       }
     },
     "troth|T R AO TH": {
-      "seconds": 0.5725,
-      "leadingMs": 80,
-      "trailingMs": 73,
+      "seconds": 0.6505,
+      "leadingMs": 70,
+      "trailingMs": 60,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 83,
+      "quietTrailingMs": 200,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "c34468a7e45e57b4693dc89113deae691fe1cc79032110bbeb4e38c3f31f7a65",
-      "sourceSha256": "a600f3e9e6382a6cf3e08988394ca3cf67baa577ec1e2d90b14aad730f576861",
+      "sha256": "2d094080b5826c4c43d60b3aa027d98032d379f4d3459fd2f8f346cdbd6c46b6",
+      "sourceSha256": "99c3882c9d37414990458530d39a48157567279ea96dcf119f2c17a1a3b4478f",
       "acoustic": {
         "sourcePhones": [
           "t",
@@ -64872,10 +65048,15 @@
           "\u0251",
           "\u03b8"
         ],
-        "perPhoneLossIncrease": 0.128894,
+        "perPhoneLossIncrease": -0.479109,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": true,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/troth-approval.json",
+          "sha256": "4fd0236795185133e02f58cbb09afc116d4c4ea5a6d43436997ed1efbf7ac084"
+        },
+        "humanApproved": true
       }
     },
     "troth|T R OW TH": {
@@ -65225,31 +65406,36 @@
       }
     },
     "watt|W AA T": {
-      "seconds": 0.5055,
+      "seconds": 0.598,
       "leadingMs": 80,
-      "trailingMs": 65,
+      "trailingMs": 68,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 115,
+      "quietTrailingMs": 108,
       "internalSilenceMs": 10,
       "issues": [],
-      "sha256": "f7372e5a3372b18984739074053f440dce0775f8c437744e18285950afad3cda",
-      "sourceSha256": "be09b22e32e927ae0aff603f6d63d84d9b157a6d5a1908e41c1192027fb293f3",
+      "sha256": "b6deb274bb7532019ad5c4c56155201e394ba62480d3d45e5224724bbf690ff8",
+      "sourceSha256": "f0eba568959d14ab3c4b0997400d2e7f8a736e17165930c0fe8ee4cf69486725",
       "acoustic": {
         "sourcePhones": [
           "w",
-          "\u0251",
+          "\u0259",
           "t"
         ],
         "decodedPhones": [
           "w",
-          "\u0251",
+          "\u0259",
           "t"
         ],
-        "perPhoneLossIncrease": 0.500558,
+        "perPhoneLossIncrease": 0.0,
         "samePhones": true,
         "passed": true,
-        "requiresPhoneMatch": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/watt-approval.json",
+          "sha256": "0a024275bc72abb033d300049c8b88d9b02968e22f34bb9bfc6aa94d077e47be"
+        },
+        "humanApproved": true,
+        "requiresPhoneMatch": true
       }
     },
     "wang|W AE NG": {
@@ -65419,30 +65605,35 @@
       }
     },
     "woof|W UW F": {
-      "seconds": 0.5625,
+      "seconds": 0.447,
       "leadingMs": 80,
-      "trailingMs": 62,
+      "trailingMs": 0,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 73,
+      "quietTrailingMs": 7,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "a639cb01d07befafe6508ed34cd44d340e923791e948a54c36791f08934aa082",
-      "sourceSha256": "d70e99b91337ed3cfdb7d65ac0e9f0de4ef912d6a1d407ff7a6acac16c519d3a",
+      "sha256": "e8e1be52054659dadb5de62ecd47b5109574d2d0e374acd03c7b5a4ed2fb0596",
+      "sourceSha256": "3fa11d18fca66cb1a6adccea1dfe4dd532d3a9d9f809e29d34f9e18003330ce9",
       "acoustic": {
         "sourcePhones": [
           "w",
-          "u",
+          "\u028a",
           "f"
         ],
         "decodedPhones": [
           "w",
-          "u",
+          "\u028a",
           "f"
         ],
-        "perPhoneLossIncrease": -0.051021,
+        "perPhoneLossIncrease": 0.733748,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/woof-approval.json",
+          "sha256": "9158f33abea84205ae9568b193cbf04b384846360957093a5acb2c9e7f40856d"
+        },
+        "humanApproved": true
       }
     },
     "wool|W UH L": {
@@ -66131,30 +66322,35 @@
       }
     },
     "won|W AA N": {
-      "seconds": 0.5192,
+      "seconds": 0.5676,
       "leadingMs": 80,
-      "trailingMs": 69,
+      "trailingMs": 78,
       "quietLeadingMs": 80,
-      "quietTrailingMs": 79,
+      "quietTrailingMs": 108,
       "internalSilenceMs": 0,
       "issues": [],
-      "sha256": "72500d9fb27fcc92be8d7adfb70eb78f2871cca82933debcbda91ccf99aada29",
-      "sourceSha256": "6dd38529ee23a7b7833a6efef3c7ee403c9889ed7b6205f7b7c6ad1c78bdeb21",
+      "sha256": "11ea7e4c5e10fe17e12ad7200782f837bf27068b74a5876418ac157cc743db3a",
+      "sourceSha256": "cd97e337cd27a877a98e973f0575190a1f4f29a373054081436a23514660de3f",
       "acoustic": {
         "sourcePhones": [
           "w",
-          "\u0251",
+          "\u0259",
           "n"
         ],
         "decodedPhones": [
           "w",
-          "\u0251",
+          "\u0259",
           "n"
         ],
-        "perPhoneLossIncrease": -0.022572,
+        "perPhoneLossIncrease": 0.018682,
         "samePhones": true,
         "passed": true,
-        "dictionaryPhonesMatched": true
+        "dictionaryPhonesMatched": false,
+        "reviewedRecording": {
+          "metadata": "data/audio/repairs/won-approval.json",
+          "sha256": "9e7e22ca6cdd7b5e0ac0d26cf8388dcfc3e315fce63932192cc06b2d164c84ca"
+        },
+        "humanApproved": true
       }
     },
     "won|W AH N": {

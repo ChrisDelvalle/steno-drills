@@ -1,0 +1,94 @@
+{
+  "version": 2,
+  "target": "git|G IH T",
+  "source": "data/audio/repairs/git-approved.wav",
+  "sourceSha256": "6d0f3c68d8ba5687e1ddd0892854972201bb862472d1fd9b4c8bc0940fd93c56",
+  "sampleSha256": "7a869c428d36a51d1abffa24988017d1b689c4094d92b6d2c115ed7264f90016",
+  "samples": 12260,
+  "sampleRate": 24000,
+  "recipeHash": "951429a96e17e8b9600d7c1d0da7e98859214e057f533f90b6fce927fcd41b40",
+  "referenceSha256": "d1d800f1cac528c93060ab577670e39b56876c73b08df05ab6ea8ea4e4102ce9",
+  "asset": {
+    "url": "/audio/instructor/e49d5596796abaeb52f49501900d328e6e211b45049b436a94cca6f5f34c04f5.opus",
+    "sha256": "e49d5596796abaeb52f49501900d328e6e211b45049b436a94cca6f5f34c04f5",
+    "bytes": 742,
+    "samples": 12260,
+    "bitrate": 10000
+  },
+  "assetSampleSha256": "7a869c428d36a51d1abffa24988017d1b689c4094d92b6d2c115ed7264f90016",
+  "assetReview": {
+    "policySha256": "65e26c727a61a3cb4926946fff4247ebe9feb47a90f2a4477043f2e50206241a",
+    "recognizerRevision": "efb7ae9b88f13db0d42eac8cedbba19739e2a278",
+    "result": {
+      "sourcePhones": [
+        "g",
+        "\u026a",
+        "t"
+      ],
+      "decodedPhones": [
+        "g",
+        "\u026a",
+        "t"
+      ],
+      "perPhoneLossIncrease": 0.0,
+      "samePhones": true,
+      "passed": true
+    },
+    "signal": {
+      "seconds": 0.5108,
+      "leadingMs": 70,
+      "trailingMs": 81,
+      "quietLeadingMs": 80,
+      "quietTrailingMs": 111,
+      "internalSilenceMs": 30,
+      "issues": []
+    }
+  },
+  "approval": {
+    "file": "data/audio/repairs/listening-2026-10-23.json",
+    "sha256": "81dba61af5dd8f9fe6f2f3131f72dace8373f5fed750b244fcb62bdbaf90da23",
+    "id": "git|G IH T:repair:b2124aa04b5b10c5b2c1"
+  },
+  "review": {
+    "method": "owner listening review",
+    "rating": "good",
+    "transcript": "git"
+  },
+  "generation": {
+    "version": 1,
+    "target": "git|G IH T",
+    "text": "gitt",
+    "temperature": 0.1,
+    "seed": 2327833333,
+    "model": {
+      "repository": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-bf16",
+      "revision": "a6eb4f68e4b056f1215157bb696209bc82a6db48"
+    },
+    "referenceSha256": "d1d800f1cac528c93060ab577670e39b56876c73b08df05ab6ea8ea4e4102ce9",
+    "referenceText": "A clear voice makes each word easy to hear. Take your time, finish each sound, and leave a short pause before the next word. The bright light fell across the quiet room.",
+    "topP": 0.8,
+    "topK": 20,
+    "repetitionPenalty": 1.05,
+    "maxTokens": 64,
+    "processing": "d2250c2fd9042998fcf0cc8e3cbad6a3f7a970a3682d85f265c664d35fa1c0e1",
+    "file": ".audio-audition/production/human-repairs-2026-10-23/b2124aa04b5b10c5b2c1.wav",
+    "sha256": "0b7ed79517fb0ba696f51a15228e96df96a0249516a3ca1b9e11831d53a94976",
+    "phones": [
+      "g",
+      "\u026a",
+      "t"
+    ],
+    "phoneMatch": true,
+    "quality": {
+      "seconds": 0.5108,
+      "leadingMs": 80,
+      "trailingMs": 71,
+      "quietLeadingMs": 80,
+      "quietTrailingMs": 111,
+      "internalSilenceMs": 10,
+      "issues": []
+    },
+    "seconds": 1.477,
+    "tokens": 12
+  }
+}

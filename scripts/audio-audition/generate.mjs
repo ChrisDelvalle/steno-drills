@@ -11,10 +11,11 @@ const production = process.argv.includes('--production');
 const pack = process.argv.includes('--pack');
 const audit = process.argv.includes('--audit');
 const quality = process.argv.includes('--quality');
-const args = process.argv.slice(2).filter(arg => !['--candidates','--production','--pack','--audit','--quality'].includes(arg));
-const script = `scripts/audio-audition/${quality ? 'quality' : audit ? 'audit' : pack ? 'pack' : production ? 'production' : candidates ? 'candidates' : 'generate'}.py`;
+const patch = process.argv.includes('--patch');
+const args = process.argv.slice(2).filter(arg => !['--candidates','--production','--pack','--audit','--quality','--patch'].includes(arg));
+const script = `scripts/audio-audition/${patch ? 'patch' : quality ? 'quality' : audit ? 'audit' : pack ? 'pack' : production ? 'production' : candidates ? 'candidates' : 'generate'}.py`;
 const localPython = resolve(work, 'venv/bin/python');
-const direct = (production || pack || audit || quality) && existsSync(localPython);
+const direct = (production || pack || audit || quality || patch) && existsSync(localPython);
 const child = spawn(direct ? localPython : 'uv', direct ? ['-u', script, ...args] : ['run', '--python', '3.12', '--project', 'scripts/audio-audition', '--locked', 'python', '-u', script, ...args], {
   cwd: root,
   stdio: 'inherit',

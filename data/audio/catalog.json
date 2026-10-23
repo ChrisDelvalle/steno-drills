@@ -55,14 +55,12 @@
       ],
       "common": true,
       "chordOrder": "|||-T",
-      "text": "thuh",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "thuh",
-        "the bus",
-        "the cup",
-        "another"
-      ]
+      "text": "the",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/the-approval.json",
+        "sha256": "91c929015a9bb11b544e894dc1583025974442dd6524edac1ff44faace536cc9"
+      }
     },
     {
       "id": "the|DH IY",
@@ -159,13 +157,13 @@
       ],
       "common": true,
       "chordOrder": "|||THA",
-      "text": "the tattoo",
-      "note": "Weak-form DH AH T retained for explicit pronunciation compatibility; prefer the fully enunciated DH AE T citation form for standalone practice.",
-      "extractFrom": [
-        "the tattoo",
-        "the tab",
-        "the tablet"
-      ]
+      "text": "that",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "spokenPhones": "DH AE T",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/that-approval.json",
+        "sha256": "cdecd8ae14b9ac9fd745565151f3d2bff90f6cebf04eb4b3bc68cd12fff0f2c0"
+      }
     },
     {
       "id": "to|T AH",
@@ -188,12 +186,12 @@
       ],
       "common": true,
       "chordOrder": "|||TO",
-      "text": "tip",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "tip",
-        "tin"
-      ]
+      "text": "to",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/to-approval.json",
+        "sha256": "6dc818e85a469624038891d137a45b58e885245a20d746d54defccc4d0f45a9a"
+      }
     },
     {
       "id": "to|T UW",
@@ -228,13 +226,12 @@
       ],
       "common": true,
       "chordOrder": "|||W",
-      "text": "wither",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "wither",
-        "withering",
-        "withers"
-      ]
+      "text": "with",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/with-approval.json",
+        "sha256": "b42a4ac1dd3731a7be5cb3dbd304c17b6a3f24752343a85b7d7ea50b91a2c9e0"
+      }
     },
     {
       "id": "with|W IH TH",
@@ -3106,13 +3103,12 @@
       ],
       "common": true,
       "chordOrder": "P|U|-FRP|",
-      "text": "pumper",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "pumper",
-        "pumpkin",
-        "pumping"
-      ]
+      "text": "pump",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/pump-approval.json",
+        "sha256": "aca3ad7cc35f4689b5bf16caec17ed2f85ba9f086ae4d62f0e21463ada2587de"
+      }
     },
     {
       "id": "pull|P UH L",
@@ -10438,12 +10434,12 @@
       ],
       "common": true,
       "chordOrder": "W|A|-S|",
-      "text": "waza",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "waza",
-        "Wazny"
-      ]
+      "text": "was",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/was-approval.json",
+        "sha256": "dd8f6212836ea4a174732884c27c35dbb233f4c20cb284b6299c5ac22dfd9e4b"
+      }
     },
     {
       "id": "was|W AH Z",
@@ -10947,13 +10943,12 @@
       ],
       "common": false,
       "chordOrder": "|A|-L|",
-      "text": "Alvin",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "Alvin",
-        "Albert",
-        "gal"
-      ]
+      "text": "Al",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/al-approval.json",
+        "sha256": "28ba2d3a521d515beb3b1b6d65f2caddabdd0a0cd12f8a2ad83c0442818c92d2"
+      }
     },
     {
       "id": "app|AE P",
@@ -12092,12 +12087,12 @@
       ],
       "common": false,
       "chordOrder": "H|OU|-L|",
-      "text": "howling",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "howling",
-        "howled"
-      ]
+      "text": "howl",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/howl-approval.json",
+        "sha256": "eb2ac71b5bed2839978752f6b32b1d39a01b3a0d54d50f50b2f53932f9e9d813"
+      }
     },
     {
       "id": "hound|HH AW N D",
@@ -12192,14 +12187,12 @@
       ],
       "common": false,
       "chordOrder": "H|U|-L|",
-      "text": "hullabaloo",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "hullabaloo",
-        "Hulbert",
-        "hulls",
-        "Hull"
-      ]
+      "text": "hull",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/hull-approval.json",
+        "sha256": "068ea718e738f65e8a82993830939a9721985292827b27f0d8eacf8ad978f26d"
+      }
     },
     {
       "id": "hum|HH AH M",
@@ -12390,13 +12383,12 @@
       ],
       "common": false,
       "chordOrder": "HR|A|*T|",
-      "text": "lathwork",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "lathwork",
-        "lathh",
-        "laths"
-      ]
+      "text": "lath",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/lath-approval.json",
+        "sha256": "1b5d2dfa954ea845491b3e013c3953a783dbe94998d6fde0e0aae696dd55fa10"
+      }
     },
     {
       "id": "la|L AA",
@@ -13007,12 +12999,12 @@
       ],
       "common": false,
       "chordOrder": "HR|U|-L|",
-      "text": "lulling",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "lulling",
-        "lullaby"
-      ]
+      "text": "lull",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/lull-approval.json",
+        "sha256": "a21a8f278c714791be5bed6b9379632ac2bc02fe8baae5033410dea824d79017"
+      }
     },
     {
       "id": "lulled|L AH L D",
@@ -13100,12 +13092,12 @@
       ],
       "common": false,
       "chordOrder": "K|A|-L|",
-      "text": "Calvin",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "Calvin",
-        "Callahan"
-      ]
+      "text": "Cal",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/cal-approval.json",
+        "sha256": "e72e6b68a17f0d8438cd1966cd320b03ae639bf5e70be3f76d62d45c9142a5c0"
+      }
     },
     {
       "id": "canned|K AE N D",
@@ -14556,12 +14548,12 @@
       ],
       "common": false,
       "chordOrder": "KWR|U|-RT|",
-      "text": "your turn",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "your turn",
-        "yurta"
-      ]
+      "text": "yurt",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/yurt-approval.json",
+        "sha256": "41d96286f21acbfbedbcb2e51ff878e9fb2e7419948b3f190ca3e0b5c6c64547"
+      }
     },
     {
       "id": "pad|P AE D",
@@ -14710,12 +14702,12 @@
       ],
       "common": false,
       "chordOrder": "P|AE|-R|",
-      "text": "paired",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "paired",
-        "pairing"
-      ]
+      "text": "pear",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/pear-approval.json",
+        "sha256": "703db3dd4ca345d03f2e39faae9a1e792a5924d53f46a18a7182ba832bc74f98"
+      }
     },
     {
       "id": "pave|P EY V",
@@ -15206,14 +15198,12 @@
       ],
       "common": false,
       "chordOrder": "P|EU|*T|",
-      "text": "pithy",
-      "note": "Whole phonetic stem extracted from one approved-voice utterance; independently checked after extraction.",
-      "extractFrom": [
-        "pithy",
-        "pith and",
-        "pith helmet",
-        "pithiness"
-      ]
+      "text": "pith",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/pith-approval.json",
+        "sha256": "e6d870650bb046ba24fd5d6a1612e35c6986ae6c02127894670620f7cd35cd1d"
+      }
     },
     {
       "id": "pock|P AA K",
@@ -15441,12 +15431,12 @@
       ],
       "common": false,
       "chordOrder": "P|U|-F|",
-      "text": "puffer",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "puffer",
-        "puffy"
-      ]
+      "text": "puff",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/puff-approval.json",
+        "sha256": "172146326b68550f7d0c45a170e5cdd8b08e59ed8f7b6aee10912f6309e7995d"
+      }
     },
     {
       "id": "pug|P AH G",
@@ -15469,14 +15459,12 @@
       ],
       "common": false,
       "chordOrder": "P|U|-P|",
-      "text": "pups",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "pups",
-        "puppetry",
-        "puppet",
-        "puppy dog"
-      ]
+      "text": "pup",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/pup-approval.json",
+        "sha256": "e747fffd68971e99a005a69b62d3b35391e7c644e7fd7ec405fdd9f9ed640e79"
+      }
     },
     {
       "id": "pun|P AH N",
@@ -15667,13 +15655,12 @@
       ],
       "common": false,
       "chordOrder": "PH|AO|-BG|",
-      "text": "mucken",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "mucken",
-        "mookster",
-        "mooks"
-      ]
+      "text": "mook",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/mook-approval.json",
+        "sha256": "83a23a145022bd896f800ef448809ca6e89c83f7ddfb765685f5085eefa37760"
+      }
     },
     {
       "id": "moose|M UW S",
@@ -16272,12 +16259,12 @@
       ],
       "common": false,
       "chordOrder": "PH|U|-L|",
-      "text": "mulling",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "mulling",
-        "mullet"
-      ]
+      "text": "mull",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/mull-approval.json",
+        "sha256": "0b3fdeee3b7afd4a67de478edf9e9e046d24dfb85b4618ff7f3857cd4754fd70"
+      }
     },
     {
       "id": "mulled|M AH L D",
@@ -16695,12 +16682,12 @@
       ],
       "common": false,
       "chordOrder": "PW|A|-Z|",
-      "text": "Basil",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "Basil",
-        "Bazley"
-      ]
+      "text": "Baz",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/baz-approval.json",
+        "sha256": "997a7caaecdfb8bbf7fd7d46fddf463e224233be281fff5fb53785698ccb201d"
+      }
     },
     {
       "id": "babe|B EY B",
@@ -16855,14 +16842,12 @@
       ],
       "common": false,
       "chordOrder": "PW|AO|-R|",
-      "text": "tambour",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "tambour",
-        "booru",
-        "boore",
-        "booer"
-      ]
+      "text": "boor",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/boor-approval.json",
+        "sha256": "70a6b85ba8983599016f2bb1575cc861a518ca7e22b1e18a4d69c8ffc4c97a02"
+      }
     },
     {
       "id": "booze|B UW Z",
@@ -19143,12 +19128,12 @@
       ],
       "common": false,
       "chordOrder": "R|OE|-G|",
-      "text": "roguish",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "roguish",
-        "rogues"
-      ]
+      "text": "roag",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/rogue-approval.json",
+        "sha256": "9e5852f5a062252a1d1f91c69f443ba125559c22060edefbd5a66fbfa11256c9"
+      }
     },
     {
       "id": "rope|R OW P",
@@ -19519,12 +19504,12 @@
       ],
       "common": false,
       "chordOrder": "S|AOE|*T|",
-      "text": "seething",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "seething",
-        "seethes"
-      ]
+      "text": "ceethe",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/seethe-approval.json",
+        "sha256": "9b3abcb28d9a9433fd6500fc025195bb169062dd80e76828a5b98c8fe3c0f082"
+      }
     },
     {
       "id": "sued|S UW D",
@@ -21895,12 +21880,12 @@
       ],
       "common": false,
       "chordOrder": "SP|AOE|-L|",
-      "text": "speeling",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "speeling",
-        "speel"
-      ]
+      "text": "spiel",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/spiel-approval.json",
+        "sha256": "f0c701405af6536bae4970e108cd9dc68a3290b98103acfeaf4ddd04e7e71a5a"
+      }
     },
     {
       "id": "spike|S P AY K",
@@ -22151,12 +22136,12 @@
       ],
       "common": false,
       "chordOrder": "SR|A|-L|",
-      "text": "Valley",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "Valley",
-        "Valerie"
-      ]
+      "text": "Val",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/val-approval.json",
+        "sha256": "09830a67ac80f779672f1aa4049e0eaeee7da83afc4b51de53a5dafb0e1a3dc3"
+      }
     },
     {
       "id": "vase|V AA Z",
@@ -22167,12 +22152,12 @@
       ],
       "common": false,
       "chordOrder": "SR|A|-S|",
-      "text": "vaza",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "vaza",
-        "vahzes"
-      ]
+      "text": "vase",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/vase-approval.json",
+        "sha256": "5f011763050ebcd5151c1658424a3f5ea9c6633b6af125209e135d661d0df3bd"
+      }
     },
     {
       "id": "vase|V EY S",
@@ -23023,12 +23008,12 @@
       ],
       "common": false,
       "chordOrder": "STKPW|EU|-PBG|",
-      "text": "zinger",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "zinger",
-        "zinging"
-      ]
+      "text": "Zing",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/zing-approval.json",
+        "sha256": "9600d41db247db7bad7e3cf15b8e2b5a37d7c15e60fd5b30cf77fd1b10de89f5"
+      }
     },
     {
       "id": "tab|T AE B",
@@ -23123,12 +23108,12 @@
       ],
       "common": false,
       "chordOrder": "T|A|-PBG|",
-      "text": "Tonga",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "Tonga",
-        "tahng"
-      ]
+      "text": "tang",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/tang-approval.json",
+        "sha256": "7d23eeb0101c838dbf76f631304b22690d066222fe8834a04c9c19a0a54c861f"
+      }
     },
     {
       "id": "tang|T AE NG",
@@ -23151,12 +23136,12 @@
       ],
       "common": false,
       "chordOrder": "T|A|-PL|",
-      "text": "Tammy",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "Tammy",
-        "tammie"
-      ]
+      "text": "Tam",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/tam-approval.json",
+        "sha256": "8a2fd1ae0d618a340664479f78aa39ae95eee8e22d2e65975f372cc9366b0395"
+      }
     },
     {
       "id": "tar|T AA R",
@@ -23816,8 +23801,12 @@
       "common": false,
       "chordOrder": "TH|AOEU|-PL|",
       "text": "thyme",
-      "note": "Use the standard citation pronunciation /taɪm/. Cambridge: https://dictionary.cambridge.org/us/pronunciation/english/thyme",
-      "spokenPhones": "T AY M"
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "spokenPhones": "T AY M",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/thyme-approval.json",
+        "sha256": "2753286810abd960002b1d51fcbdd0802be1576427464561eeecfd6fc6840660"
+      }
     },
     {
       "id": "thighs|TH AY Z",
@@ -25203,14 +25192,13 @@
       ],
       "common": false,
       "chordOrder": "TKPW|EU|-T|",
-      "text": "guitar",
-      "note": "Whole initial stem with short I, independently checked after extraction and encoding.",
+      "text": "gitt",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
       "requirePhoneMatch": true,
-      "extractFrom": [
-        "guitar",
-        "guitars",
-        "gittern"
-      ]
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/git-approval.json",
+        "sha256": "ec8778923bb43a2f7e1fd7448c5baf2817b67cb52cf9d284fccd47c2be0dc6cc"
+      }
     },
     {
       "id": "gob|G AA B",
@@ -25449,14 +25437,12 @@
       ],
       "common": false,
       "chordOrder": "TKPW|U|-T|",
-      "text": "guts",
-      "note": "Whole phonetic stem in the approved voice; independently checked after extraction.",
-      "extractFrom": [
-        "guts",
-        "gutless",
-        "gutful",
-        "Guttman"
-      ]
+      "text": "gut",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/gut-approval.json",
+        "sha256": "70927198ac1d8ddd64e5138dc886042c08f42b9f79ba3f1c9f0a3692230f79f3"
+      }
     },
     {
       "id": "grad|G R AE D",
@@ -26679,12 +26665,12 @@
       ],
       "common": false,
       "chordOrder": "TP|OE|-L|",
-      "text": "Foley",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "Foley",
-        "foaling"
-      ]
+      "text": "foal",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/foal-approval.json",
+        "sha256": "0b19d8d2a799973d506b64b15ff77262b0d173dae9332326ab709368df8d925e"
+      }
     },
     {
       "id": "foam|F OW M",
@@ -27115,12 +27101,12 @@
       ],
       "common": false,
       "chordOrder": "TPH|E|-L|",
-      "text": "Nellie",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "Nellie",
-        "Nelly"
-      ]
+      "text": "Nel",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/nel-approval.json",
+        "sha256": "599aaea333f15e24ec229bc716320b94d5fd8e2d5ca0a8a5bb6cb8ab49216192"
+      }
     },
     {
       "id": "knelt|N EH L T",
@@ -27263,12 +27249,12 @@
       ],
       "common": false,
       "chordOrder": "TPH|OE|-L|",
-      "text": "Nolan",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "Nolan",
-        "knolling"
-      ]
+      "text": "knoll",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/knoll-approval.json",
+        "sha256": "f1f3001aea80e730628feff799736ddaa703166f16b88a3aa5c6f61f57d9ea08"
+      }
     },
     {
       "id": "nope|N OW P",
@@ -27333,11 +27319,11 @@
       ],
       "common": false,
       "chordOrder": "TPH|U|-L|",
-      "text": "nullified",
-      "note": "Whole initial syllable of nullified. The isolated phoneme recognizer shifts the central vowel label before dark L; independent word recognition identifies Null. No phonetic segments are combined from other recordings.",
+      "text": "null",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
       "reviewedRecording": {
-        "metadata": "data/audio/repairs/null.json",
-        "sha256": "0c1836eacccc56ff50c2afdd485de2e91d013cdf441fb36b13bf2fc9789e2bb9"
+        "metadata": "data/audio/repairs/null-approval.json",
+        "sha256": "4f551e7fb1890557eb559fa574f6702c3ae19c256fbb4eb4396fc1fe1a204eda"
       }
     },
     {
@@ -27349,12 +27335,12 @@
       ],
       "common": false,
       "chordOrder": "TPH|U|-PB|",
-      "text": "nunnery",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "nunnery",
-        "nunnish"
-      ]
+      "text": "none",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/nun-approval.json",
+        "sha256": "888eba4845d59e722df54cd657b32ad6afc520e4ada2a5583ad746bd467b38f1"
+      }
     },
     {
       "id": "nudge|N AH JH",
@@ -27377,12 +27363,12 @@
       ],
       "common": false,
       "chordOrder": "TPH|U|-T|",
-      "text": "nutmeg",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "nutmeg",
-        "nutshell"
-      ]
+      "text": "nut",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/nut-approval.json",
+        "sha256": "5accdc4d70aee9bdc3f75594f14acffdc2b37a391da95b1b867dce40334a9ecd"
+      }
     },
     {
       "id": "flab|F L AE B",
@@ -28458,12 +28444,12 @@
       ],
       "common": false,
       "chordOrder": "TR|O|*T|",
-      "text": "trawthy",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "trawthy",
-        "trothing"
-      ]
+      "text": "trawth",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/troth-approval.json",
+        "sha256": "4fd0236795185133e02f58cbb09afc116d4c4ea5a6d43436997ed1efbf7ac084"
+      }
     },
     {
       "id": "troth|T R OW TH",
@@ -28618,14 +28604,13 @@
       ],
       "common": false,
       "chordOrder": "W|A|-T|",
-      "text": "Watt",
-      "note": "Whole word with checked final T.",
+      "text": "watt",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
       "requirePhoneMatch": true,
-      "extractFrom": [
-        "Watt",
-        "a watt",
-        "wattage"
-      ]
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/watt-approval.json",
+        "sha256": "0a024275bc72abb033d300049c8b88d9b02968e22f34bb9bfc6aa94d077e47be"
+      }
     },
     {
       "id": "wang|W AE NG",
@@ -28708,14 +28693,12 @@
       ],
       "common": false,
       "chordOrder": "W|AO|-F|",
-      "text": "woooof",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "woooof",
-        "woofoo",
-        "woo fee",
-        "wooful"
-      ]
+      "text": "woof",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/woof-approval.json",
+        "sha256": "9158f33abea84205ae9568b193cbf04b384846360957093a5acb2c9e7f40856d"
+      }
     },
     {
       "id": "wool|W UH L",
@@ -29026,12 +29009,12 @@
       ],
       "common": false,
       "chordOrder": "W|O|-PB|",
-      "text": "wander",
-      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
-      "extractFrom": [
-        "wander",
-        "wand"
-      ]
+      "text": "won",
+      "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/won-approval.json",
+        "sha256": "9e7e22ca6cdd7b5e0ac0d26cf8388dcfc3e315fce63932192cc06b2d164c84ca"
+      }
     },
     {
       "id": "won|W AH N",

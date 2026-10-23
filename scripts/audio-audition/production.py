@@ -24,6 +24,7 @@ def main():
     parser.add_argument('--repair-unverified', action='store_true')
     parser.add_argument('--repair-quality', action='store_true')
     parser.add_argument('--verify-phonemes', action='store_true')
+    parser.add_argument('--reviewed-only', action='store_true')
     args = parser.parse_args()
     catalog = json.loads(CATALOG.read_text())
     reference_hash = base.digest(REFERENCE.read_bytes())
@@ -43,6 +44,8 @@ def main():
     voice = next(v for v in candidates.CONFIG['voices'] if v['id'] == 'instructor')
     start = time.perf_counter()
     selected = [v for v in catalog['variants'] if not args.word or v['word'] in args.word]
+    if args.reviewed_only:
+        selected = [v for v in selected if v.get('reviewedRecording')]
     recognizer = None
     reviewing = args.repair_audit or args.repair_unverified or args.repair_quality or args.verify_phonemes
     if reviewing:
@@ -80,9 +83,9 @@ def main():
             continue
         try:
             extraction = None
-            if recognizer is None:
+            if recognizer is None and not item.get('reviewedRecording'):
                 recognizer = Recognizer()
-            reuse = old.get('instructor:' + item['word']) if not reviewing and item['text'] == item['word'] and item['word'] not in ambiguous else None
+            reuse = old.get('instructor:' + item['word']) if not reviewing and not item.get('reviewedRecording') and item['text'] == item['word'] and item['word'] not in ambiguous else None
             if reuse:
                 audition, audition_rate = sf.read(base.WORK / reuse['master'], dtype='float32')
                 candidate = trim_boundary_silence(base.prepare_audio(audition, audition_rate))
@@ -109,15 +112,14 @@ def main():
                     directory.mkdir(parents=True, exist_ok=True)
                     name = base.digest(prepared.tobytes())[:20]
                     sf.write(directory / (name + '.wav'), prepared, 24000, subtype='PCM_24')
-                    base.write_json(directory / (name + '.json'), {'target': item['id'], 'text': item['text'], **result})
+                    base.write_json(directory / (name + '.json'), {'target': item['id'], 'text': synthesis_text, **result})
                     if not result['matched']:
                         print('Observed phones: ' + ' '.join(actual), flush=True)
                     return result
-                if item.get('extractFrom'):
-                    from extraction import generate
-                    raw, rate, prepared, seconds, attempts, extraction = generate(model, voice, item, REFERENCE, recognizer, recipe_hash)
-                else:
-                    raw, rate, seconds, attempts = candidates.generate_single(model, voice, item['text'], None, REFERENCE, validate if recognizer else None)
+                # Legacy context fields describe old cached sources, not a
+                # license to cut another word until recognition accepts it.
+                synthesis_text = item['word'] if item.get('extractFrom') else item['text']
+                raw, rate, seconds, attempts = candidates.generate_single(model, voice, synthesis_text, None, REFERENCE, validate if recognizer else None)
             if extraction is None:
                 prepared = base.prepare_audio(raw, rate)
             if extraction is None:
@@ -126,8 +128,13 @@ def main():
                 raise ValueError('Invalid processed recording')
             master.parent.mkdir(parents=True, exist_ok=True)
             ready.parent.mkdir(parents=True, exist_ok=True)
-            sf.write(master, raw, rate, subtype='FLOAT')
-            sf.write(ready, prepared, 24000, subtype='PCM_24')
+            if extraction and extraction.get('version') == 2:
+                source_bytes = (ROOT / extraction['source']).read_bytes()
+                master.write_bytes(source_bytes)
+                ready.write_bytes(source_bytes)
+            else:
+                sf.write(master, raw, rate, subtype='FLOAT')
+                sf.write(ready, prepared, 24000, subtype='PCM_24')
             records[item['id']] = {'spec': spec, 'status': 'ready', 'master': str(master.relative_to(ROOT)), 'path': str(ready.relative_to(ROOT)), 'sha256': base.digest(ready.read_bytes()),
                 'masterSha256': base.digest(master.read_bytes()), 'samples': len(prepared), 'generationSeconds': round(seconds, 4), 'attempts': attempts, **({'extraction': extraction} if extraction else {})}
         except (ValueError, RuntimeError) as error:

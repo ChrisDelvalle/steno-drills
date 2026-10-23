@@ -1,0 +1,82 @@
+{
+  "version": 2,
+  "target": "watt|W AA T",
+  "source": "data/audio/repairs/watt-approved.wav",
+  "sourceSha256": "f0eba568959d14ab3c4b0997400d2e7f8a736e17165930c0fe8ee4cf69486725",
+  "sampleSha256": "b6deb274bb7532019ad5c4c56155201e394ba62480d3d45e5224724bbf690ff8",
+  "samples": 14351,
+  "sampleRate": 24000,
+  "recipeHash": "951429a96e17e8b9600d7c1d0da7e98859214e057f533f90b6fce927fcd41b40",
+  "referenceSha256": "d1d800f1cac528c93060ab577670e39b56876c73b08df05ab6ea8ea4e4102ce9",
+  "asset": {
+    "url": "/audio/instructor/85c79eef0bd0083270e33145cd5174460111f7cf2a5ce6ae676b3aa8b8148a46.opus",
+    "sha256": "85c79eef0bd0083270e33145cd5174460111f7cf2a5ce6ae676b3aa8b8148a46",
+    "bytes": 868,
+    "samples": 14351,
+    "bitrate": 10000
+  },
+  "assetSampleSha256": "b6deb274bb7532019ad5c4c56155201e394ba62480d3d45e5224724bbf690ff8",
+  "assetReview": {
+    "policySha256": "65e26c727a61a3cb4926946fff4247ebe9feb47a90f2a4477043f2e50206241a",
+    "recognizerRevision": "efb7ae9b88f13db0d42eac8cedbba19739e2a278",
+    "result": {
+      "sourcePhones": [
+        "w",
+        "\u0259",
+        "t"
+      ],
+      "decodedPhones": [
+        "w",
+        "\u0259",
+        "t"
+      ],
+      "perPhoneLossIncrease": 0.0,
+      "samePhones": true,
+      "passed": true
+    },
+    "signal": {
+      "seconds": 0.598,
+      "leadingMs": 80,
+      "trailingMs": 68,
+      "quietLeadingMs": 80,
+      "quietTrailingMs": 108,
+      "internalSilenceMs": 10,
+      "issues": []
+    }
+  },
+  "approval": {
+    "file": "data/audio/repairs/listening-2026-10-23.json",
+    "sha256": "81dba61af5dd8f9fe6f2f3131f72dace8373f5fed750b244fcb62bdbaf90da23",
+    "id": "watt|W AA T:repair:8a20f78c228019e627c4"
+  },
+  "review": {
+    "method": "owner listening review",
+    "rating": "good",
+    "transcript": "watt"
+  },
+  "generation": {
+    "version": 1,
+    "target": "watt|W AA T",
+    "file": ".audio-audition/production/human-repairs-2026-10-23/8a20f78c228019e627c4.wav",
+    "sha256": "d7667aa78c735a7b4f1068b5e64ea5094f4e08f5214d862b31a7e2d353652cd5",
+    "source": {
+      "record": "watt|W AA T",
+      "path": ".audio-audition/production/masters/adb19b870e981362c036-75e1799d6958199c-review-efb7ae9b-signal-1.wav",
+      "fileSha256": "0ef175e21f05a9edb9dd192d39ebffb208fab6e39114a3226fa1506b6654ea5d",
+      "start": 6480,
+      "end": 18911,
+      "fade": 120,
+      "guard": 1920,
+      "reason": "Preserve W onset; no following word"
+    },
+    "quality": {
+      "seconds": 0.598,
+      "leadingMs": 80,
+      "trailingMs": 68,
+      "quietLeadingMs": 80,
+      "quietTrailingMs": 118,
+      "internalSilenceMs": 20,
+      "issues": []
+    }
+  }
+}

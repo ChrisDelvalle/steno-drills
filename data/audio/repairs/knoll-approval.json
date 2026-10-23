@@ -1,0 +1,105 @@
+{
+  "version": 2,
+  "target": "knoll|N OW L",
+  "source": "data/audio/repairs/knoll-approved.wav",
+  "sourceSha256": "d2b3b24e67e0a0ffc30a88356ccaf9c823e0f7aee39b26361567da6230e59b66",
+  "sampleSha256": "23a9b2620b4a279a17d7c57ae490000381ea665bf8b1b62de7f77afc1577592f",
+  "samples": 14700,
+  "sampleRate": 24000,
+  "recipeHash": "951429a96e17e8b9600d7c1d0da7e98859214e057f533f90b6fce927fcd41b40",
+  "referenceSha256": "d1d800f1cac528c93060ab577670e39b56876c73b08df05ab6ea8ea4e4102ce9",
+  "asset": {
+    "url": "/audio/instructor/66084b655488c92c2fe712098de7b095a556240f84f35713bfb391be2cb6c8e8.flac",
+    "sha256": "66084b655488c92c2fe712098de7b095a556240f84f35713bfb391be2cb6c8e8",
+    "bytes": 32588,
+    "samples": 14700
+  },
+  "assetSampleSha256": "42bd0a0bf5285bb30b1bb25f6375ef253da43826bd1e100c62c3e2f597010e19",
+  "assetReview": {
+    "policySha256": "65e26c727a61a3cb4926946fff4247ebe9feb47a90f2a4477043f2e50206241a",
+    "recognizerRevision": "efb7ae9b88f13db0d42eac8cedbba19739e2a278",
+    "result": {
+      "sourcePhones": [
+        "n",
+        "o\u028a",
+        "l"
+      ],
+      "decodedPhones": [
+        "n",
+        "o\u028a",
+        "l"
+      ],
+      "perPhoneLossIncrease": 0.0,
+      "samePhones": true,
+      "passed": true
+    },
+    "signal": {
+      "seconds": 0.6125,
+      "leadingMs": 80,
+      "trailingMs": 73,
+      "quietLeadingMs": 90,
+      "quietTrailingMs": 83,
+      "internalSilenceMs": 0,
+      "issues": []
+    }
+  },
+  "approval": {
+    "file": "data/audio/repairs/listening-2026-10-23.json",
+    "sha256": "81dba61af5dd8f9fe6f2f3131f72dace8373f5fed750b244fcb62bdbaf90da23",
+    "id": "knoll|N OW L:repair:c93f2f72f7ffc8838d4b"
+  },
+  "review": {
+    "method": "owner listening review",
+    "rating": "good",
+    "transcript": "knoll"
+  },
+  "generation": {
+    "version": 1,
+    "target": "knoll|N OW L",
+    "file": ".audio-audition/production/human-repairs-2026-10-23/c93f2f72f7ffc8838d4b.wav",
+    "sha256": "23a9b2620b4a279a17d7c57ae490000381ea665bf8b1b62de7f77afc1577592f",
+    "source": {
+      "file": ".audio-audition/production/human-repairs-2026-10-23/36c61531f035f55f231a.wav",
+      "pcmSha256": "c0c8e33567854253cc95c005981a55e10555e09ae08ee5ab16f593d6c0d1d39c",
+      "text": "knoll road",
+      "reason": "Full coda before a consonant, without a following vowel",
+      "extraction": {
+        "version": 1,
+        "sourceStart": 0,
+        "sourceEnd": 12780,
+        "sourcePhones": [
+          "n",
+          "o\u028a",
+          "l",
+          "\u0279",
+          "o\u028a",
+          "d"
+        ],
+        "actual": [
+          "n",
+          "o\u028a",
+          "l"
+        ],
+        "quality": {
+          "seconds": 0.6125,
+          "leadingMs": 80,
+          "trailingMs": 73,
+          "quietLeadingMs": 90,
+          "quietTrailingMs": 83,
+          "internalSilenceMs": 0,
+          "issues": []
+        },
+        "revision": "efb7ae9b88f13db0d42eac8cedbba19739e2a278"
+      }
+    },
+    "quality": {
+      "seconds": 0.6125,
+      "leadingMs": 80,
+      "trailingMs": 73,
+      "quietLeadingMs": 90,
+      "quietTrailingMs": 83,
+      "internalSilenceMs": 0,
+      "issues": []
+    }
+  }
+}

@@ -1,0 +1,111 @@
+{
+  "version": 2,
+  "target": "puff|P AH F",
+  "source": "data/audio/repairs/puff-approved.wav",
+  "sourceSha256": "e3362be7efccd8ad8be2a10a5736ca3c88d86f2c58f344d1ca7d14615be97c7e",
+  "sampleSha256": "c3d2181f966f9d3a16d2448604c07c38178c347b43633c00beb961609bee83fd",
+  "samples": 10843,
+  "sampleRate": 24000,
+  "recipeHash": "951429a96e17e8b9600d7c1d0da7e98859214e057f533f90b6fce927fcd41b40",
+  "referenceSha256": "d1d800f1cac528c93060ab577670e39b56876c73b08df05ab6ea8ea4e4102ce9",
+  "asset": {
+    "url": "/audio/instructor/b4321dae612652b44f338f487e2561afa72333062687f1cfe3fbad23ac0d6f30.opus",
+    "sha256": "b4321dae612652b44f338f487e2561afa72333062687f1cfe3fbad23ac0d6f30",
+    "bytes": 723,
+    "samples": 10843,
+    "bitrate": 10000
+  },
+  "assetSampleSha256": "60f61e1ba3f1430e5aef02b15635cd004f77abaa0ebb5a95a0d721d61774dc5b",
+  "assetReview": {
+    "policySha256": "65e26c727a61a3cb4926946fff4247ebe9feb47a90f2a4477043f2e50206241a",
+    "recognizerRevision": "efb7ae9b88f13db0d42eac8cedbba19739e2a278",
+    "result": {
+      "sourcePhones": [
+        "p",
+        "\u0251",
+        "f"
+      ],
+      "decodedPhones": [
+        "p",
+        "h",
+        "\u0251",
+        "f"
+      ],
+      "perPhoneLossIncrease": 0.731555,
+      "samePhones": true,
+      "passed": true
+    },
+    "signal": {
+      "seconds": 0.4518,
+      "leadingMs": 70,
+      "trailingMs": 0,
+      "quietLeadingMs": 80,
+      "quietTrailingMs": 22,
+      "internalSilenceMs": 0,
+      "issues": []
+    }
+  },
+  "approval": {
+    "file": "data/audio/repairs/listening-2026-10-23.json",
+    "sha256": "81dba61af5dd8f9fe6f2f3131f72dace8373f5fed750b244fcb62bdbaf90da23",
+    "id": "puff|P AH F:whole:028a75532335e8670b41"
+  },
+  "review": {
+    "method": "owner listening review",
+    "rating": "good",
+    "transcript": "puff"
+  },
+  "generation": {
+    "version": 1,
+    "target": "puff|P AH F",
+    "text": "puff.",
+    "candidate": "B",
+    "method": "complete isolated word; no speech cropping",
+    "seed": 2818922971,
+    "temperature": 0.3,
+    "model": {
+      "repository": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-bf16",
+      "revision": "a6eb4f68e4b056f1215157bb696209bc82a6db48"
+    },
+    "referenceSha256": "d1d800f1cac528c93060ab577670e39b56876c73b08df05ab6ea8ea4e4102ce9",
+    "referenceText": "A clear voice makes each word easy to hear. Take your time, finish each sound, and leave a short pause before the next word. The bright light fell across the quiet room.",
+    "topP": 0.8,
+    "topK": 20,
+    "repetitionPenalty": 1.05,
+    "maxTokens": 64,
+    "packages": {
+      "mlx-audio": "0.6.1",
+      "mlx": "0.32.4",
+      "numpy": "2.5.4",
+      "soundfile": "0.14.0",
+      "misaki": "0.9.4",
+      "transformers": "5.20.2"
+    },
+    "processing": {
+      "trimThresholdDb": -55,
+      "guardMilliseconds": 80,
+      "targetRmsDb": -22,
+      "maximumPeakDb": -1
+    },
+    "file": ".audio-audition/production/whole-words-2026-10-23/028a75532335e8670b41.wav",
+    "sha256": "c3d2181f966f9d3a16d2448604c07c38178c347b43633c00beb961609bee83fd",
+    "quality": {
+      "seconds": 0.4518,
+      "leadingMs": 80,
+      "trailingMs": 0,
+      "quietLeadingMs": 80,
+      "quietTrailingMs": 2,
+      "internalSilenceMs": 0,
+      "issues": []
+    },
+    "tokens": 11,
+    "attempts": [
+      {
+        "seed": 2818922971,
+        "temperature": 0.3
+      }
+    ],
+    "generationSeconds": 1.183,
+    "ready": true
+  }
+}

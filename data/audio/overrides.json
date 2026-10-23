@@ -8,13 +8,12 @@
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "al|AE L": {
-    "text": "Alvin",
-    "extractFrom": [
-      "Alvin",
-      "Albert",
-      "gal"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "Al",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/al-approval.json",
+      "sha256": "28ba2d3a521d515beb3b1b6d65f2caddabdd0a0cd12f8a2ad83c0442818c92d2"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "bass|B AE S": {
     "text": "basse",
@@ -105,26 +104,24 @@
     "note": "Respelling for the reduced pronunciation."
   },
   "to|T IH": {
-    "text": "tip",
-    "extractFrom": [
-      "tip",
-      "tin"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "to",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/to-approval.json",
+      "sha256": "6dc818e85a469624038891d137a45b58e885245a20d746d54defccc4d0f45a9a"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "tear|T EH R": {
     "text": "tare",
     "note": "Exact homophone for the supported ripping pronunciation."
   },
   "the|DH AH": {
-    "text": "thuh",
-    "extractFrom": [
-      "thuh",
-      "the bus",
-      "the cup",
-      "another"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "the",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/the-approval.json",
+      "sha256": "91c929015a9bb11b544e894dc1583025974442dd6524edac1ff44faace536cc9"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "the|DH IY": {
     "text": "thee",
@@ -156,31 +153,29 @@
     "note": "Respelling for injury; review before publishing."
   },
   "that|DH AH T": {
-    "text": "the tattoo",
-    "extractFrom": [
-      "the tattoo",
-      "the tab",
-      "the tablet"
-    ],
-    "note": "Weak-form DH AH T retained for explicit pronunciation compatibility; prefer the fully enunciated DH AE T citation form for standalone practice."
+    "text": "that",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/that-approval.json",
+      "sha256": "cdecd8ae14b9ac9fd745565151f3d2bff90f6cebf04eb4b3bc68cd12fff0f2c0"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing.",
+    "spokenPhones": "DH AE T"
   },
   "with|W IH DH": {
-    "text": "wither",
-    "extractFrom": [
-      "wither",
-      "withering",
-      "withers"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "with",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/with-approval.json",
+      "sha256": "b42a4ac1dd3731a7be5cb3dbd304c17b6a3f24752343a85b7d7ea50b91a2c9e0"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "pump|P AH M P": {
-    "text": "pumper",
-    "extractFrom": [
-      "pumper",
-      "pumpkin",
-      "pumping"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "pump",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/pump-approval.json",
+      "sha256": "aca3ad7cc35f4689b5bf16caec17ed2f85ba9f086ae4d62f0e21463ada2587de"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "roof|R UH F": {
     "text": "R\u00fcf",
@@ -202,12 +197,12 @@
     "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
   },
   "was|W AA Z": {
-    "text": "waza",
-    "extractFrom": [
-      "waza",
-      "Wazny"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "was",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/was-approval.json",
+      "sha256": "dd8f6212836ea4a174732884c27c35dbb233f4c20cb284b6299c5ac22dfd9e4b"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "um|AH M": {
     "text": "uhm",
@@ -222,47 +217,44 @@
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "howl|HH AW L": {
-    "text": "howling",
-    "extractFrom": [
-      "howling",
-      "howled"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "howl",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/howl-approval.json",
+      "sha256": "eb2ac71b5bed2839978752f6b32b1d39a01b3a0d54d50f50b2f53932f9e9d813"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "hull|HH AH L": {
-    "text": "hullabaloo",
-    "extractFrom": [
-      "hullabaloo",
-      "Hulbert",
-      "hulls",
-      "Hull"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "hull",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/hull-approval.json",
+      "sha256": "068ea718e738f65e8a82993830939a9721985292827b27f0d8eacf8ad978f26d"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "lat|L AA T": {
     "text": "laht",
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "lath|L AE TH": {
-    "text": "lathwork",
-    "extractFrom": [
-      "lathwork",
-      "lathh",
-      "laths"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "lath",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/lath-approval.json",
+      "sha256": "1b5d2dfa954ea845491b3e013c3953a783dbe94998d6fde0e0aae696dd55fa10"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "lieu|L UW": {
     "text": "loo",
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "lull|L AH L": {
-    "text": "lulling",
-    "extractFrom": [
-      "lulling",
-      "lullaby"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "lull",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/lull-approval.json",
+      "sha256": "a21a8f278c714791be5bed6b9379632ac2bc02fe8baae5033410dea824d79017"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "lulled|L AH L D": {
     "text": "unlulled",
@@ -274,12 +266,12 @@
     "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
   },
   "cal|K AE L": {
-    "text": "Calvin",
-    "extractFrom": [
-      "Calvin",
-      "Callahan"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "Cal",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/cal-approval.json",
+      "sha256": "e72e6b68a17f0d8438cd1966cd320b03ae639bf5e70be3f76d62d45c9142a5c0"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "cha|CH AA": {
     "text": "chah",
@@ -310,12 +302,12 @@
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "yurt|Y UH R T": {
-    "text": "your turn",
-    "extractFrom": [
-      "your turn",
-      "yurta"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "yurt",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/yurt-approval.json",
+      "sha256": "41d96286f21acbfbedbcb2e51ff878e9fb2e7419948b3f190ca3e0b5c6c64547"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "pal|P AE L": {
     "text": "pal?",
@@ -328,12 +320,12 @@
     "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
   },
   "pear|P EH R": {
-    "text": "paired",
-    "extractFrom": [
-      "paired",
-      "pairing"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "pear",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/pear-approval.json",
+      "sha256": "703db3dd4ca345d03f2e39faae9a1e792a5924d53f46a18a7182ba832bc74f98"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "pest|P EH S T": {
     "text": "Pest",
@@ -344,31 +336,28 @@
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "puff|P AH F": {
-    "text": "puffer",
-    "extractFrom": [
-      "puffer",
-      "puffy"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "puff",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/puff-approval.json",
+      "sha256": "172146326b68550f7d0c45a170e5cdd8b08e59ed8f7b6aee10912f6309e7995d"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "pup|P AH P": {
-    "text": "pups",
-    "extractFrom": [
-      "pups",
-      "puppetry",
-      "puppet",
-      "puppy dog"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "pup",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/pup-approval.json",
+      "sha256": "e747fffd68971e99a005a69b62d3b35391e7c644e7fd7ec405fdd9f9ed640e79"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "mook|M UH K": {
-    "text": "mucken",
-    "extractFrom": [
-      "mucken",
-      "mookster",
-      "mooks"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "mook",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/mook-approval.json",
+      "sha256": "83a23a145022bd896f800ef448809ca6e89c83f7ddfb765685f5085eefa37760"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "mer|M EH R": {
     "text": "mare",
@@ -379,12 +368,12 @@
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "mull|M AH L": {
-    "text": "mulling",
-    "extractFrom": [
-      "mulling",
-      "mullet"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "mull",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/mull-approval.json",
+      "sha256": "0b3fdeee3b7afd4a67de478edf9e9e046d24dfb85b4618ff7f3857cd4754fd70"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "mulled|M AH L D": {
     "text": "muhled",
@@ -410,26 +399,24 @@
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "baz|B AE Z": {
-    "text": "Basil",
-    "extractFrom": [
-      "Basil",
-      "Bazley"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "Baz",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/baz-approval.json",
+      "sha256": "997a7caaecdfb8bbf7fd7d46fddf463e224233be281fff5fb53785698ccb201d"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "boop|B UW P": {
     "text": "boopp",
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "boor|B UH R": {
-    "text": "tambour",
-    "extractFrom": [
-      "tambour",
-      "booru",
-      "boore",
-      "booer"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "boor",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/boor-approval.json",
+      "sha256": "70a6b85ba8983599016f2bb1575cc861a518ca7e22b1e18a4d69c8ffc4c97a02"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "beak|B IY K": {
     "text": "a beak",
@@ -467,24 +454,24 @@
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "rogue|R OW G": {
-    "text": "roguish",
-    "extractFrom": [
-      "roguish",
-      "rogues"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "roag",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/rogue-approval.json",
+      "sha256": "9e5852f5a062252a1d1f91c69f443ba125559c22060edefbd5a66fbfa11256c9"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "siege|S IY JH": {
     "text": "seej",
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "seethe|S IY DH": {
-    "text": "seething",
-    "extractFrom": [
-      "seething",
-      "seethes"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "ceethe",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/seethe-approval.json",
+      "sha256": "9b3abcb28d9a9433fd6500fc025195bb169062dd80e76828a5b98c8fe3c0f082"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "sieve|S IH V": {
     "text": "siv",
@@ -517,56 +504,56 @@
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "spiel|S P IY L": {
-    "text": "speeling",
-    "extractFrom": [
-      "speeling",
-      "speel"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "spiel",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/spiel-approval.json",
+      "sha256": "f0c701405af6536bae4970e108cd9dc68a3290b98103acfeaf4ddd04e7e71a5a"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "val|V AE L": {
-    "text": "Valley",
-    "extractFrom": [
-      "Valley",
-      "Valerie"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "Val",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/val-approval.json",
+      "sha256": "09830a67ac80f779672f1aa4049e0eaeee7da83afc4b51de53a5dafb0e1a3dc3"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "vase|V AA Z": {
-    "text": "vaza",
-    "extractFrom": [
-      "vaza",
-      "vahzes"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "vase",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/vase-approval.json",
+      "sha256": "5f011763050ebcd5151c1658424a3f5ea9c6633b6af125209e135d661d0df3bd"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "vie|V AY": {
     "text": "vye",
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "zing|Z IH NG": {
-    "text": "zinger",
-    "extractFrom": [
-      "zinger",
-      "zinging"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "Zing",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/zing-approval.json",
+      "sha256": "9600d41db247db7bad7e3cf15b8e2b5a37d7c15e60fd5b30cf77fd1b10de89f5"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "tang|T AA NG": {
-    "text": "Tonga",
-    "extractFrom": [
-      "Tonga",
-      "tahng"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "tang",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/tang-approval.json",
+      "sha256": "7d23eeb0101c838dbf76f631304b22690d066222fe8834a04c9c19a0a54c861f"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "tam|T AE M": {
-    "text": "Tammy",
-    "extractFrom": [
-      "Tammy",
-      "tammie"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "Tam",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/tam-approval.json",
+      "sha256": "8a2fd1ae0d618a340664479f78aa39ae95eee8e22d2e65975f372cc9366b0395"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "tong|T AO NG": {
     "text": "tawng",
@@ -623,28 +610,28 @@
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "foal|F OW L": {
-    "text": "Foley",
-    "extractFrom": [
-      "Foley",
-      "foaling"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "foal",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/foal-approval.json",
+      "sha256": "0b19d8d2a799973d506b64b15ff77262b0d173dae9332326ab709368df8d925e"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "nel|N EH L": {
-    "text": "Nellie",
-    "extractFrom": [
-      "Nellie",
-      "Nelly"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "Nel",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/nel-approval.json",
+      "sha256": "599aaea333f15e24ec229bc716320b94d5fd8e2d5ca0a8a5bb6cb8ab49216192"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "knoll|N OW L": {
-    "text": "Nolan",
-    "extractFrom": [
-      "Nolan",
-      "knolling"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "knoll",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/knoll-approval.json",
+      "sha256": "f1f3001aea80e730628feff799736ddaa703166f16b88a3aa5c6f61f57d9ea08"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "noir|N OY R": {
     "text": "nwar",
@@ -657,72 +644,69 @@
     ]
   },
   "null|N AH L": {
-    "text": "nullified",
+    "text": "null",
     "reviewedRecording": {
-      "metadata": "data/audio/repairs/null.json",
-      "sha256": "0c1836eacccc56ff50c2afdd485de2e91d013cdf441fb36b13bf2fc9789e2bb9"
+      "metadata": "data/audio/repairs/null-approval.json",
+      "sha256": "4f551e7fb1890557eb559fa574f6702c3ae19c256fbb4eb4396fc1fe1a204eda"
     },
-    "note": "Whole initial syllable of nullified. The isolated phoneme recognizer shifts the central vowel label before dark L; independent word recognition identifies Null. No phonetic segments are combined from other recordings."
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "nun|N AH N": {
-    "text": "nunnery",
-    "extractFrom": [
-      "nunnery",
-      "nunnish"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "none",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/nun-approval.json",
+      "sha256": "888eba4845d59e722df54cd657b32ad6afc520e4ada2a5583ad746bd467b38f1"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "nut|N AH T": {
-    "text": "nutmeg",
-    "extractFrom": [
-      "nutmeg",
-      "nutshell"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "nut",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/nut-approval.json",
+      "sha256": "5accdc4d70aee9bdc3f75594f14acffdc2b37a391da95b1b867dce40334a9ecd"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "trough|T R AO F": {
     "text": "trawf",
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "troth|T R AO TH": {
-    "text": "trawthy",
-    "extractFrom": [
-      "trawthy",
-      "trothing"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "trawth",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/troth-approval.json",
+      "sha256": "4fd0236795185133e02f58cbb09afc116d4c4ea5a6d43436997ed1efbf7ac084"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "watt|W AA T": {
-    "text": "Watt",
-    "extractFrom": [
-      "Watt",
-      "a watt",
-      "wattage"
-    ],
-    "note": "Whole word with checked final T.",
-    "requirePhoneMatch": true
+    "text": "watt",
+    "requirePhoneMatch": true,
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/watt-approval.json",
+      "sha256": "0a024275bc72abb033d300049c8b88d9b02968e22f34bb9bfc6aa94d077e47be"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "waned|W EY N D": {
     "text": "waynd",
     "note": "Pronunciation repair input; accepted only after independent acoustic screening."
   },
   "woof|W UW F": {
-    "text": "woooof",
-    "extractFrom": [
-      "woooof",
-      "woofoo",
-      "woo fee",
-      "wooful"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "woof",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/woof-approval.json",
+      "sha256": "9158f33abea84205ae9568b193cbf04b384846360957093a5acb2c9e7f40856d"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "won|W AA N": {
-    "text": "wander",
-    "extractFrom": [
-      "wander",
-      "wand"
-    ],
-    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+    "text": "won",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/won-approval.json",
+      "sha256": "9e7e22ca6cdd7b5e0ac0d26cf8388dcfc3e315fce63932192cc06b2d164c84ca"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "base|B EY S": {
     "text": "Base",
@@ -746,14 +730,12 @@
     "note": "Pronunciation repair input; checked independently against expected phones and signal quality."
   },
   "gut|G AH T": {
-    "text": "guts",
-    "extractFrom": [
-      "guts",
-      "gutless",
-      "gutful",
-      "Guttman"
-    ],
-    "note": "Whole phonetic stem in the approved voice; independently checked after extraction."
+    "text": "gut",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/gut-approval.json",
+      "sha256": "70927198ac1d8ddd64e5138dc886042c08f42b9f79ba3f1c9f0a3692230f79f3"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "pan|P AE N": {
     "text": "pann",
@@ -762,27 +744,28 @@
   "thyme|TH AY M": {
     "text": "thyme",
     "spokenPhones": "T AY M",
-    "note": "Use the standard citation pronunciation /ta\u026am/. Cambridge: https://dictionary.cambridge.org/us/pronunciation/english/thyme"
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/thyme-approval.json",
+      "sha256": "2753286810abd960002b1d51fcbdd0802be1576427464561eeecfd6fc6840660"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "pith|P IH TH": {
-    "text": "pithy",
-    "extractFrom": [
-      "pithy",
-      "pith and",
-      "pith helmet",
-      "pithiness"
-    ],
-    "note": "Whole phonetic stem extracted from one approved-voice utterance; independently checked after extraction."
+    "text": "pith",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/pith-approval.json",
+      "sha256": "e6d870650bb046ba24fd5d6a1612e35c6986ae6c02127894670620f7cd35cd1d"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "git|G IH T": {
-    "text": "guitar",
-    "extractFrom": [
-      "guitar",
-      "guitars",
-      "gittern"
-    ],
+    "text": "gitt",
     "requirePhoneMatch": true,
-    "note": "Whole initial stem with short I, independently checked after extraction and encoding."
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/git-approval.json",
+      "sha256": "ec8778923bb43a2f7e1fd7448c5baf2817b67cb52cf9d284fccd47c2be0dc6cc"
+    },
+    "note": "Owner-approved complete recording; retain its fixed audio and listening approval when packing."
   },
   "tromp|T R AA M P": {
     "text": "trahmp",

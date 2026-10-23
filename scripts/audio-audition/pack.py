@@ -30,6 +30,7 @@ def main():
     packs.mkdir(parents=True, exist_ok=True)
     PUBLIC.mkdir(parents=True, exist_ok=True)
     prepared = []
+    approved = []
     for item in catalog['variants']:
         record = records.get(item['id'])
         expected_spec = base.production_spec(record_file['recipeHash'], item)
@@ -46,7 +47,12 @@ def main():
         audio, rate = sf.read(path, dtype='float32')
         if rate != 24000 or audio.ndim != 1 or len(audio) != record['samples'] or not np.isfinite(audio).all() or np.max(np.abs(audio)) < .005:
             raise ValueError('Invalid prepared audio: ' + item['id'])
-        prepared.append((item, audio))
+        if item.get('reviewedRecording') and json.loads((ROOT / item['reviewedRecording']['metadata']).read_text()).get('version') == 2:
+            from approved import load
+            _, _, data, content = load(item, record_file['recipeHash'])
+            approved.append((item, data, content))
+        else:
+            prepared.append((item, audio))
     files = {}
     quality = {}
     review = CodecReview()
@@ -138,6 +144,10 @@ def main():
             raise ValueError('Single clip exceeds duration limit')
         encode(prepared[start:end])
         start = end
+    from approved import append
+    for item, data, content in approved:
+        append(manifest, quality, item, data, records[item['id']])
+        files[data['asset']['url'].split('/')[-1]] = content
     provenance = {'voice': 'Clear instructor', 'syntheticReference': 'data/audio/instructor-reference.wav', 'recipe': record_file['recipe'], 'recipeHash': record_file['recipeHash'],
                   'catalogSha256': base.digest(catalog_bytes), 'dictionarySha256': catalog['dictionarySha256'], 'words': catalog['words'], 'common': catalog['common'],
                   'recordedWords': len(set(c['word'] for c in manifest['clips'])), 'recordedVariants': len(manifest['clips']), 'fallback': manifest['fallback'],

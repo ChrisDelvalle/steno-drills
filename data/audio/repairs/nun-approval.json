@@ -1,0 +1,90 @@
+{
+  "version": 2,
+  "target": "nun|N AH N",
+  "source": "data/audio/repairs/nun-approved.wav",
+  "sourceSha256": "cef9d1c37d5a6bc42e84b4d5112bd27889249b1091a4244627d02d6ac07da0db",
+  "sampleSha256": "6f14547ccc798965eae0e195159997052a302af46f206770bd7dc8701075545c",
+  "samples": 15400,
+  "sampleRate": 24000,
+  "recipeHash": "951429a96e17e8b9600d7c1d0da7e98859214e057f533f90b6fce927fcd41b40",
+  "referenceSha256": "d1d800f1cac528c93060ab577670e39b56876c73b08df05ab6ea8ea4e4102ce9",
+  "asset": {
+    "url": "/audio/instructor/6d9293f4ece8f11246a8b379a311dc8286c14cb14e0a72a424f39ec7166cb320.opus",
+    "sha256": "6d9293f4ece8f11246a8b379a311dc8286c14cb14e0a72a424f39ec7166cb320",
+    "bytes": 928,
+    "samples": 15400,
+    "bitrate": 10000
+  },
+  "assetSampleSha256": "8aa4d07f9f6eae48e736ebc81c8d7d2ea4d2e4149bfa73cb509b6ca7c25d88d3",
+  "assetReview": {
+    "policySha256": "65e26c727a61a3cb4926946fff4247ebe9feb47a90f2a4477043f2e50206241a",
+    "recognizerRevision": "efb7ae9b88f13db0d42eac8cedbba19739e2a278",
+    "result": {
+      "sourcePhones": [
+        "n",
+        "\u0259",
+        "n"
+      ],
+      "decodedPhones": [
+        "n",
+        "\u0259",
+        "n"
+      ],
+      "perPhoneLossIncrease": 0.156528,
+      "samePhones": true,
+      "passed": true
+    },
+    "signal": {
+      "seconds": 0.6417,
+      "leadingMs": 80,
+      "trailingMs": 82,
+      "quietLeadingMs": 80,
+      "quietTrailingMs": 122,
+      "internalSilenceMs": 0,
+      "issues": []
+    }
+  },
+  "approval": {
+    "file": "data/audio/repairs/listening-2026-10-23.json",
+    "sha256": "81dba61af5dd8f9fe6f2f3131f72dace8373f5fed750b244fcb62bdbaf90da23",
+    "id": "nun|N AH N:retry:c456fe2a56dc41557434"
+  },
+  "review": {
+    "method": "owner listening review",
+    "rating": "good",
+    "transcript": "nun"
+  },
+  "generation": {
+    "version": 1,
+    "target": "nun|N AH N",
+    "text": "none",
+    "candidate": "E",
+    "method": "complete isolated word; whole homophone reuse; no extraction",
+    "sourceRecord": "none|N AH N",
+    "sourceFile": ".audio-audition/production/prepared/a0d07b44079890368a75.wav",
+    "sourceSha256": "1a7cea35005791796fc01a3d7246cc77d44387c97347c86cb48fc5cf408b3008",
+    "referenceSha256": "d1d800f1cac528c93060ab577670e39b56876c73b08df05ab6ea8ea4e4102ce9",
+    "attempts": [
+      {
+        "seed": 1280830135,
+        "temperature": 0.5,
+        "seconds": 1.306,
+        "duration": 0.642,
+        "accepted": true
+      }
+    ],
+    "file": ".audio-audition/production/four-word-repairs-2026-10-23/c456fe2a56dc41557434.wav",
+    "sha256": "6f14547ccc798965eae0e195159997052a302af46f206770bd7dc8701075545c",
+    "ready": true,
+    "quality": {
+      "seconds": 0.6417,
+      "leadingMs": 80,
+      "trailingMs": 82,
+      "quietLeadingMs": 80,
+      "quietTrailingMs": 122,
+      "internalSilenceMs": 0,
+      "issues": []
+    },
+    "generationSeconds": 0
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "version": 2,
+  "target": "null|N AH L",
+  "source": "data/audio/repairs/null-approved.wav",
+  "sourceSha256": "fe65f86f28085f929a3ee386620ac0ce2313f97816177631e87d0b9343371486",
+  "sampleSha256": "7e200919b2726395904959dd792ef2c301145de15fddb52899e5e311c8884d14",
+  "samples": 11204,
+  "sampleRate": 24000,
+  "recipeHash": "951429a96e17e8b9600d7c1d0da7e98859214e057f533f90b6fce927fcd41b40",
+  "referenceSha256": "d1d800f1cac528c93060ab577670e39b56876c73b08df05ab6ea8ea4e4102ce9",
+  "asset": {
+    "url": "/audio/instructor/a29606b0e53744d3ed53fe4f33135020863201ac7869c30b76b96d5768e12e24.opus",
+    "sha256": "a29606b0e53744d3ed53fe4f33135020863201ac7869c30b76b96d5768e12e24",
+    "bytes": 712,
+    "samples": 11204,
+    "bitrate": 10000
+  },
+  "assetSampleSha256": "7e200919b2726395904959dd792ef2c301145de15fddb52899e5e311c8884d14",
+  "assetReview": {
+    "policySha256": "65e26c727a61a3cb4926946fff4247ebe9feb47a90f2a4477043f2e50206241a",
+    "recognizerRevision": "efb7ae9b88f13db0d42eac8cedbba19739e2a278",
+    "result": {
+      "sourcePhones": [
+        "n",
+        "o\u028a"
+      ],
+      "decodedPhones": [
+        "n",
+        "o\u028a"
+      ],
+      "perPhoneLossIncrease": 0.0,
+      "samePhones": true,
+      "passed": true
+    },
+    "signal": {
+      "seconds": 0.4668,
+      "leadingMs": 80,
+      "trailingMs": 47,
+      "quietLeadingMs": 80,
+      "quietTrailingMs": 57,
+      "internalSilenceMs": 0,
+      "issues": []
+    }
+  },
+  "approval": {
+    "file": "data/audio/repairs/listening-2026-10-23.json",
+    "sha256": "81dba61af5dd8f9fe6f2f3131f72dace8373f5fed750b244fcb62bdbaf90da23",
+    "id": "null|N AH L:repair:b963bfe60701ac3248c1"
+  },
+  "review": {
+    "method": "owner listening review",
+    "rating": "good",
+    "transcript": "null"
+  },
+  "generation": {
+    "version": 1,
+    "target": "null|N AH L",
+    "file": ".audio-audition/production/human-repairs-2026-10-23/b963bfe60701ac3248c1.wav",
+    "sha256": "37f9bf74afca94c4cb8a1c79d0117e40c9852c63bc751dda96655476c681e82d",
+    "source": {
+      "record": "null|N AH L",
+      "path": ".audio-audition/production/prepared/21faa9963ae0fb743b3c-08a1a531a5e0c2d0-review-efb7ae9b-signal-1.wav",
+      "fileSha256": "bbea7429e5f669bb8ea8edf0d394d7ecc69878fa497dd09d0f0369d61e3ca64f",
+      "atempo": 0.82,
+      "reason": "Lengthen audible syllable without changing pitch or adding phonemes"
+    },
+    "quality": {
+      "seconds": 0.4668,
+      "leadingMs": 80,
+      "trailingMs": 67,
+      "quietLeadingMs": 80,
+      "quietTrailingMs": 67,
+      "internalSilenceMs": 0,
+      "issues": []
+    }
+  }
+}

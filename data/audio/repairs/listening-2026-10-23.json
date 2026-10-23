@@ -1,0 +1,493 @@
+{
+  "version": 1,
+  "method": "owner listening review",
+  "sourceManifest": "/audio/instructor/catalog.ab03dbcc1f3df9257bbba428919725da55e9e5ab1b8e5a0b31d2c457bf004172.json",
+  "approved": [
+    {
+      "id": "cheat|CH IY T",
+      "word": "cheat",
+      "sha256": "36466a68cba98e15988b7b752e9d6fc56095744c2929b75f06996dcf931bad0d",
+      "rating": "good"
+    },
+    {
+      "id": "than|DH AE N",
+      "word": "than",
+      "sha256": "31e8fd931ecde72e450eeb5e2a597649fc135156c810492d428f9516b6be679d",
+      "rating": "good"
+    },
+    {
+      "id": "peck|P EH K",
+      "word": "peck",
+      "sha256": "f048a29899b061a909463825d6d34562cc993985b11a26eec90865f1997f4e4a",
+      "rating": "good"
+    },
+    {
+      "id": "geese|G IY S",
+      "word": "geese",
+      "sha256": "e8a1ce292cf896638e40fc9bc29a9e8b64024a99667b02773652eb3f42fc862c",
+      "rating": "good"
+    },
+    {
+      "id": "deem|D IY M",
+      "word": "deem",
+      "sha256": "4bc1e7700dd8406824b6ca9e7517fe256c1d1a27c2d18bae61c021ec966fd62c",
+      "rating": "good"
+    },
+    {
+      "id": "mud|M AH D",
+      "word": "mud",
+      "sha256": "7bfe864c0a173774e46745917549daa661bba0918aea66570f579f641310693f",
+      "rating": "good"
+    },
+    {
+      "id": "chat|CH AE T",
+      "word": "chat",
+      "sha256": "d7f6daefcc5294e5f65386c44a90505d6448b32e1246925fb074d9d7846bb678",
+      "rating": "good"
+    },
+    {
+      "id": "land|L AE N D",
+      "word": "land",
+      "sha256": "2895449d7c34bfb563d3a69ea368ac2130fcee9a5682d5aae7023330096844a9",
+      "rating": "good"
+    },
+    {
+      "id": "your|Y UH R",
+      "word": "your",
+      "sha256": "6fe9d121db7bd2e4c23f23764d5069667cbea2e4d5a9502a47e901fcd161f765",
+      "rating": "good"
+    },
+    {
+      "id": "pause|P AO Z",
+      "word": "pause",
+      "sha256": "b7f885172db93ebd0faf21cd3716c4d9088ce4164ded451cf1995ef88aab326c",
+      "rating": "good"
+    },
+    {
+      "id": "mood|M UW D",
+      "word": "mood",
+      "sha256": "b7239f489fd971b886f5823d76bab47622930be3904d53e96b365a4805ba6467",
+      "rating": "good"
+    },
+    {
+      "id": "bar|B AA R",
+      "word": "bar",
+      "sha256": "681502b919e12bb3df1eed9a3215a15878df59459c87c3c80b61972a6baa8fb6",
+      "rating": "good"
+    },
+    {
+      "id": "sort|S AO R T",
+      "word": "sort",
+      "sha256": "8e8d41daf79debdc33e60ec43b2099e591756bd56de0c42fddedbc50e6a42ffa",
+      "rating": "good"
+    },
+    {
+      "id": "shut|SH AH T",
+      "word": "shut",
+      "sha256": "12991e469e08f63295dd8b128ab4651362da9226654ae9df9eac9ffff81976bf",
+      "rating": "good"
+    },
+    {
+      "id": "sped|S P EH D",
+      "word": "sped",
+      "sha256": "854857e40ec4d0d578042e2c7d5e34d9d2112d2608c084d0548ee136b27b8d53",
+      "rating": "good"
+    },
+    {
+      "id": "keg|K EH G",
+      "word": "keg",
+      "sha256": "f80e9e453effbe692bbcc4d7cdb9da92e77b92c5a87618da6d4a38606e75c4f5",
+      "rating": "good"
+    },
+    {
+      "id": "yip|Y IH P",
+      "word": "yip",
+      "sha256": "c1f9d8d2551f2f9e6b878057d19ac6493d32ba9f7dd127567df249356a79dfe8",
+      "rating": "good"
+    },
+    {
+      "id": "panned|P AE N D",
+      "word": "panned",
+      "sha256": "9d92ca69305a76c08823d6cc39db2eed6c7e96ebbca1d693a7d6cdb4d54ed1cb",
+      "rating": "good"
+    },
+    {
+      "id": "bailed|B EY L D",
+      "word": "bailed",
+      "sha256": "072c728426f4649d851ff2e934b9541393ed3d1f72d9099a30a6765f76b6e704",
+      "rating": "good"
+    },
+    {
+      "id": "bic|B IH K",
+      "word": "bic",
+      "sha256": "5592b259ce524627bfed2cfca56404939fcf844375d7e66bd0538daeafe89dbf",
+      "rating": "good"
+    },
+    {
+      "id": "blare|B L EH R",
+      "word": "blare",
+      "sha256": "2e6307f36eaa479b9390e9285df4c60fb196be4b96c85ba69e8b151c79f73e36",
+      "rating": "good"
+    },
+    {
+      "id": "bleed|B L IY D",
+      "word": "bleed",
+      "sha256": "9a5162c59b666fb8284b3f97bb66b34615ed18d74b1c15335ee491393d788e6a",
+      "rating": "good"
+    },
+    {
+      "id": "bruise|B R UW Z",
+      "word": "bruise",
+      "sha256": "f329c77b1e47c871ac19f78ace86d048e6802e2afaace7c76f8b22f8d5fee432",
+      "rating": "good"
+    },
+    {
+      "id": "soir|S OY R",
+      "word": "soir",
+      "sha256": "f988f55a889df322bb56d13bedb29fb0c6b71b9a309076753b2ffff5aae9d78d",
+      "rating": "good"
+    },
+    {
+      "id": "skull|S K AH L",
+      "word": "skull",
+      "sha256": "5b3450ef774a70636f23b566b85af29fe7961ccf0e61ba0504e8a0eea270c4ca",
+      "rating": "good"
+    },
+    {
+      "id": "jolt|JH OW L T",
+      "word": "jolt",
+      "sha256": "55f474229393377be1fde3c4bc70fc60adc67326d342b737dbd6b77c9b7f72b5",
+      "rating": "good"
+    },
+    {
+      "id": "spouse|S P AW S",
+      "word": "spouse",
+      "sha256": "57a9369e35783c325664b52b3e540362c93c270ca49a5f0e962e5d889fed13b1",
+      "rating": "good"
+    },
+    {
+      "id": "tiled|T AY L D",
+      "word": "tiled",
+      "sha256": "c8d3e775dd21f17b0c140b97cfd362c6446b93927a9219acf919de812d6848ce",
+      "rating": "good"
+    },
+    {
+      "id": "tomb|T UW M",
+      "word": "tomb",
+      "sha256": "1c7d17b5d16327cad59f83dbd918f023ac53a68bb8ac965adbd4f295f6fe7cf7",
+      "rating": "good"
+    },
+    {
+      "id": "dupe|D UW P",
+      "word": "dupe",
+      "sha256": "111fd5bf43cc74d1c7944a73249ec1bad7ad704400e53ac7746da8dc650de272",
+      "rating": "good"
+    },
+    {
+      "id": "tromp|T R AA M P",
+      "word": "tromp",
+      "sha256": "7eed9dac8ce480cba45bb53920990876fc15b2287f2185e8e4852cccc298e463",
+      "rating": "good"
+    },
+    {
+      "id": "that|DH AH T:repair:915eca28905a018b6fac",
+      "word": "that",
+      "sha256": "1931b513e8a48c77408af7c26dab68cbe6c37a8c890c70720883e39544f7c3a7",
+      "rating": "good"
+    },
+    {
+      "id": "thyme|TH AY M:repair:2905abf19c5aa1a2349e",
+      "word": "thyme",
+      "sha256": "fbe9d74299507caee40dcadca0bfa653dc638c64d8aed910bd9cfda05ca3871b",
+      "rating": "good"
+    },
+    {
+      "id": "watt|W AA T:repair:8a20f78c228019e627c4",
+      "word": "watt",
+      "sha256": "b6deb274bb7532019ad5c4c56155201e394ba62480d3d45e5224724bbf690ff8",
+      "rating": "good"
+    },
+    {
+      "id": "watt|W AA T:repair:3222da1e7b1499a61e68",
+      "word": "watt",
+      "sha256": "41d6d37f2b2956c14d6a49b06039fc6080cb4dcb11264321aeb9b19380e7c141",
+      "rating": "good"
+    },
+    {
+      "id": "rogue|R OW G:repair:2e4320d6de4b1557c1e2",
+      "word": "rogue",
+      "sha256": "629ce934c9c36cf36de2a0444c5006636760aa6a2f26f9b9b6a8b88c7ac98819",
+      "rating": "good"
+    },
+    {
+      "id": "rogue|R OW G:repair:35d4919c82039582dcec",
+      "word": "rogue",
+      "sha256": "e4037c2ad58f9e6a246f1cea677c7958dbf44a59de30dae24ed415c8461645ec",
+      "rating": "good"
+    },
+    {
+      "id": "git|G IH T:repair:6a61ed2a751bfc58f1ce",
+      "word": "git",
+      "sha256": "7aab757d9eef7cd2e17e58fc5da349321f7a746c73f370988c5ffd7a246dae50",
+      "rating": "good"
+    },
+    {
+      "id": "git|G IH T:repair:b2124aa04b5b10c5b2c1",
+      "word": "git",
+      "sha256": "7a869c428d36a51d1abffa24988017d1b689c4094d92b6d2c115ed7264f90016",
+      "rating": "good"
+    },
+    {
+      "id": "null|N AH L:repair:b963bfe60701ac3248c1",
+      "word": "null",
+      "sha256": "7e200919b2726395904959dd792ef2c301145de15fddb52899e5e311c8884d14",
+      "rating": "good"
+    },
+    {
+      "id": "knoll|N OW L:repair:c93f2f72f7ffc8838d4b",
+      "word": "knoll",
+      "sha256": "23a9b2620b4a279a17d7c57ae490000381ea665bf8b1b62de7f77afc1577592f",
+      "rating": "good"
+    },
+    {
+      "id": "the|DH AH:whole:58b9f7a83b5cc6e401cf",
+      "word": "the",
+      "sha256": "71d5d572b8fda2abd70bba4e3d96cbb341950ec258db4d3bb646fc37ea18ca5e",
+      "rating": "good"
+    },
+    {
+      "id": "to|T IH:whole:70d83b610bc2091ff014",
+      "word": "to",
+      "sha256": "1614c825bd24a2505b5efca13c20289024c4d6cc73c6e73303a04e970c5bef67",
+      "rating": "good"
+    },
+    {
+      "id": "to|T IH:whole:aeea92c64fa680cf197f",
+      "word": "to",
+      "sha256": "565e4f370c8b1121c377621e53f0d2216cfb99d107412a3f8f9678efcb395787",
+      "rating": "good"
+    },
+    {
+      "id": "with|W IH DH:whole:32e2fc6bbc0c96feb310",
+      "word": "with",
+      "sha256": "48650fecc6106a0477ad2021ce408eb0c6d8feb920095c5dcabe537359d27058",
+      "rating": "good"
+    },
+    {
+      "id": "pump|P AH M P:whole:d7b328eca1046a2f3ea4",
+      "word": "pump",
+      "sha256": "f0b7993989ba307f48d06b637ace0c90334ba8e1bc11b21e3b146b7ffbbee8e1",
+      "rating": "good"
+    },
+    {
+      "id": "was|W AA Z:whole:8e0d6aceaf612a5839a5",
+      "word": "was",
+      "sha256": "9c827be66031cba574f79b952c80a50691c6a53d13ae33b50b0a25abedf7eda6",
+      "rating": "good"
+    },
+    {
+      "id": "al|AE L:whole:5e177774a60f13a08403",
+      "word": "al",
+      "sha256": "c9ede9de7e5e84ca1bc8ad930e5330091316fd58290d9309ca5729403e4475e2",
+      "rating": "good"
+    },
+    {
+      "id": "howl|HH AW L:whole:e809883967b648bf3d80",
+      "word": "howl",
+      "sha256": "279df24e88f630ad7c1da82fea641ea34f14185284e4fcd5f46b736bd56328ab",
+      "rating": "good"
+    },
+    {
+      "id": "howl|HH AW L:whole:dca804806c3e74b1379c",
+      "word": "howl",
+      "sha256": "629a115c48ac76c5a0156302f0e4eac49a886888fe5ab61093a15d526c8fc4c6",
+      "rating": "good"
+    },
+    {
+      "id": "hull|HH AH L:whole:6c4c13d06e94d8bc24cc",
+      "word": "hull",
+      "sha256": "07927bac50b8718ccd8776099fb09d9c0201a62f083fd249d1001b4731c53f6f",
+      "rating": "good"
+    },
+    {
+      "id": "lath|L AE TH:whole:c09e355a470ae30db324",
+      "word": "lath",
+      "sha256": "76b3317e47cc88a968bc8f419f8e3d62f199eb1fe1c13ed84a9a54cf73a9708d",
+      "rating": "good"
+    },
+    {
+      "id": "lull|L AH L:whole:05c5cae2e5706814bec8",
+      "word": "lull",
+      "sha256": "44307f1de3a9bf8f3ff2cb1f05486704472410f1c4674380ed39756221acee2e",
+      "rating": "good"
+    },
+    {
+      "id": "cal|K AE L:whole:0593ccc2452b1033ddf5",
+      "word": "cal",
+      "sha256": "86ee6de9df2c05f3e99705f9a2d186a8ade56fc86b11a22c3241739937419181",
+      "rating": "good"
+    },
+    {
+      "id": "yurt|Y UH R T:whole:466b03855bd77c4bb5d2",
+      "word": "yurt",
+      "sha256": "392cb7b3c69847d973b295794395297903136530d174e2c8052d6410d236d3d8",
+      "rating": "good"
+    },
+    {
+      "id": "pear|P EH R:whole:1638e4951978923bcd9c",
+      "word": "pear",
+      "sha256": "71f0c12bf0b116ecc7af9585fc62bf9e0ad4defd0f9f6e14203ada6e7e8984aa",
+      "rating": "good"
+    },
+    {
+      "id": "pith|P IH TH:whole:14d02ac5ce38fcb0ac78",
+      "word": "pith",
+      "sha256": "b3b6d2c7b05f7ee8743b68ae219b5f53854f25fc95391817c9e4d56d2171d262",
+      "rating": "good"
+    },
+    {
+      "id": "puff|P AH F:whole:028a75532335e8670b41",
+      "word": "puff",
+      "sha256": "c3d2181f966f9d3a16d2448604c07c38178c347b43633c00beb961609bee83fd",
+      "rating": "good"
+    },
+    {
+      "id": "pup|P AH P:whole:f824f27a5a465c85fc47",
+      "word": "pup",
+      "sha256": "8a655af9ba717a0f7af9114f83afc0643a29ba018988a01013dda449b3e6c76e",
+      "rating": "good"
+    },
+    {
+      "id": "mook|M UH K:whole:f0904f193b897db010cc",
+      "word": "mook",
+      "sha256": "9b130fc3ad293e934f2c97589bc11d0bda7244f6eaab8f897df1e955a50a7c38",
+      "rating": "good"
+    },
+    {
+      "id": "mull|M AH L:whole:2a5da62792323b9e511c",
+      "word": "mull",
+      "sha256": "e5ddca15c2531ef73fefb874acd8e711c70db6748f21aef0b7ab40969490c744",
+      "rating": "good"
+    },
+    {
+      "id": "baz|B AE Z:whole:8b4d45014f8636cbabed",
+      "word": "baz",
+      "sha256": "480fb5a3c135643cf205824b831ac6ba3851d8207c6d7f923692bdeedc59d4af",
+      "rating": "good"
+    },
+    {
+      "id": "boor|B UH R:whole:eb90cd3f063f100cfb05",
+      "word": "boor",
+      "sha256": "2ec4a1098b1356dac3e2016045b74a29dcff8bc5a10988499258cd773f556e37",
+      "rating": "good"
+    },
+    {
+      "id": "spiel|S P IY L:whole:6b5750f8a6d7eb03611d",
+      "word": "spiel",
+      "sha256": "d0f433be16a00f6283029df362a156944a1fd9c92700cb467b604226d5b73920",
+      "rating": "good"
+    },
+    {
+      "id": "val|V AE L:whole:5c9c7b5e6ec9fe74d530",
+      "word": "val",
+      "sha256": "63fcbbceac54f0ddd4f1aecab6db18479cb565b7173ed4dbcf8a5b1955d141b8",
+      "rating": "good"
+    },
+    {
+      "id": "vase|V AA Z:whole:74c99e4535f01db3c20b",
+      "word": "vase",
+      "sha256": "5e5352b189886f42a0609554d3e38f92ca1753102063e6a67515b299df729d51",
+      "rating": "good"
+    },
+    {
+      "id": "vase|V AA Z:whole:740716aadb01a8028c2b",
+      "word": "vase",
+      "sha256": "36ed5d3bde5a454fcb84bd7be22e240bd660f289d48a8d054584051ad015097a",
+      "rating": "good"
+    },
+    {
+      "id": "tang|T AA NG:whole:348994387da7b990a274",
+      "word": "tang",
+      "sha256": "ccc03ee6bf9a587163c0631545846a161ead48860410125734f796d611e0886e",
+      "rating": "good"
+    },
+    {
+      "id": "tam|T AE M:whole:b9b642d1ca5c6beddc9f",
+      "word": "tam",
+      "sha256": "4a2b83aa25284a88c53e168ca23c8c37c906876f72124dee392655c853b42c2b",
+      "rating": "good"
+    },
+    {
+      "id": "tam|T AE M:whole:1edc33de1101e2a2a14e",
+      "word": "tam",
+      "sha256": "5b55ae7b6aaff4661eb70b9e9d13eb735a3434d86d98c27b46e7651215c07ac7",
+      "rating": "good"
+    },
+    {
+      "id": "gut|G AH T:whole:c51a189c13986f40d721",
+      "word": "gut",
+      "sha256": "28a80945a2581bf20d4957d3352f3b9b49a902d6f69b60b83c7c75f3e4e8b987",
+      "rating": "good"
+    },
+    {
+      "id": "gut|G AH T:whole:fe1707b10cc2ab854408",
+      "word": "gut",
+      "sha256": "af8528c5c1c13df54f469abc1940403402c23631e31a6f4414f27844bf2a804d",
+      "rating": "good"
+    },
+    {
+      "id": "foal|F OW L:whole:cc26631ab53101564e72",
+      "word": "foal",
+      "sha256": "cdabf12c8cfb2980b6a6cf0cfebbcdfb82648d00aba4b05c92aeaabf62ebf904",
+      "rating": "good"
+    },
+    {
+      "id": "nel|N EH L:whole:d9d73e054eec6a732813",
+      "word": "nel",
+      "sha256": "3353d100af9160796a82da43e514d203f0c66e0cd8fb5b3a7402c70eb0da732e",
+      "rating": "good"
+    },
+    {
+      "id": "nut|N AH T:whole:5d91ff42b2bbbb2246c8",
+      "word": "nut",
+      "sha256": "2566d681eaa0b9df1dd31bf427fb98d4f06f43b2be1055287f8c5133caea197a",
+      "rating": "good"
+    },
+    {
+      "id": "woof|W UW F:whole:5fabfefadc6119acc177",
+      "word": "woof",
+      "sha256": "c7d55dd1ac8e622cac9bff567e2b57e677a2fe237a0661e6853f734d0c35568c",
+      "rating": "good"
+    },
+    {
+      "id": "won|W AA N:whole:e70bb2b3d6aa3fb7d200",
+      "word": "won",
+      "sha256": "ccc81a33f3dcb6ac4c13f804ccb4aca46934f5275147c2174c2a7f4b0063d50c",
+      "rating": "good"
+    },
+    {
+      "id": "seethe|S IY DH:retry:ca560b846ab289fc98d2",
+      "word": "seethe",
+      "sha256": "91209fb40dc28f64733fc892129c11d154c14c4f38fd99225a94f92edbaa14ae",
+      "rating": "good"
+    },
+    {
+      "id": "zing|Z IH NG:retry:0106e0951696b804f1a4",
+      "word": "zing",
+      "sha256": "254406f881d82c5d686f422ced06ef04a3b03cda005113f55eefcbc349785543",
+      "rating": "good"
+    },
+    {
+      "id": "nun|N AH N:retry:c456fe2a56dc41557434",
+      "word": "nun",
+      "sha256": "6f14547ccc798965eae0e195159997052a302af46f206770bd7dc8701075545c",
+      "rating": "good"
+    },
+    {
+      "id": "troth|T R AO TH:retry:14eb8bc4b2187eddde7f",
+      "word": "troth",
+      "sha256": "6d417916cf25b32683817c6dc9f204c6c79fde99f6ee8889ff8462f099b0f254",
+      "rating": "good"
+    }
+  ]
+}
