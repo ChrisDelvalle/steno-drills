@@ -110,7 +110,7 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     speaker.cancel(); setActivated(startAudio); setEpoch(nextEpoch); setSpeechError(''); setSpeechNotice(''); setRevealedPrompt('');
     setActive(next); setTargets(nextTargets); setInput(''); latestInput.current = '';
     setStartedAt(null); setElapsed(0); setFinished(false); setControlsHidden(false); setCursor(0); history.current = []; errors.current = []; typing.current = []; incorrectChars.current = 0; recovery.current.clear(); focus();
-    if (startAudio) speaker.play({ id: `${nextEpoch}:0:0`, text: nextTargets.slice(0, next.groupSize || 1).map(w => w.word).join(' '), words: nextTargets.slice(0, next.groupSize || 1) }, next.voice || '', nextListening.rate);
+    if (startAudio) speaker.play({ id: `${nextEpoch}:0:0`, text: nextTargets.slice(0, next.groupSize || 1).map(w => w.word).join(' '), words: nextTargets.slice(0, next.groupSize || 1) }, next.voice || '', nextListening.rate, 500);
   };
   const previousSuspended = useRef(suspended);
   useLayoutEffect(() => {
@@ -161,10 +161,11 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     const hints = !active.hints;
     setActive(previous => ({ ...previous, hints })); onOptionsChange?.({ hints }); focus();
   };
+  const openSettings = () => { speaker.cancel(); onExit(); };
   const handleKey = (event: KeyboardEvent) => {
     if (suspended || event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey) return;
     if (event.key === 'Tab') setControlsHidden(false);
-    if (event.key === 'Escape') { event.preventDefault(); speaker.cancel(); onExit(); return; }
+    if (event.key === 'Escape') { event.preventDefault(); openSettings(); return; }
     const target = event.target;
     const control = target instanceof Element && target.closest('button,a,input,textarea,select,[contenteditable],dialog');
     if (control && control !== inputRef.current && !control.classList.contains('practice-focus')) return;
@@ -182,7 +183,7 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
   return <main className="session-shell" aria-label="Practice" data-controls-hidden={controlsHidden && startedAt !== null && !finished && !suspended} data-hint-position={active.hintPosition || 'above'} data-hint-text={active.hintTextSize || 'extra-large'} data-hint-keyboard={active.hintKeyboardSize || 'extra-large'} onFocusCapture={e => {
     if (e.target !== inputRef.current) setControlsHidden(false);
   }} onKeyDown={e => handleKey(e.nativeEvent)}>
-    <header className="session-header"><Brand href={practiceHref} onClick={e => { e.preventDefault(); reset(); }}/><button className="icon-button session-controls" aria-label="Test settings" title="Test settings" onClick={() => { speaker.cancel(); onExit(); }}><Icon name="settings"/></button></header>
+    <header className="session-header"><Brand href={practiceHref} onClick={e => { e.preventDefault(); reset(); }}/><button className="icon-button session-controls" aria-label="Test settings" title="Test settings" onClick={openSettings}><Icon name="settings"/></button></header>
     {!finished ? <div className="test-stage">
       {active.hintPosition !== 'below' && <div className="hint-slot hint-above">{hint}</div>}
       <div className="test-status"><span className="session-clock" aria-label={active.mode === 'timed' ? 'Time left' : 'Elapsed time'}>{active.mode === 'timed' ? Math.ceil(remaining / 1000) : Math.floor(elapsed / 1000)}</span>{audio && !activated && <span className="audio-start-prompt" role="status">Press space to start</span>}</div>
@@ -228,6 +229,6 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
       {missed.length > 0 && <details className="missed-words"><summary>{missed.length} missed {missed.length === 1 ? 'word' : 'words'}</summary><table><thead><tr><th>Word</th><th>Outline</th></tr></thead><tbody>{missed.map(w => <tr key={w.word}><td>{w.word}</td><td><code>{w.outline || '—'}</code></td></tr>)}</tbody></table><button className="text-button" onClick={() => reset({ ...active, title: 'Missed words', kind: active.kind === 'chords' ? 'chords' : 'words', pool: missed, ordered: false, attribution: undefined, mode: 'count', count: Math.max(10, missed.length) })}>Practice missed words</button></details>}
       <div className="button-row center"><button className="icon-button" aria-label="Restart" title="Restart (Enter)" onClick={() => reset(config)}><Icon name="refresh"/></button></div>
     </section>}
-    <footer className="test-footer session-controls"><span><kbd>enter</kbd> restart</span>{active.questionHints && !finished && <span><kbd>?</kbd> hints</span>}<span><kbd>esc</kbd> settings</span></footer>
+    <footer className="test-footer session-controls"><button type="button" onClick={() => reset()}><kbd>enter</kbd> restart</button>{active.questionHints && !finished && <button type="button" aria-pressed={hintsVisible} onClick={toggleHints}><kbd>?</kbd> hints</button>}<button type="button" onClick={openSettings}><kbd>esc</kbd> settings</button></footer>
   </main>;
 }

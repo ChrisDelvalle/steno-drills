@@ -51,8 +51,14 @@ export class PromptSpeaker {
     this.cancel(Boolean(prompt));
     if (this.activated && prompt && allowed) this.speak(prompt, preferred, rate);
   }
-  play(prompt: SpokenPrompt, preferred: string, rate: number) {
-    this.activated = true; this.prompt = prompt; this.cancel(true); this.speak(prompt, preferred, rate);
+  play(prompt: SpokenPrompt, preferred: string, rate: number, delay = 0) {
+    this.activated = true; this.prompt = prompt; this.cancel(true);
+    if (!delay) { this.speak(prompt, preferred, rate); return; }
+    const generation = this.generation;
+    this.timeout = setTimeout(() => {
+      if (generation !== this.generation) return;
+      this.timeout = undefined; this.speak(prompt, preferred, rate);
+    }, delay);
   }
   private speak(prompt: SpokenPrompt, preferred: string, rate: number) {
     const voice = chooseVoice(this.adapter.voices(), preferred);

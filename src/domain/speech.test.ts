@@ -40,6 +40,22 @@ it('reports missing voices, denial, thrown errors, and a browser that never star
   other.adapter.speak = () => { throw new Error('blocked'); };
   other.speaker.play(p, '', 1); expect(other.events.error).toHaveBeenLastCalledWith(expect.stringContaining('Speech failed'));
 });
+it('delays scheduled playback and cancels it on restart, navigation, or explicit Replay', () => {
+  vi.useFakeTimers();
+  const { speaker, calls, events } = harness();
+  const first = { id: 'first', text: 'one' }, next = { id: 'next', text: 'net' };
+  speaker.play(first, '', 1, 500);
+  speaker.update(first, '', 1);
+  vi.advanceTimersByTime(499); expect(calls).toHaveLength(0); expect(events.start).not.toHaveBeenCalled();
+  vi.advanceTimersByTime(1); expect(calls.map(c => c.text)).toEqual(['one']);
+  expect(events.start).not.toHaveBeenCalled(); calls[0].events.start(); expect(events.start).toHaveBeenCalledOnce();
+  speaker.play(first, '', 1, 500); vi.advanceTimersByTime(250);
+  speaker.play(next, '', 1, 500); vi.advanceTimersByTime(499); expect(calls).toHaveLength(1);
+  vi.advanceTimersByTime(1); expect(calls.map(c => c.text)).toEqual(['one', 'net']);
+  speaker.play(first, '', 1, 500); speaker.cancel(); vi.advanceTimersByTime(1000); expect(calls).toHaveLength(2);
+  speaker.play(first, '', 1, 500); speaker.update(null, '', 1); vi.advanceTimersByTime(1000); expect(calls).toHaveLength(2);
+  speaker.play(first, '', 1, 500); speaker.play(first, '', 1); vi.advanceTimersByTime(500); expect(calls).toHaveLength(3);
+});
 it('selects only local English browser voices and handles delayed discovery', () => {
   const native = (id: string, lang: string, localService: boolean, isDefault = false) => ({ voiceURI: id, name: id, lang, localService, default: isDefault });
   let voices: ReturnType<typeof native>[] = [];

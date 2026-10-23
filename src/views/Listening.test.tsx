@@ -52,6 +52,8 @@ it('preserves raw outlines typed immediately after a fresh restart', () => {
   const h = harness({ inputMode: 'steno', translator });
   fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Enter' });
   h.type('w'); h.type('wupb');
+  expect(h.calls).toHaveLength(0);
+  act(() => vi.advanceTimersByTime(500));
   expect(screen.getByRole('textbox')).toHaveValue('wupb'); expect(h.calls.map(call => call.text)).toEqual(['one']);
   h.start(); expect(h.calls.at(-1)?.text).toBe('net');
   h.type('wupb '); expect(h.calls).toHaveLength(2);
@@ -84,20 +86,25 @@ it('handles input-only start spaces, reveal, and normal keyboard navigation', ()
   const count = h.calls.length;
   h.type(' '); expect(screen.getByRole('textbox')).toHaveValue(''); expect(h.calls).toHaveLength(count + 1);
 });
-it('always plays on Enter and Restart, accepts immediate input, and ignores canceled start events', () => {
+it('delays Enter and Restart playback, accepts immediate input, and ignores canceled start events', () => {
   const h = harness({ listening: { enabled: true, display: 'hidden', rate: 1 } });
   fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Enter' });
+  expect(h.calls).toHaveLength(0);
+  act(() => vi.advanceTimersByTime(499)); expect(h.calls).toHaveLength(0);
+  expect(screen.getByLabelText('Elapsed time')).toHaveTextContent('0');
+  act(() => vi.advanceTimersByTime(1));
   expect(h.calls.map(call => call.text)).toEqual(['one']);
   h.type('o'); expect(screen.getByRole('textbox')).toHaveValue('o');
   fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Enter' });
-  expect(h.calls).toHaveLength(2); h.type('one');
+  expect(h.calls).toHaveLength(1); h.type('one');
   act(() => h.calls[0].events.start());
-  act(() => vi.advanceTimersByTime(1000)); expect(screen.getByLabelText('Elapsed time')).toHaveTextContent('0');
+  act(() => vi.advanceTimersByTime(500)); expect(screen.getByLabelText('Elapsed time')).toHaveTextContent('0');
   expect(h.calls).toHaveLength(2);
   act(() => h.calls[1].events.start()); expect(h.calls.at(-1)?.text).toBe('net');
   fireEvent.click(screen.getByRole('button', { name: 'Restart' }));
-  expect(h.calls.at(-1)?.text).toBe('one'); expect(screen.getByRole('textbox')).toHaveFocus();
+  expect(h.calls.at(-1)?.text).toBe('net'); expect(screen.getByRole('textbox')).toHaveFocus();
   h.type('o'); expect(screen.getByRole('textbox')).toHaveValue('o');
+  act(() => vi.advanceTimersByTime(500)); expect(h.calls.at(-1)?.text).toBe('one');
 });
 it('starts from Space or Enter after focus recovery without requiring a pointer', () => {
   const h = harness({ listening: { enabled: true, display: 'hidden', rate: 1 } });
@@ -106,7 +113,22 @@ it('starts from Space or Enter after focus recovery without requiring a pointer'
   expect(h.calls).toHaveLength(1); expect(screen.getByRole('textbox')).toHaveFocus();
   act(() => screen.getByRole('textbox').blur());
   fireEvent.keyDown(document.body, { key: 'Enter' });
+  expect(h.calls).toHaveLength(1); act(() => vi.advanceTimersByTime(500));
   expect(h.calls).toHaveLength(2); expect(screen.getByRole('textbox')).toHaveFocus();
+});
+it.each(['blur', 'settings', 'hidden tab', 'unmount'])('cancels pending restart audio on %s', action => {
+  const h = harness();
+  fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Enter' });
+  act(() => vi.advanceTimersByTime(250));
+  if (action === 'blur') fireEvent(window, new Event('blur'));
+  else if (action === 'settings') fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Escape' });
+  else if (action === 'hidden tab') {
+    vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('hidden');
+    fireEvent(document, new Event('visibilitychange'));
+  } else h.unmount();
+  act(() => vi.advanceTimersByTime(1000));
+  expect(h.calls).toHaveLength(0);
+  if (action !== 'unmount') expect(screen.getByLabelText('Elapsed time')).toHaveTextContent('0');
 });
 it('can retry startup after failure without discarding early input or getting stuck on completion', () => {
   const h = harness({ pool: [{ word: 'one' }] });
@@ -116,6 +138,7 @@ it('can retry startup after failure without discarding early input or getting st
   h.play(); expect(h.calls.at(-1)?.text).toBe('one');
   h.start(); expect(screen.getByRole('region', { name: 'Practice results' })).toBeInTheDocument();
   fireEvent.keyDown(screen.getByRole('region', { name: 'Practice results' }), { key: 'Enter' });
+  act(() => vi.advanceTimersByTime(500));
   expect(h.calls.at(-1)?.text).toBe('one'); expect(screen.getByRole('textbox')).toHaveFocus();
 });
 it('speaks complete groups once per pass, previews tails, and reverses edits without duplicate errors', () => {
@@ -170,6 +193,7 @@ it('handles raw tails and strict corrections, and finishes without trailing spac
   expect(screen.getByRole('region', { name: 'Practice results' })).toBeInTheDocument();
   expect(h.calls).toHaveLength(2); // A multiword update skips stale intermediate prompts.
   fireEvent.click(screen.getByRole('button', { name: 'Restart' }));
+  act(() => vi.advanceTimersByTime(500));
   expect(h.calls.at(-1)?.text).toBe('one'); expect(screen.getByRole('textbox')).toHaveValue('');
 });
 it('cancels on blur, hidden tab, settings, completion and unmount without restarting the clock', () => {
@@ -213,7 +237,8 @@ it('shows an incomplete raw outline neutrally without exposing the target or its
 it('cancels settings and restarts playback after activation, with a fresh clock on first utterance', () => {
   const h = harness(); h.play(); h.start(); act(() => vi.advanceTimersByTime(2000));
   fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Enter' });
-  expect(h.calls).toHaveLength(2); expect(screen.getByLabelText('Elapsed time')).toHaveTextContent('0');
+  expect(h.calls).toHaveLength(1); expect(screen.getByLabelText('Elapsed time')).toHaveTextContent('0');
+  act(() => vi.advanceTimersByTime(500)); expect(h.calls).toHaveLength(2);
   act(() => vi.advanceTimersByTime(1000)); expect(screen.getByLabelText('Elapsed time')).toHaveTextContent('0');
   h.start(); act(() => vi.advanceTimersByTime(1100)); expect(screen.getByLabelText('Elapsed time')).toHaveTextContent('1');
   fireEvent.keyDown(screen.getByRole('textbox'), { key: 'Escape' }); expect(h.onExit).toHaveBeenCalledOnce();
