@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { defaultProfile, exportBackup, importBackup, loadProfile, profileKey, saveProfile, validateCorrection } from './profile';
+import { defaultProfile, exportBackup, importBackup, loadProfile, profileKey, saveProfile, validateCorrection, validateProfile } from './profile';
 import { applyCorrections, eligibleWords, parseWordList } from './vocabulary';
 import { makeEntry } from './classifier';
 
@@ -127,4 +127,11 @@ it('migrates group size and validates it through backups', () => {
   const old = JSON.parse(exportBackup(p)); delete old.profile.session.groupSize;
   expect(importBackup(JSON.stringify(old)).session.groupSize).toBe(1);
   for (const groupSize of [0, 11, 1.5, null, '3']) expect(() => importBackup(exportBackup({ ...p, session: { ...p.session, groupSize } } as never))).toThrow();
+});
+it('preserves experimental audio preferences in backups and defaults older profiles to off', () => {
+  const profile = defaultProfile(); profile.experimental = true; profile.voice = 'recorded:clear-instructor';
+  expect(importBackup(exportBackup(profile))).toMatchObject({experimental:true,voice:'recorded:clear-instructor'});
+  const old = JSON.parse(JSON.stringify(profile)); delete old.experimental;
+  expect(validateProfile(old).experimental).toBe(false);
+  expect(()=>validateProfile({...profile,experimental:'yes'})).toThrow();
 });

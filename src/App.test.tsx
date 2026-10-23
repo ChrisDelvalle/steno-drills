@@ -35,6 +35,28 @@ it('persists learned skills and saved word lists through the full app', async ()
   expect(screen.getByText('A to Z', { exact: true })).toBeInTheDocument();
   expect(JSON.parse(localStorage.getItem(profileKey)!).lists[0].words).toEqual(['bad', 'dim']);
 });
+it('exposes recorded audio only with the personal experiment enabled and retains its preference', async () => {
+  const profile = defaultProfile(); profile.session.listening.enabled = true;
+  localStorage.setItem(profileKey,JSON.stringify(profile)); render(<App/>);
+  await screen.findByRole('button',{name:'Test settings'});
+  await navigate('/test-settings');
+  expect(screen.queryByRole('option',{name:'Clear instructor · experimental'})).not.toBeInTheDocument();
+  await navigate('/settings'); fireEvent.click(screen.getByRole('checkbox',{name:'Experimental features'}));
+  await navigate('/test-settings');
+  expect(screen.getByRole('option',{name:'Clear instructor · experimental'})).toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText('Voice'),{target:{value:'recorded:clear-instructor'}});
+  await navigate('/settings'); fireEvent.click(screen.getByRole('checkbox',{name:'Experimental features'}));
+  await navigate('/test-settings'); expect(screen.getByLabelText('Voice')).toHaveValue('');
+  expect(JSON.parse(localStorage.getItem(profileKey)!).voice).toBe('recorded:clear-instructor');
+});
+it('restores practice focus after the closing dialog restores its previous control', async () => {
+  render(<App/>); await screen.findByRole('button',{name:'Test settings'});
+  await navigate('/test-settings');
+  const gear = document.querySelector<HTMLButtonElement>('.session-header button')!;
+  Object.defineProperty(screen.getByRole('dialog'), 'close', { configurable:true, value: () => { gear.focus(); } });
+  fireEvent.click(screen.getByRole('button',{name:'Done'}));
+  expect(screen.getByLabelText('Practice input')).toHaveFocus();
+});
 it('does not silently replace unreadable stored data after edits', async () => {
   localStorage.setItem(profileKey, '{damaged'); render(<App/>);
   await screen.findByRole('button', { name: 'Test settings' });

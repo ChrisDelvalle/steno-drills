@@ -1,13 +1,15 @@
-export interface LocalVoice { id: string; name: string; lang: string; default: boolean }
-export interface SpeechEvents { start(): void; end(): void; error(message: string): void }
+export interface LocalVoice { id: string; name: string; lang: string; default: boolean; automatic?: boolean }
+export interface SpeechEvents { start(): void; end(): void; error(message: string): void; status?(message: string): void }
 export interface SpeechAdapter {
   voices(): LocalVoice[];
   subscribe(listener: () => void): () => void;
-  speak(text: string, voice: LocalVoice, rate: number, events: SpeechEvents): void;
-  cancel(): void;
+  speak(text: string, voice: LocalVoice, rate: number, events: SpeechEvents, prompt?: SpokenPrompt): void;
+  prepare?(prompt: SpokenPrompt, upcoming: import('./types').PracticeWord[]): void;
+  cancel(keepPreparation?: boolean): void;
 }
 export function chooseVoice(voices: LocalVoice[], preferred: string) {
-  return voices.find(v => v.id === preferred) || voices.find(v => v.default) || voices[0];
+  const automatic = voices.filter(v => v.automatic !== false);
+  return voices.find(v => v.id === preferred) || automatic.find(v => v.default) || automatic[0];
 }
 export function browserSpeech(): SpeechAdapter {
   const synth = typeof window !== 'undefined' ? window.speechSynthesis : undefined;
@@ -30,27 +32,27 @@ export function browserSpeech(): SpeechAdapter {
     },
   };
 }
-export interface SpokenPrompt { id: string; text: string }
+export interface SpokenPrompt { id: string; text: string; words?: import('./types').PracticeWord[] }
 /** Owns cancellation and activation, independently of input, scoring, and React. */
 export class PromptSpeaker {
   activated = false;
   private generation = 0;
   private prompt: SpokenPrompt | null = null;
   private timeout: ReturnType<typeof setTimeout> | undefined;
-  constructor(private adapter: SpeechAdapter, private events: { start(): void; error(message: string): void }) {}
-  cancel() {
+  constructor(private adapter: SpeechAdapter, private events: { start(): void; error(message: string): void; status?(message: string): void }) {}
+  cancel(keepPreparation = false) {
     this.generation++;
     clearTimeout(this.timeout); this.timeout = undefined;
-    this.adapter.cancel();
+    this.adapter.cancel(keepPreparation);
   }
   update(prompt: SpokenPrompt | null, preferred: string, rate: number, allowed = true) {
     if (prompt?.id === this.prompt?.id) return;
     this.prompt = prompt;
-    this.cancel();
+    this.cancel(Boolean(prompt));
     if (this.activated && prompt && allowed) this.speak(prompt, preferred, rate);
   }
   play(prompt: SpokenPrompt, preferred: string, rate: number) {
-    this.activated = true; this.prompt = prompt; this.cancel(); this.speak(prompt, preferred, rate);
+    this.activated = true; this.prompt = prompt; this.cancel(true); this.speak(prompt, preferred, rate);
   }
   private speak(prompt: SpokenPrompt, preferred: string, rate: number) {
     const voice = chooseVoice(this.adapter.voices(), preferred);
@@ -67,7 +69,8 @@ export class PromptSpeaker {
         start: () => { if (generation === this.generation) { started = true; clear(); this.events.start(); } },
         end: () => { if (generation === this.generation) clear(); },
         error: message => { if (generation === this.generation) { this.cancel(); this.events.error(message); } },
-      });
+        status: message => { if (generation === this.generation) this.events.status?.(message); },
+      }, prompt);
     } catch { this.cancel(); this.events.error('Speech failed. Select Replay to try again.'); }
   }
 }

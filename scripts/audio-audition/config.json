@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "seed": 1729,
+  "sampleRate": 24000,
+  "generationSpeed": 1,
+  "processing": {
+    "trimThresholdDb": -55,
+    "guardMilliseconds": 80,
+    "targetRmsDb": -22,
+    "maximumPeakDb": -1
+  },
+  "qwen": {
+    "temperature": 0.7,
+    "topP": 0.8,
+    "topK": 20,
+    "repetitionPenalty": 1.05,
+    "maxTokens": 64,
+    "terminalPunctuation": ".",
+    "maximumWordSeconds": 2.5,
+    "retryTemperatures": [0.7, 0.7, 0.5, 0.3, 0.1, 0],
+    "instruction": "Clear, neutral American English. Natural speaking pace."
+  },
+  "encoding": {
+    "bitrates": [16, 20, 24],
+    "application": "audio",
+    "frameDuration": 20,
+    "complexity": 10,
+    "vbr": "on"
+  },
+  "models": {
+    "kokoro": {
+      "repository": "mlx-community/Kokoro-82M-bf16",
+      "revision": "a71e4d38b236d968966a2002c4c895dbd12b1c3c"
+    },
+    "qwen": {
+      "repository": "mlx-community/Qwen3-TTS-12Hz-1.7B-CustomVoice-bf16",
+      "revision": "52f4770fd9726457eae3d3b6aa92047a25a10776"
+    }
+  },
+  "voices": [
+    { "id": "heart", "model": "kokoro", "voice": "af_heart", "label": "Heart", "modelLabel": "Kokoro" },
+    { "id": "michael", "model": "kokoro", "voice": "am_michael", "label": "Michael", "modelLabel": "Kokoro" },
+    { "id": "aiden", "model": "qwen", "voice": "Aiden", "label": "Aiden", "modelLabel": "Qwen" },
+    { "id": "ryan", "model": "qwen", "voice": "Ryan", "label": "Ryan", "modelLabel": "Qwen" }
+  ],
+  "words": [
+    "bad", "dad", "name", "main", "feet", "fit", "like", "ride",
+    "judge", "net", "pen", "one", "fan", "van", "thin", "ship",
+    "cap", "cat", "coat", "bit", "bid", "bed", "heat", "hit",
+    "sit", "seat", "pull", "pool", "read", "lead", "wind", "live"
+  ]
+}

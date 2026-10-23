@@ -1,10 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import type { ReactNode } from 'react';
 import { Icon } from '../components';
 
 export function TestSettings({ onClose, navigation, children }: { onClose: () => void; navigation: ReactNode; children: ReactNode }) {
   const dialog = useRef<HTMLDialogElement>(null);
-  useEffect(() => {
+  useLayoutEffect(() => {
     const element = dialog.current;
     if (!element) return;
     if (element.showModal) element.showModal();

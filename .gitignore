@@ -12,3 +12,6 @@ public/dictionary.json
 public/concept-audit.json
 public/sources.lock.json
 public/THIRD_PARTY_NOTICES.txt
+.audio-audition/
+scripts/audio-audition/.venv/
+scripts/audio-audition/__pycache__/

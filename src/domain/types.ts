@@ -92,6 +92,7 @@ export interface Profile {
   customText: string;
   practice: PracticePreferences;
   voice: string;
+  experimental: boolean;
   session: WordPracticeOptions & { listening: ListeningOptions; mode: 'timed' | 'count'; duration: number; count: number; hints: boolean; lines: number; hintPosition: 'above' | 'below'; hintTextSize: HintSize; hintKeyboardSize: HintSize };
 }
 export interface Evaluation {
@@ -101,4 +102,4 @@ export interface Evaluation {
   missing: string[];
   reason: string;
 }
-export interface PracticeWord { word: string; outline?: string }
+export interface PracticeWord { word: string; outline?: string; pronunciations?: string[][] }

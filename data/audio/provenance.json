@@ -1,0 +1,69 @@
+{
+  "voice": "Clear instructor",
+  "syntheticReference": "data/audio/instructor-reference.wav",
+  "recipe": {
+    "version": 1,
+    "model": {
+      "repository": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-bf16",
+      "revision": "a6eb4f68e4b056f1215157bb696209bc82a6db48"
+    },
+    "referenceSha256": "d1d800f1cac528c93060ab577670e39b56876c73b08df05ab6ea8ea4e4102ce9",
+    "referenceText": "A clear voice makes each word easy to hear. Take your time, finish each sound, and leave a short pause before the next word. The bright light fell across the quiet room.",
+    "processing": {
+      "trimThresholdDb": -55,
+      "guardMilliseconds": 80,
+      "targetRmsDb": -22,
+      "maximumPeakDb": -1
+    },
+    "temperatures": [
+      0.5,
+      0.3,
+      0.1,
+      0
+    ],
+    "topP": 0.8,
+    "topK": 20,
+    "maxTokens": 64,
+    "seed": 1729,
+    "packages": {
+      "mlx-audio": "0.6.1",
+      "mlx": "0.32.4",
+      "numpy": "2.5.4",
+      "soundfile": "0.14.0",
+      "misaki": "0.9.4",
+      "transformers": "5.20.2"
+    }
+  },
+  "recipeHash": "951429a96e17e8b9600d7c1d0da7e98859214e057f533f90b6fce927fcd41b40",
+  "catalogSha256": "9319847a74ded516966e91fe451a1d12a24672b13a166d9bf6df09d4acde7591",
+  "dictionarySha256": "5d1380cd28e1822e13c22b5fedb4ae4af8c3723dd5922137227fe5b879b3ab33",
+  "words": 2360,
+  "common": 878,
+  "recordedWords": 2360,
+  "recordedVariants": 2392,
+  "fallback": [
+    {
+      "id": "a|EY",
+      "reason": "Letter-name pronunciation not verified"
+    },
+    {
+      "id": "to|T IH",
+      "reason": "Reduced short-I recording unavailable"
+    }
+  ],
+  "sprites": 40,
+  "audioBytes": 1865211,
+  "generationSeconds": 3107.56,
+  "encoding": {
+    "codec": "libopus",
+    "bitrate": 10000,
+    "vbr": "on",
+    "application": "audio",
+    "frameMilliseconds": 20,
+    "complexity": 10,
+    "bitexactContainer": true,
+    "maximumBytes": 48000,
+    "maximumSamples": 960000,
+    "encoder": "ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers"
+  }
+}

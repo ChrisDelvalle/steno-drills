@@ -1,0 +1,85 @@
+{
+  "date": "2026-10-23",
+  "machine": "Apple M1 Max, 64 GB RAM",
+  "conditions": {
+    "availableDownloadBitsPerSecond": 5000000,
+    "responseLatencyMilliseconds": 100,
+    "connection": "localhost HTTP with Chromium network emulation; established connection; browser HTTP cache disabled",
+    "catalog": "loaded before timing individual uncached words",
+    "cacheStorage": "disabled for benchmark",
+    "voice": "Clear instructor",
+    "codec": "Opus 10 kbps VBR"
+  },
+  "nativePlayback": {
+    "coldMs": [
+      244.20000004768372,
+      231.70000004768372,
+      227.79999995231628,
+      227.60000014305115,
+      229.40000009536743,
+      230.5,
+      229.09999990463257,
+      228.89999985694885,
+      229.5,
+      229.69999980926514
+    ],
+    "warmMs": [
+      2.8000001907348633,
+      3,
+      2.8999998569488525,
+      2.6000001430511475,
+      3.299999952316284,
+      2.700000047683716,
+      2.6999998092651367,
+      2.8000001907348633,
+      2.799999952316284,
+      2.3999998569488525
+    ],
+    "coldP95": 244.20000004768372,
+    "warmP95": 3.299999952316284
+  },
+  "syntheticWorstOrder": {
+    "bundleBytes": 47920,
+    "bundleSeconds": 39.830666666666666,
+    "cold": {
+      "medianMs": 227.29999995231628,
+      "p95Ms": 232.80000019073486,
+      "samples": [
+        232.80000019073486,
+        226.5,
+        227.29999995231628,
+        227.80000019073486,
+        230.5,
+        226,
+        230.40000009536743,
+        225.29999995231628,
+        227.70000004768372,
+        224.10000014305115,
+        226,
+        228.60000014305115
+      ]
+    },
+    "group3Ms": 387.59999990463257,
+    "initial21Ms": 2378.100000143051,
+    "stress": {
+      "words": 225,
+      "elapsedMs": 59735.299999952316,
+      "medianMs": 0,
+      "p95Ms": 0.10000014305114746,
+      "late": [],
+      "maxPcm": 12006900,
+      "maxCompressed": 10782340,
+      "maxInflight": 4,
+      "fetches": 204,
+      "downloaded": 9776009
+    }
+  },
+  "notes": [
+    "Cold playback includes sprite fetch, checksum, decode, clip extraction, WAV assembly, and the audio playing event.",
+    "The synthetic test has 225 distinct near-limit sprites, representing a larger future collection; it does not generate the full indexed dictionary.",
+    "The first 21 targets were prepared before the 60-second stress run. Startup preload is measured separately.",
+    "Total sprite bytes including preload: 10782340. HTTP headers are not counted.",
+    "Prepared transition latency in the stress test measures clip availability; the separate nativePlayback test includes audio-element startup.",
+    "Results are controlled reference-machine measurements, not latency guarantees for all networks or devices."
+  ]
+}

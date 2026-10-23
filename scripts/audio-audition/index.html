@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Audio auditions</title>
+<style>
+  :root { color-scheme: dark; font: 15px/1.5 system-ui, sans-serif; color: #d1d0c5; background: #323437; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; }
+  main { max-width: 1000px; height: 100dvh; margin: auto; padding: 24px; display: flex; flex-direction: column; }
+  .controls { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: end; }
+  label { display: flex; gap: 8px; align-items: center; }
+  select, button { font: inherit; color: inherit; background: #292b2e; border: 1px solid #55575a; border-radius: 5px; padding: 6px 12px; }
+  button { cursor: pointer; }
+  button:disabled { opacity: .35; cursor: default; }
+  button:hover:not(:disabled) { color: #fff; }
+  :focus-visible { outline: 2px solid #e2b714; outline-offset: 3px; }
+  #status { min-height: 24px; margin: 12px 0; color: #a3a39c; font-size: 13px; }
+  #status.error { color: #ef7a85; }
+  #sequence { margin: 16px 0 0; color: #a3a39c; font-size: 13px; }
+  .table-scroll { overflow: auto; flex: 1; min-height: 0; }
+  table { width: 100%; min-width: 540px; border-collapse: separate; border-spacing: 0; table-layout: fixed; }
+  th, td { padding: 10px 14px; text-align: center; border-bottom: 1px solid #424447; }
+  thead th { position: sticky; top: 0; z-index: 2; background: #323437; font-weight: 500; }
+  thead th span { display: block; font-size: 12px; color: #a3a39c; font-weight: 400; }
+  th:first-child { width: 56%; text-align: left; position: sticky; left: 0; background: #323437; z-index: 1; }
+  thead th:first-child { z-index: 3; }
+  tbody th { font-weight: 400; }
+  tbody button { min-width: 78px; background: transparent; border-color: transparent; color: #a3a39c; }
+  tbody button[aria-pressed="true"] { color: #e2b714; background: #292b2e; }
+  .word-note { display: block; color: #a3a39c; font-size: 11px; }
+  .detail { display: block; font-size: 12px; color: #a3a39c; }
+  @media (max-width: 600px) { main { padding: 16px 12px; } .controls { gap: 10px 14px; } th, td { padding: 10px; } table { min-width: 500px; } th:first-child { width: 40%; } }
+</style>
+<main>
+  <div class="controls">
+    <label>Compare <select id="comparison"><option value="voices">Voices</option><option value="instructor">Clear instructor</option></select></label>
+    <label id="quality-control">Quality <select id="quality"><option value="original">Original</option><option value="16">16 kbps</option><option value="20">20 kbps</option><option value="24">24 kbps</option></select></label>
+    <label>Speed <select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
+    <label>Word <select id="word" aria-label="Individual word"></select></label>
+    <button id="stop" disabled>Stop</button>
+  </div>
+  <p id="sequence"></p>
+  <div id="status" role="status" aria-live="polite">Loading samples…</div>
+  <div class="table-scroll" role="region" aria-label="Voice comparison" tabindex="0">
+    <table aria-label="Audio auditions"><thead><tr><th scope="col">Candidate</th><th scope="col">Sequence</th><th scope="col" id="word-column">Word</th></tr></thead><tbody id="words"></tbody></table>
+  </div>
+</main>
+<script type="module">
+  const quality = document.querySelector('#quality');
+  const comparison = document.querySelector('#comparison');
+  comparison.value = new URL(location.href).searchParams.get('compare') === 'instructor' ? 'instructor' : 'voices';
+  const speed = document.querySelector('#speed');
+  const selectedWord = document.querySelector('#word');
+  const stopButton = document.querySelector('#stop');
+  const status = document.querySelector('#status');
+  const audio = new Audio();
+  audio.preload = 'auto';
+  audio.preservesPitch = true;
+  let data, active, generation = 0, rendered = '', loadRequest = 0;
+  const buttons = new Map();
+
+  function message(text = '', error = false) {
+    status.textContent = text;
+    status.classList.toggle('error', error);
+  }
+  function stop() {
+    generation++;
+    audio.onended = audio.onerror = null;
+    audio.pause();
+    audio.removeAttribute('src');
+    audio.load();
+    if (active) { active.button.setAttribute('aria-pressed', 'false'); active.button.textContent = 'Play'; }
+    active = null;
+    stopButton.disabled = true;
+  }
+  function idle() {
+    if (active) { active.button.setAttribute('aria-pressed', 'false'); active.button.textContent = 'Play'; }
+    active = null;
+    stopButton.disabled = true;
+  }
+  function summary() {
+    if (!data?.complete) return `${data?.ready || 0} of ${data?.total || 128} recordings ready`;
+    return '';
+  }
+  async function play(word, voice, button) {
+    const clip = (word === 'sequence' ? data.sequences?.[voice.id] : data.clips[voice.id]?.[word])?.[voice.quality || quality.value];
+    stop();
+    if (!clip) { message('This sample is not ready.', true); return; }
+    const current = generation;
+    active = { word, voice, button };
+    button.setAttribute('aria-pressed', 'true'); button.textContent = 'Playing';
+    stopButton.disabled = false;
+    message(voice.quality ? `${word} · Clear instructor · ${voice.label}` : `${word} · ${voice.label} · ${quality.selectedOptions[0].textContent}`);
+    audio.src = clip.url;
+    audio.playbackRate = Number(speed.value);
+    audio.preservesPitch = true;
+    audio.onended = () => { if (current === generation && audio.ended) { idle(); message(summary()); } };
+    audio.onerror = () => { if (current === generation && active && audio.error) { stop(); message('Could not play this sample.', true); } };
+    try { await audio.play(); }
+    catch (error) {
+      if (current !== generation) return;
+      stop();
+      message(error.name === 'NotAllowedError' ? 'Playback blocked. Select Play again.' : 'Could not play this sample.', true);
+    }
+  }
+  stopButton.addEventListener('click', () => { stop(); message(summary()); });
+  quality.addEventListener('change', () => {
+    const previous = active;
+    updateButtons();
+    if (previous) void play(previous.word, previous.voice, previous.button);
+    else { stop(); message(summary()); }
+  });
+  selectedWord.addEventListener('change', () => {
+    const previous = active;
+    updateButtons();
+    if (previous && previous.word !== 'sequence') void play(selectedWord.value, previous.voice, previous.button);
+  });
+  speed.addEventListener('change', () => { audio.playbackRate = Number(speed.value); audio.preservesPitch = true; });
+  comparison.addEventListener('change', () => {
+    stop();
+    data = null; rendered = ''; buttons.clear();
+    document.querySelector('#words').replaceChildren();
+    const url = new URL(location.href);
+    if (comparison.value === 'instructor') url.searchParams.set('compare', 'instructor');
+    else url.searchParams.delete('compare');
+    history.replaceState(null, '', url);
+    void load();
+  });
+  window.addEventListener('pagehide', stop);
+  document.addEventListener('visibilitychange', () => { if (document.hidden) { stop(); message(summary()); } });
+
+  function updateButtons() {
+    document.querySelector('#word-column').textContent = selectedWord.value || 'Word';
+    for (const { button, voice, kind } of buttons.values()) {
+      const word = kind === 'sequence' ? kind : selectedWord.value;
+      const formats = kind === 'sequence' ? data.sequences?.[voice.id] : data.clips[voice.id]?.[word];
+      button.disabled = !formats?.[voice.quality || quality.value];
+      button.setAttribute('aria-label', `Play ${word} with ${voice.label} (${voice.modelLabel})`);
+    }
+  }
+  function render(next) {
+    data = next;
+    document.querySelector('thead th').textContent = data.compression ? 'Bitrate' : 'Candidate';
+    const schema = data.voices.map(v => v.id).join(',');
+    if (rendered !== schema) {
+      if (active) stop();
+      rendered = schema;
+      buttons.clear();
+      document.querySelector('#words').replaceChildren();
+      const previousWord = selectedWord.value;
+      selectedWord.replaceChildren(...data.words.map(word => {
+        const option = document.createElement('option'); option.value = word;
+        option.textContent = word + (data.notes?.[word] ? ' · ambiguous' : ''); return option;
+      }));
+      if (data.words.includes(previousWord)) selectedWord.value = previousWord;
+      document.querySelector('#sequence').textContent = data.sequence ? `${data.sequence.words.join(' · ')} — ${data.sequence.pauseMilliseconds} ms pauses` : '';
+      for (const voice of data.voices) {
+        const row = document.createElement('tr'); row.dataset.voice = voice.id;
+        const th = document.createElement('th'); th.scope = 'row'; th.textContent = voice.label;
+        const detail = document.createElement('span'); detail.className = 'detail';
+        detail.textContent = voice.quality ? voice.detail : `${voice.modelLabel} · ${voice.detail || 'Original audition'}`;
+        th.append(detail); row.append(th);
+        for (const kind of ['sequence', 'word']) {
+          const td = document.createElement('td'), button = document.createElement('button');
+          button.type = 'button'; button.textContent = 'Play'; button.setAttribute('aria-pressed', 'false');
+          button.dataset.kind = kind; button.dataset.voice = voice.id;
+          button.addEventListener('click', () => { void play(kind === 'sequence' ? kind : selectedWord.value, voice, button); });
+          buttons.set(`${voice.id}:${kind}`, { button, voice, kind }); td.append(button); row.append(td);
+        }
+        document.querySelector('#words').append(row);
+      }
+    }
+    updateButtons();
+    if (!active) message(summary());
+  }
+  function compressionView(source) {
+    const voices = source.qualities.map(quality => ({ id: `instructor${quality}`, quality,
+      label: quality === 'original' ? 'Original' : `${quality} kbps`, modelLabel: source.voice.label,
+      detail: `${(source.sequences[quality].bytes / 1000).toFixed(1)} KB sequence` }));
+    return { ...source, voices, compression: true,
+      clips: Object.fromEntries(voices.map(voice => [voice.id, source.clips])),
+      sequences: Object.fromEntries(voices.map(voice => [voice.id, source.sequences])),
+      ready: source.words.length * voices.length, total: source.words.length * voices.length };
+  }
+  async function load() {
+    const request = ++loadRequest, mode = comparison.value;
+    document.querySelector('#quality-control').hidden = mode === 'instructor';
+    if (!data) message('Loading samples…');
+    try {
+      let response = await fetch(mode === 'instructor' ? '/compression.json' : '/candidates.json', { cache: 'no-store' });
+      if (response.status === 404 && mode === 'voices') response = await fetch('/auditions.json', { cache: 'no-store' });
+      if (!response.ok) throw new Error();
+      const source = await response.json();
+      if (request !== loadRequest) return;
+      render(mode === 'instructor' ? compressionView(source) : source);
+      if (!data.complete) setTimeout(() => { if (mode === comparison.value) void load(); }, 5000);
+    } catch {
+      if (request === loadRequest) message(`Samples unavailable. Run npm run audio:audition:${mode === 'instructor' ? 'compress' : 'candidates'}, then reload.`, true);
+    }
+  }
+  void load();
+</script>
+</html>

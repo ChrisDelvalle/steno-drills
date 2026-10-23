@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "sequence": {
+    "words": ["judge", "name", "fit", "van", "lead", "feet", "pull", "thin", "main", "wind"],
+    "pauseMilliseconds": 450
+  },
+  "models": {
+    "design": {
+      "repository": "mlx-community/Qwen3-TTS-12Hz-1.7B-VoiceDesign-bf16",
+      "revision": "7d3824abff87e49756bb0f83fb5411de75d160c4"
+    },
+    "clone": {
+      "repository": "mlx-community/Qwen3-TTS-12Hz-1.7B-Base-bf16",
+      "revision": "a6eb4f68e4b056f1215157bb696209bc82a6db48"
+    }
+  },
+  "referenceText": "A clear voice makes each word easy to hear. Take your time, finish each sound, and leave a short pause before the next word. The bright light fell across the quiet room.",
+  "context": { "batchSize": 8, "paddingMilliseconds": 65 },
+  "qwen": {
+    "retryTemperatures": [0.5, 0.3, 0.1, 0],
+    "instruction": "A calm adult male voice in a comfortable lower register. Neutral American English, restrained and steady intonation, precise consonants, fully articulated word endings, and deliberate unhurried diction. Speak naturally and plainly, without breathiness, theatrical emphasis, or a singsong delivery."
+  },
+  "voices": [
+    { "id": "michaelslow", "model": "kokoro", "voice": "am_michael", "speed": 0.85, "label": "Michael · slower", "modelLabel": "Kokoro", "detail": "0.85× synthesis; original voice" },
+    { "id": "michaelfull", "model": "reuse", "source": "michael", "gainReference": "trimmed", "label": "Michael · untrimmed", "modelLabel": "Kokoro", "detail": "Original timing and matched gain; checks silence trimming" },
+    { "id": "michaelcontext", "model": "kokoro", "voice": "am_michael", "context": true, "label": "Michael · context", "modelLabel": "Kokoro", "detail": "Generated in eight-word lists, then separated" },
+    { "id": "michaelcontextslow", "model": "kokoro", "voice": "am_michael", "context": true, "speed": 0.85, "label": "Michael · context + slower", "modelLabel": "Kokoro", "detail": "Eight-word lists at 0.85× synthesis" },
+    { "id": "michaellongcontext", "model": "kokoro", "voice": "am_michael", "context": true, "batchSize": 32, "speed": 0.9, "label": "Michael · longer context", "modelLabel": "Kokoro", "detail": "One 32-word list at 0.9× synthesis" },
+    { "id": "fenrir", "model": "kokoro", "voice": "am_fenrir", "label": "Fenrir", "modelLabel": "Kokoro", "detail": "Alternative American male voice" },
+    { "id": "michaelblend", "model": "kokoro", "voice": "am_michael,am_fenrir", "speed": 0.9, "label": "Michael / Fenrir", "modelLabel": "Kokoro", "detail": "Equal voice blend at 0.9× synthesis" },
+    { "id": "heartcontext", "model": "kokoro", "voice": "af_heart", "context": true, "speed": 0.9, "label": "Heart · context", "modelLabel": "Kokoro", "detail": "Eight-word lists at 0.9× synthesis" },
+    { "id": "aidenclear", "model": "qwen", "voice": "Aiden", "label": "Aiden · restrained", "modelLabel": "Qwen", "detail": "Lower-register, deliberate delivery instructions" },
+    { "id": "ryanclear", "model": "qwen", "voice": "Ryan", "label": "Ryan · restrained", "modelLabel": "Qwen", "detail": "Lower-register, deliberate delivery instructions", "instruction": "Neutral American male voice in a lower register. Calm, steady and clear. Articulate the word at an unhurried natural pace.", "retryTemperatures": [0.7, 0.5, 0.3, 0.1, 0, 0.5, 0.7, 0.3] },
+    { "id": "calm", "model": "clone", "label": "Calm baritone", "modelLabel": "Qwen · designed", "detail": "Synthetic voice design, reused through voice cloning", "description": "A mature American male voice with a natural warm baritone register. Calm, grounded and neutral, with restrained pitch variation. Clean dry studio recording, clear precise consonants, complete word endings and deliberate diction. Comfortable conversational volume and an unhurried pace. No rasp, vocal fry, breathiness or announcer performance." },
+    { "id": "instructor", "model": "clone", "label": "Clear instructor", "modelLabel": "Qwen · designed", "detail": "A second synthetic design emphasizing clear pronunciation", "description": "An adult male American English instructor with a clear natural middle-low register. Plain, patient and precise speech with crisp but natural consonants and distinct vowel contrasts. Steady restrained intonation and a slightly slower educational speaking pace. Clean close studio sound, without a dramatic bass voice, breathiness, vocal fry, excessive enthusiasm or singing." }
+  ]
+}

@@ -7,6 +7,7 @@ import { textTranslator } from '../domain/translation';
 import { assistedPractice, projectWordPractice, wordPracticeDefaults, wordPracticeMetrics, scoreWordPractice, rebaseRecovery } from '../domain/wordPractice';
 import { browserSpeech, PromptSpeaker } from '../domain/speech';
 import type { SpeechAdapter } from '../domain/speech';
+import { recordedVoiceId } from '../domain/recordedAudio';
 import { listeningDefaults } from '../domain/listening';
 import { PracticeSurface } from './PracticeSurface';
 
@@ -21,6 +22,7 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
   const audio = active.kind === 'words' && listening.enabled;
   const display = audio ? listening.display : 'full';
   const [speechError, setSpeechError] = useState('');
+  const [speechNotice, setSpeechNotice] = useState('');
   const [activated, setActivated] = useState(false);
   const [epoch, setEpoch] = useState(0);
   const epochRef = useRef(0);
@@ -63,15 +65,18 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     start: () => { const at = performance.now(); setSpeechError(''); setStartedAt(previous => previous ?? at); },
     error: message => { setSpeechError(message); setControlsHidden(false); },
   };
-  const speaker = useMemo(() => new PromptSpeaker(adapter, { start: () => speechCallbacks.current.start(), error: message => speechCallbacks.current.error(message) }), [adapter]);
+  const speaker = useMemo(() => new PromptSpeaker(adapter, { start: () => speechCallbacks.current.start(), error: message => speechCallbacks.current.error(message), status: setSpeechNotice }), [adapter]);
   // Keep the first cue queued while accepting early typing. An exact tail must
   // not cancel it before its start callback can establish the session clock.
   const spokenPrompt = !audio ? null : startedAt === null && targets.length ? {
-    id: `${epoch}:0:0`, text: targets.slice(0, options.groupSize).map(w => w.word).join(' '),
-  } : prompt && prompt.start < prompt.end ? { id: promptId, text: targets.slice(prompt.start, prompt.end).map(w => w.word).join(' ') } : null;
+    id: `${epoch}:0:0`, text: targets.slice(0, options.groupSize).map(w => w.word).join(' '), words: targets.slice(0, options.groupSize),
+  } : prompt && prompt.start < prompt.end ? { id: promptId, text: targets.slice(prompt.start, prompt.end).map(w => w.word).join(' '), words: targets.slice(prompt.start, prompt.end) } : null;
   useEffect(() => {
     speaker.update(!suspended && !finished ? spokenPrompt : null, active.voice || '', listening.rate, playbackAllowed.current && document.hasFocus() && document.visibilityState !== 'hidden');
   }, [speaker, spokenPrompt?.id, suspended, finished, active.voice, listening.rate]);
+  useEffect(() => {
+    if (spokenPrompt && !suspended && !finished && active.voice === recordedVoiceId) adapter.prepare?.(spokenPrompt, targets.slice((startedAt === null ? options.groupSize : prompt?.end || 0), (startedAt === null ? options.groupSize : prompt?.end || 0) + 20));
+  }, [adapter, spokenPrompt?.id, suspended, finished, active.voice, targets]);
   useEffect(() => {
     const cancel = () => speaker.cancel();
     const visibility = () => { if (document.visibilityState === 'hidden') cancel(); };
@@ -101,10 +106,10 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     const nextListening = next.listening || listeningDefaults();
     const startAudio = replay && next.kind === 'words' && nextListening.enabled && nextTargets.length > 0;
     inputAllowed.current = startAudio; playbackAllowed.current = replay;
-    speaker.cancel(); setActivated(startAudio); setEpoch(nextEpoch); setSpeechError(''); setRevealedPrompt('');
+    speaker.cancel(); setActivated(startAudio); setEpoch(nextEpoch); setSpeechError(''); setSpeechNotice(''); setRevealedPrompt('');
     setActive(next); setTargets(nextTargets); setInput(''); latestInput.current = '';
     setStartedAt(null); setElapsed(0); setFinished(false); setControlsHidden(false); setCursor(0); history.current = []; errors.current = []; typing.current = []; incorrectChars.current = 0; recovery.current.clear(); focus();
-    if (startAudio) speaker.play({ id: `${nextEpoch}:0:0`, text: nextTargets.slice(0, next.groupSize || 1).map(w => w.word).join(' ') }, next.voice || '', nextListening.rate);
+    if (startAudio) speaker.play({ id: `${nextEpoch}:0:0`, text: nextTargets.slice(0, next.groupSize || 1).map(w => w.word).join(' '), words: nextTargets.slice(0, next.groupSize || 1) }, next.voice || '', nextListening.rate);
   };
   const previousSuspended = useRef(suspended);
   useLayoutEffect(() => {
@@ -212,7 +217,7 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
       }}/>
       <div className="test-actions session-controls">{audio && <button className="text-button audio-play" onClick={play}><Icon name="practice" size={18}/>{activated ? 'Replay' : 'Play'}</button>}<button className="icon-button" aria-label="Restart" title="Restart (Enter)" onClick={() => reset()}><Icon name="refresh"/></button><button className="icon-button hint-toggle" aria-label="Hints" title={active.questionHints ? options.inputMode === 'steno' ? 'Hints (?)' : 'Hints (? / H-F)' : 'Hints'} aria-pressed={hintsVisible} onClick={toggleHints}><Icon name="hint"/></button><button className="text-button small session-finish" disabled={startedAt === null} onClick={finish}>Finish</button></div>
       {active.hintPosition === 'below' && <div className="hint-slot hint-below">{hint}</div>}
-      {audio && <div className="speech-status" role="status">{speechError && <span className="error">{speechError}</span>}</div>}
+      {audio && <div className="speech-status" role="status">{speechError ? <span className="error">{speechError}</span> : speechNotice}</div>}
       {active.attribution && <p className="small muted passage-source session-controls">{active.attribution}</p>}
       <span className="sr-only">{score.completed} {active.kind === 'chords' ? 'chords' : 'words'} submitted{active.mode === 'count' ? ` of ${targets.length}` : ''}</span>
     </div> : <section className="session-results" tabIndex={-1} ref={resultsRef} aria-label="Practice results">

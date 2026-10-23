@@ -74,6 +74,8 @@ const notices = [
   await readFile(new URL('node_modules/@fontsource/roboto-mono/LICENSE', root), 'utf8'),
   'Chart.js: results analytics rendering. License follows.',
   await readFile(new URL('node_modules/chart.js/LICENSE.md', root), 'utf8'),
+  'Clear instructor: locally generated synthetic speech using the pinned Qwen3-TTS Base model and a synthetic VoiceDesign reference. No human voice recording was used. Model revisions, reference provenance, audio recipe, and coverage are in data/audio in this repository. Models identify their license as Apache-2.0; model weights are not distributed with this site.',
+  await readFile(new URL('data/audio/MODEL_LICENSE.txt', root), 'utf8'),
 ].join('\n\n');
 await mkdir(new URL('public/', root), { recursive: true });
 for (const [file, contents] of [['dictionary.json', json], ['concept-audit.json', conceptAudit], ['sources.lock.json', JSON.stringify(lock, null, 2) + '\n'], ['THIRD_PARTY_NOTICES.txt', notices]]) {
