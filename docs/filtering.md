@@ -32,6 +32,8 @@ Add a sound/key rule with a stable concept ID, add positive and negative classif
 
 Practice and Word Bank share a concept selector. **Single keys** selects only position-specific single-key sound concepts. **Starter** uses the original starter defaults. **Skills** follows the current learned profile. **All** explicitly selects all supported rules and briefs; unexplained outlines still do not qualify. **Custom** stores an independent checklist seeded from the previous selection. Changing practice selections never edits learned skills.
 
+Skills provides global Select all and Clear actions beside Use starter, in addition to each section's actions. Test settings groups exercise, session, repetition, and audio controls, with appearance controls under Display. Reset defaults restores Words, Common vocabulary, personal Skills, and the default session/display options. It retains learned Skills, voice preference, lists, saved filters, corrections, exclusions, and authored text/patterns.
+
 Named word lessons and personal lists use this filter by default. Turning off “Filter by concepts” makes their fixed membership unrestricted. Saved filters store criteria and expand with Skills; explicit lists keep their membership. Legacy single-focus filters still work and can be cleared in the selector.
 
 The homepage remembers the exercise source and all exercise parameters, alongside concept selection and session length. Older version 1 backups receive defaults for the new parameters during validation, including three rows, hints above the test, and large hint text and keyboard sizes. Malformed backups remain atomic failures and never replace current data.

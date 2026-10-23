@@ -84,7 +84,9 @@ hr { height: 1px; border: 0; background: var(--border); margin: 28px 0; }
 .notice.compact, .notice.warning { display: block; }
 .notice.warning { background: var(--warning-bg); border: 1px solid var(--warning-border); }
 .notice.warning button { margin-top: 15px; }
-.skills-overview { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 35px; }
+.skills-overview { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 15px; margin-bottom: 35px; }
+.skills-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; }
+.skills-actions .selection-actions { margin-left: 0; }
 .skill-section { margin-bottom: 35px; }
 .skill-section legend, .concept-group legend { width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; }
 .selection-actions { display: inline-flex; flex-shrink: 0; gap: 14px; margin-left: auto; }
@@ -326,6 +328,17 @@ kbd { font: inherit; color: var(--page); background: var(--muted); border-radius
 .settings-content .practice-setup { margin: 0 auto; }
 .settings-content .start-button { margin-top: 16px; }
 .settings-content .test-settings-actions .start-button { width: auto; min-width: 100px; margin: 0; }
+.test-options { min-width: 0; margin: 0 0 24px; padding: 24px 0 0; border: 0; border-top: 1px solid var(--border); }
+.test-options > :last-child { margin-bottom: 0; }
+.test-options > .check-line:first-child { margin-top: 0; }
+.test-options legend { float: left; width: 100%; margin-bottom: 16px; color: var(--muted); font-size: 12px; }
+.test-options legend + * { clear: both; }
+.exercise-options { border-top: 0; padding-top: 0; }
+.exercise-options > .field:first-child { margin-top: 0; }
+.word-practice-options .session-options > .field { margin-top: 0; }
+.test-display-options summary { color: var(--muted); font-size: 12px; }
+.test-display-options[open] summary { margin-bottom: 20px; }
+.reset-test-settings { color: var(--muted); }
 @media (max-width: 700px) {
   .session-shell { padding: 24px 24px 20px; }
   .session-brand { font-size: 22px; }

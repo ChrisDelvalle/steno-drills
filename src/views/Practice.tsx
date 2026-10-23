@@ -14,6 +14,7 @@ import { recordedSpeech, recordedVoiceId } from '../domain/recordedAudio';
 import { analyzeOutline } from '../domain/classifier';
 import { useSpeechVoices } from '../useSpeechVoices';
 import { wordPracticeDefaults } from '../domain/wordPractice';
+import { defaultProfile } from '../domain/profile';
 import { PracticeSession } from './Session';
 import { TestSettings } from './TestSettings';
 import { ShareControls } from './ShareControls';
@@ -60,6 +61,13 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
   const isRaw = source === 'chords' || source === 'fingers';
   const ordered = ['fingers','sentences','two-key','quotes','number-sentences','text'].includes(source);
   const updateSession = (patch: Partial<typeof session>) => setProfile(p => ({ ...p, session: { ...p.session, ...patch } }));
+  const resetSettings = () => setProfile(p => {
+    const defaults = defaultProfile();
+    const { lines, hintPosition, hintTextSize, hintKeyboardSize } = p.session;
+    return { ...p, practice: { ...defaults.practice, customPatterns: p.practice.customPatterns },
+      filter: shared ? { ...defaults.filter, concepts: { mode: 'starter', selected: [] } } : defaults.filter,
+      session: shared ? { ...defaults.session, lines, hintPosition, hintTextSize, hintKeyboardSize } : defaults.session };
+  });
   const updateFilter = (next: Filter) => setProfile(p => saved ? { ...p, exercises: p.exercises.map(e => e.id === saved.id ? { ...e, filter: next } : e) } : { ...p, filter: next });
   const patterns = fingerBook === 'custom' ? customPatterns.toUpperCase().trim().split(/\s+/).filter(Boolean) : fingerBook === 'technique' ? techniqueSections['1A'] : fingerSections[section];
   const activePatterns = fingerBook === 'custom' || pattern === -1 ? patterns : patterns.slice(pattern, pattern + 1);
@@ -103,6 +111,7 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
   const sessionKey = JSON.stringify({ listening: isWords ? session.listening : null, preferences, filter, learned: profile.learned, corrections: profile.corrections, excluded: profile.excluded, text: profile.customText, lists: profile.lists, mode: session.mode, duration: session.duration, count: session.count, inputMode: session.inputMode, groupSize: session.groupSize, repetitions: session.repetitions, requireCorrect: session.requireCorrect, repeatOnError: session.repeatOnError, errorRepetitions: session.errorRepetitions });
   const controls = <section className="practice-setup" aria-label="Practice setup">
     {shared && <div className="shared-test"><span className="small muted">Shared test</span><button className="text-button small" onClick={saveShared}>Save settings</button><button className="text-button small" onClick={exitShared}>Exit</button></div>}
+    <fieldset className="test-options exercise-options" aria-label="Exercise settings">
     <label className="field">Exercise<select aria-label="Exercise" value={source} onChange={e => setSource(e.target.value)}>
       {builtins.filter(([id]) => !shared || id !== 'text').map(([id, label]) => <option key={id} value={id}>{label}</option>)}
       {profile.lists.length > 0 && <optgroup label="My lists">{profile.lists.map(l => <option key={l.id} value={`list:${l.id}`}>{l.name}</option>)}</optgroup>}
@@ -129,31 +138,37 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
     {source === 'quotes' && <label className="field">Quote length<select aria-label="Quote length" value={quoteLength} onChange={e => setQuoteLength(e.target.value as typeof quoteLength)}><option value="short">Short</option><option value="medium">Medium</option><option value="long">Long</option></select></label>}
     {source === 'symbols' && <><label className="check-line"><input type="checkbox" checked={symbolVariants} onChange={e => setSymbolVariants(e.target.checked)}/>Include variants</label><p className="field-note">Enable Emily’s Symbols with spacing.</p></>}
     {source === 'text' && <label className="field">Text<textarea rows={6} maxLength={100000} value={profile.customText} onChange={e => setProfile(p => ({ ...p, customText: e.target.value }))} placeholder="Paste text…"/></label>}
-    <hr/>
+    </fieldset>
+    <fieldset className="test-options" aria-label="Session settings">
     <div className="session-options"><label>Session<select aria-label="Session" value={session.mode} onChange={e => updateSession({ mode: e.target.value as 'timed' | 'count' })}><option value="timed">Timed</option><option value="count">{ordered ? 'Passage' : 'Count'}</option></select></label>
       {session.mode === 'timed' ? <label>Duration<select aria-label="Duration" value={session.duration} onChange={e => updateSession({ duration: +e.target.value })}>{[30,60,90,120,300].map(n => <option value={n} key={n}>{n}s</option>)}</select></label> : (!ordered || ['sentences','number-sentences'].includes(source)) && <label>Length<select aria-label="Length" value={session.count} onChange={e => updateSession({ count: +e.target.value })}>{[10,25,50,100,250,500].map(n => <option value={n} key={n}>{n} {isRaw ? 'strokes' : 'words'}</option>)}</select></label>}
     </div>
-    {isWords && <div className="word-practice-options">
+    {isWords && <>
       <label className="check-line"><input type="checkbox" checked={session.inputMode === 'steno'} onChange={e => updateSession({ inputMode: e.target.checked ? 'steno' : 'text' })}/>Raw steno input</label>
       {session.inputMode === 'steno' && <p className="field-note">Spaces separate attempts; / joins strokes. Dictionary words only.{unavailableRaw > 0 && ` ${unavailableRaw} unavailable in raw mode.`}</p>}
+    </>}
+    </fieldset>
+    {isWords && <fieldset className="test-options word-practice-options"><legend>Repetition</legend>
       <div className="session-options"><label className="field">Group size<select aria-label="Group size" value={session.groupSize} onChange={e => updateSession({ groupSize: +e.target.value })}>{Array.from({ length: 10 }, (_, i) => <option key={i} value={i + 1}>{i + 1} {i === 0 ? 'word' : 'words'}</option>)}</select></label>
       <label className="field">Repetitions<select aria-label="Repetitions" value={session.repetitions} onChange={e => updateSession({ repetitions: +e.target.value })}>{Array.from({ length: 10 }, (_, i) => <option key={i} value={i + 1}>{i + 1}</option>)}</select></label></div>
       <label className="check-line"><input type="checkbox" checked={session.requireCorrect} onChange={e => updateSession({ requireCorrect: e.target.checked })}/>Require correct</label>
       <label className="check-line"><input type="checkbox" checked={session.repeatOnError} onChange={e => updateSession({ repeatOnError: e.target.checked })}/>Repeat on error</label>
       {session.repeatOnError && <label className="field">Error repetitions<select aria-label="Error repetitions" value={session.errorRepetitions} onChange={e => updateSession({ errorRepetitions: +e.target.value })}>{Array.from({ length: 10 }, (_, i) => <option key={i} value={i + 1}>{i + 1}</option>)}</select><span className="field-help">Mistakes restart the count.</span></label>}
-    </div>}
-    {isWords && <div className="listening-options">
+    </fieldset>}
+    {isWords && <fieldset className="test-options listening-options" aria-label="Audio settings">
       <label className="check-line"><input type="checkbox" checked={session.listening.enabled} onChange={e => updateSession({ listening: { ...session.listening, enabled: e.target.checked } })}/>Audio</label>
       {session.listening.enabled && <>
         <label className="field">Voice<select aria-label="Voice" value={personal.voice} onChange={e => setPersonal(p => ({ ...p, voice: e.target.value }))}><option value="">Automatic · Clear instructor</option>{personal.voice && personal.voice !== recordedVoiceId && !voices.some(v => v.id === personal.voice) && <option value={personal.voice}>Saved voice · unavailable</option>}{voices.map(v => <option key={v.id} value={v.id}>{v.name}{v.id !== recordedVoiceId && ` · ${v.lang}`}</option>)}</select></label>
         <div className="session-options"><label>Speed<select aria-label="Speed" value={session.listening.rate} onChange={e => updateSession({ listening: { ...session.listening, rate: +e.target.value } })}>{speechRates.map(n => <option key={n} value={n}>{n}×</option>)}</select></label><label>Text<select aria-label="Text display" value={session.listening.display} onChange={e => updateSession({ listening: { ...session.listening, display: e.target.value as typeof session.listening.display } })}><option value="full">Full</option><option value="current">Current</option><option value="hidden">Hidden</option></select></label></div>
       </>}
-    </div>}
+    </fieldset>}
+    <details className="test-options test-display-options"><summary>Display</summary>
     <label className="check-line"><input type="checkbox" checked={session.hints} onChange={e => updateSession({ hints: e.target.checked })}/>Hints</label>
     <div className="session-options"><label>Lines<select aria-label="Lines" value={session.lines} onChange={e => updateSession({ lines: +e.target.value })}>{[3,4,5,6,7,8].map(n => <option key={n}>{n}</option>)}</select></label><label>Hint position<select aria-label="Hint position" value={session.hintPosition} onChange={e => updateSession({ hintPosition: e.target.value as 'above' | 'below' })}><option value="above">Above</option><option value="below">Below</option></select></label></div>
     <div className="session-options hint-size-options">{(['hintTextSize','hintKeyboardSize'] as const).map(key => <label key={key}>{key === 'hintTextSize' ? 'Hint text size' : 'Keyboard size'}<select aria-label={key === 'hintTextSize' ? 'Hint text size' : 'Keyboard size'} value={session[key]} onChange={e => updateSession({ [key]: e.target.value as HintSize })}>{(['small','medium','large','extra-large'] as const).map(value => <option key={value} value={value}>{value === 'extra-large' ? 'Extra large' : value[0].toUpperCase() + value.slice(1)}</option>)}</select></label>)}</div>
+    </details>
     {readingError ? <p className="error" role="alert">{readingError}</p> : isReading && reading?.key !== readingKey ? <p className="pool-summary" role="status">Loading exercise…</p> : !inputPractice.pool.length ? <Empty title="No matches">Change the concepts{isWordList ? ' or turn off the filter' : ''}.</Empty> : <div className="pool-summary">{inputPractice.pool.length.toLocaleString()} {isRaw ? inputPractice.pool.length === 1 ? 'stroke' : 'strokes' : inputPractice.pool.length === 1 ? 'word' : 'words'}{practice.unrestricted && <span className="tag">Unrestricted</span>}</div>}
-    <div className="test-settings-actions"><button className="primary start-button" disabled={!inputPractice.pool.length} onClick={onClose}>Done</button><ShareControls profile={profile} disabled={!inputPractice.pool.length}/></div>
+    <div className="test-settings-actions"><button className="primary start-button" disabled={!inputPractice.pool.length} onClick={onClose}>Done</button><ShareControls profile={profile} disabled={!inputPractice.pool.length}/><button type="button" className="text-button small reset-test-settings" onClick={resetSettings}>Reset defaults</button></div>
   </section>;
   return <>
     {inputPractice.pool.length ? <PracticeSession key={sessionKey} config={config} speechAdapter={speech} onExit={onSettings} suspended={settingsOpen} onOptionsChange={updateSession} practiceHref={routeHash('practice')}/> :

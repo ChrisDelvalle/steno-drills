@@ -12,7 +12,7 @@ export function SkillsView() {
     ['special', 'Special rules'], ['brief', 'Briefs'],
   ];
   return <>
-    <div className="skills-overview"><span className="muted small">{profile.learned.length} learned · {eligible.toLocaleString()} words ready</span><button className="secondary small" onClick={() => setProfile(p => ({ ...p, learned: [...starterSkills] }))}>Use starter</button></div>
+    <div className="skills-overview"><span className="muted small">{profile.learned.length} learned · {eligible.toLocaleString()} words ready</span><div className="skills-actions" role="group" aria-label="All skills"><button className="secondary small" onClick={() => setProfile(p => ({ ...p, learned: [...starterSkills] }))}>Use starter</button><SelectionActions selected={profile.learned.length} total={concepts.length} onSelectAll={() => setProfile(p => ({ ...p, learned: concepts.map(c => c.id) }))} onClear={() => setProfile(p => ({ ...p, learned: [] }))}/></div></div>
     {banks.map(([bank, title]) => {
       const group = concepts.filter(c => c.bank === bank);
       const selected = group.filter(c => profile.learned.includes(c.id)).length;

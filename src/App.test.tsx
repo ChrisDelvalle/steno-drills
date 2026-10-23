@@ -5,7 +5,7 @@ import { makeEntry } from './domain/classifier';
 import { defaultProfile, exportBackup, profileKey } from './domain/profile';
 import type { Dictionary } from './domain/types';
 import { decodeSharedTest, encodeSharedTest, normalizeSharedTest, sharedHash } from './domain/sharing';
-import { concepts, conceptBanks } from './domain/concepts';
+import { concepts, conceptBanks, starterSkills } from './domain/concepts';
 
 const dictionary: Dictionary = { version: 1, words: [makeEntry('bad', ['PWAD'], [['B','AE1','D']], 1), makeEntry('dim', ['TKEUPL'], [['D','IH1','M']], 2)], report: { entries: 2, words: 2, monosyllables: 2, classified: 2, starter: 2, starterCommon: 2, missingPronunciation: 0, unexplained: 0 } };
 beforeEach(() => {
@@ -374,6 +374,79 @@ it('selects and clears each Skills group without changing other groups, and pers
   app.unmount(); render(<App/>);
   await screen.findByRole('group', { name: 'Initial sounds' });
   expect(screen.getAllByRole('checkbox').every(box => !(box as HTMLInputElement).checked)).toBe(true);
+});
+
+it('selects and clears all Skills and restores the starter preset without changing other data', async () => {
+  const personal = defaultProfile(); personal.lists = [{ id: 'words', name: 'Words', words: ['bad'] }];
+  localStorage.setItem(profileKey, JSON.stringify(personal));
+  window.location.hash = '#/skills';
+  let app = render(<App/>);
+  const actions = within(await screen.findByRole('group', { name: 'All skills' }));
+  fireEvent.click(actions.getByRole('button', { name: 'Select all' }));
+  expect(screen.getAllByRole('checkbox').every(box => (box as HTMLInputElement).checked)).toBe(true);
+  expect(actions.getByRole('button', { name: 'Select all' })).toBeDisabled();
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual({ ...personal, learned: concepts.map(c => c.id) });
+  fireEvent.click(actions.getByRole('button', { name: 'Clear' }));
+  expect(screen.getAllByRole('checkbox').every(box => !(box as HTMLInputElement).checked)).toBe(true);
+  expect(actions.getByRole('button', { name: 'Clear' })).toBeDisabled();
+  app.unmount(); app = render(<App/>);
+  fireEvent.click(await screen.findByRole('button', { name: 'Use starter' }));
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual({ ...personal, learned: [...starterSkills] });
+});
+
+it('resets test controls without deleting Skills or authored content and persists the defaults', async () => {
+  const personal = defaultProfile();
+  personal.learned = personal.learned.filter(id => id !== 'initial.d');
+  personal.voice = 'saved-local'; personal.theme = 'light';
+  personal.lists = [{ id: 'words', name: 'Words', words: ['bad', 'dim'] }];
+  personal.corrections = [{ word: 'bad', outlines: ['PWAD'], syllables: 1, pronunciation: 'B AE1 D' }];
+  personal.excluded = ['dim']; personal.customText = 'keep this text';
+  personal.practice = { ...personal.practice, source: 'list:words', restricted: false, customPatterns: 'TK/PW' };
+  personal.filter = { ...personal.filter, pool: 'all', focus: 'initial.d', minLength: 3, maxLength: 5, concepts: { mode: 'all', selected: [] } };
+  personal.session = { ...personal.session, mode: 'count', count: 50, duration: 90, repetitions: 3, groupSize: 2, inputMode: 'steno', requireCorrect: true, repeatOnError: true, errorRepetitions: 5, hints: true, lines: 6, hintPosition: 'below', hintTextSize: 'small', hintKeyboardSize: 'medium', listening: { enabled: true, display: 'hidden', rate: 1.5 } };
+  localStorage.setItem(profileKey, JSON.stringify(personal)); window.location.hash = '#/test-settings';
+  const app = render(<App/>);
+  fireEvent.click(await screen.findByRole('button', { name: 'Reset defaults' }));
+  const defaults = defaultProfile();
+  const expected = { ...personal, practice: { ...defaults.practice, customPatterns: 'TK/PW' }, filter: defaults.filter, session: defaults.session };
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(expected);
+  expect(screen.getByLabelText('Exercise')).toHaveValue('bank');
+  expect(screen.getByLabelText('Concepts')).toHaveValue('personal');
+  expect(screen.getByLabelText('Duration')).toHaveValue('60');
+  expect(screen.getByLabelText('Repetitions')).toHaveValue('1');
+  expect(screen.getByLabelText('Audio')).not.toBeChecked();
+  fireEvent.click(screen.getByText('Display', { selector: 'summary' }));
+  expect(screen.getByLabelText('Lines')).toHaveValue('3');
+  expect(screen.getByLabelText('Keyboard size')).toHaveValue('extra-large');
+  app.unmount(); render(<App/>);
+  expect(await screen.findByLabelText('Exercise')).toHaveValue('bank');
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(expected);
+});
+
+it('resets shared tests to explicit starter settings while preserving the personal profile', async () => {
+  const personal = defaultProfile(); personal.learned = []; personal.voice = 'saved-local';
+  personal.session.lines = 7; personal.session.hintPosition = 'below'; personal.session.hintTextSize = 'small'; personal.session.hintKeyboardSize = 'medium';
+  personal.session.repetitions = 5; personal.session.listening = { enabled: true, display: 'hidden', rate: 1.5 };
+  localStorage.setItem(profileKey, JSON.stringify(personal));
+  const teacher = defaultProfile(); teacher.filter.concepts = { mode: 'all', selected: [] };
+  teacher.session = { ...teacher.session, mode: 'count', count: 100, inputMode: 'steno', repetitions: 3, groupSize: 4 };
+  const original = normalizeSharedTest(teacher); if (!original.ok) throw new Error(original.error);
+  window.location.hash = sharedHash('test-settings', encodeSharedTest(original.value));
+  const app = render(<App/>);
+  fireEvent.click(await screen.findByRole('button', { name: 'Reset defaults' }));
+  const expectedProfile = defaultProfile(); expectedProfile.filter.concepts = { mode: 'starter', selected: [] };
+  const expected = normalizeSharedTest(expectedProfile); if (!expected.ok) throw new Error(expected.error);
+  await waitFor(() => expect(window.location.hash).toBe(sharedHash('test-settings', encodeSharedTest(expected.value))));
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
+  app.unmount(); render(<App/>);
+  expect(await screen.findByLabelText('Concepts')).toHaveValue('starter');
+  expect(screen.getByLabelText('Duration')).toHaveValue('60');
+  fireEvent.click(screen.getByText('Display', { selector: 'summary' }));
+  expect(screen.getByLabelText('Lines')).toHaveValue('7');
+  expect(screen.getByLabelText('Hint text size')).toHaveValue('small');
+  fireEvent.click(screen.getByRole('button', { name: 'Exit' }));
+  await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
 });
 
 it('applies per-group custom concept actions to the shared test without altering personal Skills', async () => {

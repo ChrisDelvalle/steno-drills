@@ -2,6 +2,8 @@
 
 In Test settings, choose the exercise and parameters, then select Share. The URL opens immediately into a ready test. Shared settings stay in the URL, separate from the student's profile. Save settings copies test parameters into personal defaults; Exit restores the previous personal test. Appearance controls still use personal preferences. Shared tests always use bundled content, without personal corrections or exclusions.
 
+Reset defaults in a shared test changes the temporary test to Words, Common vocabulary, explicit Starter concepts, and the default session options. It updates the link without changing the personal profile or appearance. Save settings and Exit retain their usual behavior.
+
 Custom word lists, custom text, and custom finger patterns cannot be shared. Saved filters can be shared because their criteria and selected concepts are resolved into the link, without their local IDs or names. Links preserve constraints rather than a fixed word sequence or vocabulary snapshot.
 
 ## V1 wire format
