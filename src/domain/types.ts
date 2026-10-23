@@ -92,6 +92,7 @@ export interface Profile {
   customText: string;
   practice: PracticePreferences;
   voice: string;
+  /** Legacy backup field; recorded voices no longer require opt-in. */
   experimental: boolean;
   session: WordPracticeOptions & { listening: ListeningOptions; mode: 'timed' | 'count'; duration: number; count: number; hints: boolean; lines: number; hintPosition: 'above' | 'below'; hintTextSize: HintSize; hintKeyboardSize: HintSize };
 }

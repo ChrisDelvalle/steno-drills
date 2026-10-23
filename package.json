@@ -19,10 +19,13 @@
     "audio:catalog": "node --import tsx scripts/audio-catalog.ts",
     "audio:generate": "node scripts/audio-audition/generate.mjs --production",
     "audio:pack": "node scripts/audio-audition/generate.mjs --pack",
+    "audio:audit": "node scripts/audio-audition/generate.mjs --audit",
+    "audio:quality": "node scripts/audio-audition/generate.mjs --quality",
     "audio:check": "node --import tsx scripts/audio-catalog.ts --check && node --import tsx scripts/check-audio.ts",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "check": "npm run data:build && npm run typecheck && npm test && npm run data:check && npm run audio:check",
+    "predeploy": "npm run audio:check",
     "deploy": "npm run build && wrangler deploy",
     "deploy:check": "wrangler deploy --dry-run"
   },

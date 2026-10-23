@@ -27,10 +27,12 @@ function browser(available = true): SpeechAdapter {
   return { voices: () => available ? [{ id:'device',name:'Device',lang:'en-US',default:true }] : [], subscribe:()=>()=>{},cancel:vi.fn(),speak:vi.fn() };
 }
 afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); });
-it('requires an explicit recorded-voice selection even when device voices are missing', () => {
-  expect(chooseVoice([recordedVoice],'')).toBeUndefined();
-  expect(chooseVoice([recordedVoice],'missing-device')).toBeUndefined();
+it('defaults to recorded speech while preserving an explicitly selected device voice', () => {
+  const device = browser().voices()[0];
+  expect(chooseVoice([recordedVoice, device],'')).toBe(recordedVoice);
+  expect(chooseVoice([recordedVoice],'missing-device')).toBe(recordedVoice);
   expect(chooseVoice([recordedVoice],recordedVoice.id)).toBe(recordedVoice);
+  expect(chooseVoice([recordedVoice, device],device.id)).toBe(device);
 });
 it('resolves the outline pronunciation and rejects incompatible personal corrections', () => {
   expect(phoneKey(['R','EH1','D'])).toBe('R EH D');
@@ -44,8 +46,15 @@ it('resolves the outline pronunciation and rejects incompatible personal correct
 it('respects effective dictionary pronunciation order instead of manifest display order', () => {
   expect(resolveClip(manifest,{word:'read',pronunciations:[['R','IY1','D'],['R','EH1','D']]})?.start).toBe(6);
 });
+it('prefers a clear citation form only when compatible with the effective pronunciation', () => {
+  const collection = { ...manifest, clips: [{...manifest.clips[0]}, {...manifest.clips[1], preferred: true}] };
+  expect(resolveClip(collection, {word:'read', pronunciations:[['R','EH1','D'],['R','IY1','D']]})?.start).toBe(6);
+  expect(resolveClip(collection, target)?.start).toBe(0);
+});
 it('validates bounded manifests, duplicate pronunciations, and sample ranges', () => {
   expect(validateAudioManifest(manifest)).toBe(manifest);
+  const lossless = { ...manifest, sprites: [{ ...sprite, url: sprite.url.replace('.opus', '.flac') }] };
+  expect(validateAudioManifest(lossless)).toBe(lossless);
   expect(()=>validateAudioManifest({...manifest,version:2})).toThrow();
   expect(()=>validateAudioManifest({...manifest,sprites:[{...sprite,bytes:48001}]})).toThrow();
   expect(()=>validateAudioManifest({...manifest,sprites:[{...sprite,url:'https://example.com/a.opus'}]})).toThrow();

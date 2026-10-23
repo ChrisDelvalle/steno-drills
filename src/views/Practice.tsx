@@ -30,7 +30,7 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
 }) {
   const { testProfile: profile, setTestProfile: setProfile, testWords: words, testWordMap: wordMap, source, setSource, shared, saveShared, exitShared, routeHash } = useApp();
   const { profile: personal, setProfile: setPersonal } = useApp();
-  const speech = useMemo(() => personal.experimental ? recordedSpeech(browserSpeech()) : browserSpeech(), [personal.experimental]);
+  const speech = useMemo(() => recordedSpeech(browserSpeech()), []);
   const voices = useSpeechVoices(speech);
   const preferences = profile.practice;
   const { restricted, drill, mixed, keyboardSet, fingerBook, section, pattern, repeats, customPatterns, quoteLength, symbolVariants } = preferences;
@@ -86,7 +86,7 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
         const entry = wordMap.get(word);
         const result = entry ? evaluateForFocus(entry, profile, filter.focus, filter) : null;
         if (restricted) return result?.eligible ? [{ word, outline: result.outline }] : [];
-        return [{ word, outline: entry?.outlines[0]?.outline }];
+        return [{ word, outline: entry?.outlines.find(o => o.requirements.length)?.outline || entry?.outlines[0]?.outline }];
       });
     } else pool = eligibleWords(words, profile, filter);
     if (isWords) pool = pool.map(target => {
@@ -145,7 +145,7 @@ export function PracticeView({ settingsOpen, onSettings, onClose, navigation, se
     {isWords && <div className="listening-options">
       <label className="check-line"><input type="checkbox" checked={session.listening.enabled} onChange={e => updateSession({ listening: { ...session.listening, enabled: e.target.checked } })}/>Audio</label>
       {session.listening.enabled && <>
-        <label className="field">Voice<select aria-label="Voice" value={!personal.experimental && personal.voice === recordedVoiceId ? '' : personal.voice} onChange={e => setPersonal(p => ({ ...p, voice: e.target.value }))}><option value="">Automatic · local English</option>{personal.voice && personal.voice !== recordedVoiceId && !voices.some(v => v.id === personal.voice) && <option value={personal.voice}>Saved voice · unavailable</option>}{voices.map(v => <option key={v.id} value={v.id}>{v.name}{v.id !== recordedVoiceId && ` · ${v.lang}`}</option>)}</select>{!voices.length && <span className="field-help">No local English voice available on this device.</span>}</label>
+        <label className="field">Voice<select aria-label="Voice" value={personal.voice} onChange={e => setPersonal(p => ({ ...p, voice: e.target.value }))}><option value="">Automatic · Clear instructor</option>{personal.voice && personal.voice !== recordedVoiceId && !voices.some(v => v.id === personal.voice) && <option value={personal.voice}>Saved voice · unavailable</option>}{voices.map(v => <option key={v.id} value={v.id}>{v.name}{v.id !== recordedVoiceId && ` · ${v.lang}`}</option>)}</select></label>
         <div className="session-options"><label>Speed<select aria-label="Speed" value={session.listening.rate} onChange={e => updateSession({ listening: { ...session.listening, rate: +e.target.value } })}>{speechRates.map(n => <option key={n} value={n}>{n}×</option>)}</select></label><label>Text<select aria-label="Text display" value={session.listening.display} onChange={e => updateSession({ listening: { ...session.listening, display: e.target.value as typeof session.listening.display } })}><option value="full">Full</option><option value="current">Current</option><option value="hidden">Hidden</option></select></label></div>
       </>}
     </div>}

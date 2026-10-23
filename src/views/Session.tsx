@@ -5,7 +5,7 @@ import type { ErrorSample, SpeedSample, TypingEvent } from '../domain/practice';
 import { Icon, StenoKeyboard, Brand } from '../components';
 import { textTranslator } from '../domain/translation';
 import { assistedPractice, projectWordPractice, wordPracticeDefaults, wordPracticeMetrics, scoreWordPractice, rebaseRecovery } from '../domain/wordPractice';
-import { browserSpeech, PromptSpeaker } from '../domain/speech';
+import { browserSpeech, chooseVoice, PromptSpeaker } from '../domain/speech';
 import type { SpeechAdapter } from '../domain/speech';
 import { recordedVoiceId } from '../domain/recordedAudio';
 import { listeningDefaults } from '../domain/listening';
@@ -29,6 +29,7 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
   const inputAllowed = useRef(false);
   const [revealedPrompt, setRevealedPrompt] = useState('');
   const adapter = useMemo(() => speechAdapter || browserSpeech(), [speechAdapter]);
+  const recorded = audio && chooseVoice(adapter.voices(), active.voice || '')?.id === recordedVoiceId;
   const [targets, setTargets] = useState(() => makeTargets(config));
   const [input, setInput] = useState('');
   const [startedAt, setStartedAt] = useState<number | null>(null);
@@ -75,8 +76,8 @@ export function PracticeSession({ config, onExit, onOptionsChange, suspended = f
     speaker.update(!suspended && !finished ? spokenPrompt : null, active.voice || '', listening.rate, playbackAllowed.current && document.hasFocus() && document.visibilityState !== 'hidden');
   }, [speaker, spokenPrompt?.id, suspended, finished, active.voice, listening.rate]);
   useEffect(() => {
-    if (spokenPrompt && !suspended && !finished && active.voice === recordedVoiceId) adapter.prepare?.(spokenPrompt, targets.slice((startedAt === null ? options.groupSize : prompt?.end || 0), (startedAt === null ? options.groupSize : prompt?.end || 0) + 20));
-  }, [adapter, spokenPrompt?.id, suspended, finished, active.voice, targets]);
+    if (spokenPrompt && !suspended && !finished && recorded) adapter.prepare?.(spokenPrompt, targets.slice((startedAt === null ? options.groupSize : prompt?.end || 0), (startedAt === null ? options.groupSize : prompt?.end || 0) + 20));
+  }, [adapter, spokenPrompt?.id, suspended, finished, recorded, targets]);
   useEffect(() => {
     const cancel = () => speaker.cancel();
     const visibility = () => { if (document.visibilityState === 'hidden') cancel(); };

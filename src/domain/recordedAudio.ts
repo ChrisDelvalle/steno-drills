@@ -5,21 +5,21 @@ import { chooseVoice } from './speech';
 import type { SpeechAdapter, SpeechEvents, SpokenPrompt } from './speech';
 
 export const recordedVoiceId = 'recorded:clear-instructor';
-export const recordedVoice = { id: recordedVoiceId, name: 'Clear instructor · experimental', lang: 'en-US', default: false, automatic: false };
-export interface AudioSprite { url: string; sha256: string; bytes: number; samples: number }
-export interface AudioClip { word: string; phones: string; outlines: string[]; sprite: number; start: number; end: number }
+export const recordedVoice = { id: recordedVoiceId, name: 'Clear instructor', lang: 'en-US', default: true };
+export interface AudioSprite { url: string; sha256: string; bytes: number; samples: number; bitrate?: number }
+export interface AudioClip { word: string; phones: string; outlines: string[]; sprite: number; start: number; end: number; preferred?: boolean; spokenPhones?: string }
 export interface AudioManifest { version: 1; sampleRate: 24000; sprites: AudioSprite[]; clips: AudioClip[]; words: number; fallback: { id: string; reason: string }[] }
 export const phoneKey = (phones: string[]) => phones.map(p => p.replace(/[012]$/, '')).join(' ');
 export function validateAudioManifest(value: unknown): AudioManifest {
   const m = value as AudioManifest;
   if (!m || m.version !== 1 || m.sampleRate !== 24000 || !Number.isInteger(m.words) || m.words < 0 || !Array.isArray(m.fallback) || m.fallback.length > 100000 || !Array.isArray(m.sprites) || !Array.isArray(m.clips) || m.sprites.length > 20000 || m.clips.length > 100000) throw Error('Invalid audio collection.');
   for (const s of m.sprites) {
-    if (!/^\/audio\/instructor\/[a-f0-9]{64}\.opus$/.test(s.url) || !/^[a-f0-9]{64}$/.test(s.sha256) || !s.url.endsWith(s.sha256+'.opus') || !Number.isInteger(s.bytes) || s.bytes < 1 || s.bytes > 48000 || !Number.isInteger(s.samples) || s.samples < 1 || s.samples > 960000) throw Error('Invalid audio sprite.');
+    if (!/^\/audio\/instructor\/[a-f0-9]{64}\.(?:opus|flac)$/.test(s.url) || !/^[a-f0-9]{64}$/.test(s.sha256) || (!s.url.endsWith(s.sha256+'.opus') && !s.url.endsWith(s.sha256+'.flac')) || !Number.isInteger(s.bytes) || s.bytes < 1 || s.bytes > 48000 || !Number.isInteger(s.samples) || s.samples < 1 || s.samples > 960000 || (s.bitrate !== undefined && ![10000,16000,24000,32000,48000,64000].includes(s.bitrate))) throw Error('Invalid audio sprite.');
   }
   const keys = new Set<string>();
   for (const c of m.clips) {
     const s = m.sprites[c.sprite], key = `${c.word}|${c.phones}`;
-    if (!/^[a-z]+(?:['-][a-z]+)*$/.test(c.word) || typeof c.phones !== 'string' || !c.phones || !Array.isArray(c.outlines) || c.outlines.some(o => typeof o !== 'string') || !Number.isInteger(c.sprite) || !s || !Number.isInteger(c.start) || !Number.isInteger(c.end) || c.start < 0 || c.end <= c.start || c.end > s.samples || keys.has(key)) throw Error('Invalid audio clip.');
+    if (!/^[a-z]+(?:['-][a-z]+)*$/.test(c.word) || typeof c.phones !== 'string' || !c.phones || (c.preferred !== undefined && typeof c.preferred !== 'boolean') || (c.spokenPhones !== undefined && (typeof c.spokenPhones !== 'string' || !c.spokenPhones)) || !Array.isArray(c.outlines) || c.outlines.some(o => typeof o !== 'string') || !Number.isInteger(c.sprite) || !s || !Number.isInteger(c.start) || !Number.isInteger(c.end) || c.start < 0 || c.end <= c.start || c.end > s.samples || keys.has(key)) throw Error('Invalid audio clip.');
     keys.add(key);
   }
   return m;
@@ -27,7 +27,8 @@ export function validateAudioManifest(value: unknown): AudioManifest {
 export function resolveClip(manifest: AudioManifest, target: PracticeWord): AudioClip | undefined {
   const keys = target.pronunciations?.filter(phones => !target.outline || analyzeOutline(target.word,target.outline,[phones]).requirements.length).map(phoneKey);
   const matches = manifest.clips.filter(c => c.word === target.word.toLowerCase());
-  return keys ? keys.flatMap(key => matches.filter(c => c.phones === key))[0] : matches.find(c => !target.outline || c.outlines.includes(target.outline));
+  const compatible = keys ? keys.flatMap(key => matches.filter(c => c.phones === key)) : matches.filter(c => !target.outline || c.outlines.includes(target.outline));
+  return compatible.find(c => c.preferred) || compatible[0];
 }
 export class ByteLru<T> {
   private entries = new Map<string, { value: T; bytes: number }>();
@@ -136,7 +137,7 @@ export class RecordedLoader {
       const store = cache;
       this.storageWrites = this.storageWrites.catch(() => {}).then(async () => {
         await store.delete(sprite.url);
-        await store.put(sprite.url, new Response(bytes, { headers: { 'Content-Type': 'audio/ogg', 'Content-Length': String(bytes.byteLength) } }));
+        await store.put(sprite.url, new Response(bytes, { headers: { 'Content-Type': sprite.url.endsWith('.flac') ? 'audio/flac' : 'audio/ogg', 'Content-Length': String(bytes.byteLength) } }));
         const keys = [...await store.keys()]; let size = 0;
         for (const key of keys.reverse()) { const item = await store.match(key); size += Number(item?.headers.get('Content-Length') || 48000); if (size > this.compressed.limit) await store.delete(key); }
       }).catch(() => {});

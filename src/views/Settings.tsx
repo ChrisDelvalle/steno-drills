@@ -18,7 +18,6 @@ export function SettingsView() {
     } catch (e) { setPending(null); setError(e instanceof Error ? e.message : 'The backup could not be read.'); }
   };
   return <>
-    <section className="card"><label className="check-line"><input type="checkbox" checked={profile.experimental} onChange={e => setProfile(p => ({ ...p, experimental: e.target.checked }))}/>Experimental features</label></section>
     <section className="card"><fieldset className="theme-options"><legend>Theme</legend>{(['system', 'light', 'dark'] as const).map(theme => <label className={profile.theme === theme ? 'selected' : ''} key={theme}><input type="radio" name="theme" checked={profile.theme === theme} onChange={() => setProfile(p => ({ ...p, theme }))}/>{theme === 'system' ? 'Follow system' : `${theme[0].toUpperCase()}${theme.slice(1)}`}</label>)}</fieldset></section>
     <section className="card"><p className="small muted">Data is stored in this browser. Use backups to move it between devices or domains.</p><div className="button-row"><button className="primary" onClick={() => downloadFile(`steno-drills-backup-${new Date().toLocaleDateString('en-CA')}.json`, exportBackup(profile))}><Icon name="download" size={17}/>Export backup</button><label className="file-button secondary">Import backup<input type="file" accept="application/json,.json" onChange={e => { void readBackup(e.target.files?.[0]); e.target.value = ''; }}/></label></div>
       {error && <p className="error" role="alert">{error}</p>}{message && <p className="success" role="status">{message}</p>}

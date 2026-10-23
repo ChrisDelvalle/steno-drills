@@ -35,28 +35,29 @@
     }
   },
   "recipeHash": "951429a96e17e8b9600d7c1d0da7e98859214e057f533f90b6fce927fcd41b40",
-  "catalogSha256": "9319847a74ded516966e91fe451a1d12a24672b13a166d9bf6df09d4acde7591",
+  "catalogSha256": "362a734781e0b4cb89228328f5532ede2113c6a8f71b6c611cc4719afad38399",
   "dictionarySha256": "5d1380cd28e1822e13c22b5fedb4ae4af8c3723dd5922137227fe5b879b3ab33",
   "words": 2360,
   "common": 878,
   "recordedWords": 2360,
-  "recordedVariants": 2392,
-  "fallback": [
-    {
-      "id": "a|EY",
-      "reason": "Letter-name pronunciation not verified"
-    },
-    {
-      "id": "to|T IH",
-      "reason": "Reduced short-I recording unavailable"
-    }
-  ],
-  "sprites": 40,
-  "audioBytes": 1865211,
-  "generationSeconds": 3107.56,
+  "recordedVariants": 2394,
+  "fallback": [],
+  "sprites": 141,
+  "audioBytes": 4571720,
+  "generationSeconds": 3587.77,
   "encoding": {
     "codec": "libopus",
-    "bitrate": 10000,
+    "losslessFallback": "FLAC 24-bit",
+    "minimumBitrate": 10000,
+    "adaptiveBitrates": [
+      10000,
+      16000,
+      24000,
+      32000,
+      48000,
+      64000
+    ],
+    "maximumPerPhoneLossIncrease": 0.25,
     "vbr": "on",
     "application": "audio",
     "frameMilliseconds": 20,

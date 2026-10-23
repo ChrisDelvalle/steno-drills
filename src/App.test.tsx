@@ -35,19 +35,29 @@ it('persists learned skills and saved word lists through the full app', async ()
   expect(screen.getByText('A to Z', { exact: true })).toBeInTheDocument();
   expect(JSON.parse(localStorage.getItem(profileKey)!).lists[0].words).toEqual(['bad', 'dim']);
 });
-it('exposes recorded audio only with the personal experiment enabled and retains its preference', async () => {
+it('offers recorded audio by default without experimental opt-in and retains personal voice selection', async () => {
   const profile = defaultProfile(); profile.session.listening.enabled = true;
   localStorage.setItem(profileKey,JSON.stringify(profile)); render(<App/>);
   await screen.findByRole('button',{name:'Test settings'});
   await navigate('/test-settings');
-  expect(screen.queryByRole('option',{name:'Clear instructor · experimental'})).not.toBeInTheDocument();
-  await navigate('/settings'); fireEvent.click(screen.getByRole('checkbox',{name:'Experimental features'}));
-  await navigate('/test-settings');
-  expect(screen.getByRole('option',{name:'Clear instructor · experimental'})).toBeInTheDocument();
+  expect(screen.getByRole('option',{name:/^Clear instructor$/})).toBeInTheDocument();
+  expect(screen.getByLabelText('Voice')).toHaveValue('');
   fireEvent.change(screen.getByLabelText('Voice'),{target:{value:'recorded:clear-instructor'}});
-  await navigate('/settings'); fireEvent.click(screen.getByRole('checkbox',{name:'Experimental features'}));
-  await navigate('/test-settings'); expect(screen.getByLabelText('Voice')).toHaveValue('');
+  await navigate('/settings'); expect(screen.queryByRole('checkbox',{name:'Experimental features'})).not.toBeInTheDocument();
+  await navigate('/test-settings'); expect(screen.getByLabelText('Voice')).toHaveValue('recorded:clear-instructor');
   expect(JSON.parse(localStorage.getItem(profileKey)!).voice).toBe('recorded:clear-instructor');
+});
+it('uses an explained outline for covered words in unrestricted lists', async () => {
+  const entry = makeEntry('bad', ['SKP/PWAD', 'PWAD'], [['B','AE1','D']], 1);
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ...dictionary, words: [entry] }) }));
+  const profile = defaultProfile();
+  profile.lists = [{ id: 'list', name: 'List', words: ['bad'] }];
+  profile.practice.source = 'list:list'; profile.practice.restricted = false;
+  profile.session.hints = true; profile.session.listening.enabled = true;
+  localStorage.setItem(profileKey, JSON.stringify(profile));
+  render(<App/>);
+  expect(await screen.findByText('PWAD', {selector: 'code'})).toBeInTheDocument();
+  expect(screen.queryByText('SKP/PWAD', {selector: 'code'})).not.toBeInTheDocument();
 });
 it('restores practice focus after the closing dialog restores its previous control', async () => {
   render(<App/>); await screen.findByRole('button',{name:'Test settings'});

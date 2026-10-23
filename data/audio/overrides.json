@@ -1,29 +1,803 @@
 {
-  "a|AH": { "text": "uh", "note": "Reduced vowel pronunciation for the brief." },
-  "a|EY": { "text": "A", "note": "Letter-name variant remains unverified; the reduced AH variant is available.", "fallback": "Letter-name pronunciation not verified" },
-  "al|AE L": { "text": "Al", "note": "Capitalization for the spoken name; lowercase repeatedly produced silence." },
-  "bass|B AE S": { "text": "basse", "note": "Respelling checked against the phoneme recognizer to avoid the base reading." },
-  "bow|B AW": { "text": "bough", "note": "Exact homophone for the bending pronunciation." },
-  "bow|B OW": { "text": "beau", "note": "Exact homophone for the ribbon pronunciation." },
-  "dove|D AH V": { "text": "dove", "note": "Bird pronunciation checked against the phoneme recognizer." },
-  "dove|D OW V": { "text": "dohv", "note": "Respelling checked for the past-tense long-O pronunciation." },
-  "lead|L EH D": { "text": "led", "note": "Exact homophone for the metal pronunciation." },
-  "lead|L IY D": { "text": "lead", "note": "Long-E verb pronunciation; review before publishing." },
-  "live|L IH V": { "text": "liv", "note": "Respelling for the verb, matching the supported short-I outline." },
-  "ma|M AA": { "text": "mah", "note": "Phonetic respelling; lowercase ma repeatedly produced silence." },
-  "om|AO M": { "text": "awm", "note": "Phonetic respelling for the literal syllable rather than a prolonged chant." },
-  "read|R EH D": { "text": "red", "note": "Exact homophone for the supported past-tense outline." },
-  "read|R IY D": { "text": "reed", "note": "Exact homophone if a long-E outline is supported later." },
-  "route|R AW T": { "text": "rout", "note": "Exact homophone for the how pronunciation; prevents the root reading." },
-  "route|R UW T": { "text": "root", "note": "Exact homophone for the long-U pronunciation." },
-  "rim|R IH M": { "text": "rimm", "note": "Phonetic respelling; rim repeatedly produced silence." },
-  "to|T UW": { "text": "too", "note": "Exact homophone for the standalone pronunciation." },
-  "to|T AH": { "text": "tuh", "note": "Respelling for the reduced pronunciation." },
-  "to|T IH": { "text": "tih", "note": "The rare reduced short-I form did not yield a usable recording.", "fallback": "Reduced short-I recording unavailable" },
-  "tear|T EH R": { "text": "tare", "note": "Exact homophone for the supported ripping pronunciation." },
-  "ugh|AH G": { "text": "Ugg", "note": "Homophone for the literal word instead of a nonverbal grunt." },
-  "wind|W AY N D": { "text": "wined", "note": "Exact homophone for the winding pronunciation." },
-  "wind|W IH N D": { "text": "wind", "note": "Short-I air pronunciation; review before publishing." },
-  "wound|W AW N D": { "text": "wownd", "note": "Respelling for past-tense wind; review before publishing." },
-  "wound|W UW N D": { "text": "woond", "note": "Respelling for injury; review before publishing." }
+  "a|AH": {
+    "text": "uhh",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "a|EY": {
+    "text": "eigh",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "al|AE L": {
+    "text": "Alvin",
+    "extractFrom": [
+      "Alvin",
+      "Albert",
+      "gal"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "bass|B AE S": {
+    "text": "basse",
+    "note": "Respelling checked against the phoneme recognizer to avoid the base reading."
+  },
+  "bow|B AW": {
+    "text": "bough",
+    "note": "Exact homophone for the bending pronunciation."
+  },
+  "bow|B OW": {
+    "text": "beau",
+    "note": "Exact homophone for the ribbon pronunciation."
+  },
+  "dove|D AH V": {
+    "text": "dove",
+    "note": "Bird pronunciation checked against the phoneme recognizer."
+  },
+  "dove|D OW V": {
+    "text": "dohv",
+    "note": "Respelling checked for the past-tense long-O pronunciation."
+  },
+  "dies|D AY Z": {
+    "text": "dyes",
+    "note": "Exact homophone; the original isolated reading incorrectly used long E."
+  },
+  "lead|L EH D": {
+    "text": "led",
+    "note": "Exact homophone for the metal pronunciation."
+  },
+  "lead|L IY D": {
+    "text": "lead",
+    "note": "Long-E verb pronunciation; review before publishing."
+  },
+  "live|L IH V": {
+    "text": "liv",
+    "note": "Respelling for the verb, matching the supported short-I outline."
+  },
+  "lice|L AY S": {
+    "text": "lyce",
+    "note": "Phonetic respelling; independent recognizers found the original reading used short I."
+  },
+  "ma|M AA": {
+    "text": "mah",
+    "note": "Phonetic respelling; lowercase ma repeatedly produced silence."
+  },
+  "om|AO M": {
+    "text": "awm",
+    "note": "Phonetic respelling for the literal syllable rather than a prolonged chant."
+  },
+  "owe|OW": {
+    "text": "oh",
+    "note": "Exact homophone; independent recognizers found the original reading used the ow vowel."
+  },
+  "owned|OW N D": {
+    "text": "ohnd",
+    "note": "Phonetic respelling; independent recognizers found the original reading used the ow vowel."
+  },
+  "owes|OW Z": {
+    "text": "ohz",
+    "note": "Phonetic respelling; independent recognizers found the original reading used the ow vowel."
+  },
+  "read|R EH D": {
+    "text": "red",
+    "note": "Exact homophone for the supported past-tense outline."
+  },
+  "read|R IY D": {
+    "text": "reed",
+    "note": "Exact homophone if a long-E outline is supported later."
+  },
+  "route|R AW T": {
+    "text": "rout",
+    "note": "Exact homophone for the how pronunciation; prevents the root reading."
+  },
+  "route|R UW T": {
+    "text": "root",
+    "note": "Exact homophone for the long-U pronunciation."
+  },
+  "rim|R IH M": {
+    "text": "rimm",
+    "note": "Phonetic respelling; rim repeatedly produced silence."
+  },
+  "to|T UW": {
+    "text": "too",
+    "note": "Exact homophone for the standalone pronunciation."
+  },
+  "to|T AH": {
+    "text": "tuh",
+    "note": "Respelling for the reduced pronunciation."
+  },
+  "to|T IH": {
+    "text": "tip",
+    "extractFrom": [
+      "tip",
+      "tin"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "tear|T EH R": {
+    "text": "tare",
+    "note": "Exact homophone for the supported ripping pronunciation."
+  },
+  "the|DH AH": {
+    "text": "thuh",
+    "extractFrom": [
+      "thuh",
+      "the bus",
+      "the cup",
+      "another"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "the|DH IY": {
+    "text": "thee",
+    "note": "Prefer the clearly enunciated citation form for standalone practice; the reduced variant remains recorded.",
+    "preferred": true
+  },
+  "ties|T AY Z": {
+    "text": "tyes",
+    "note": "Phonetic respelling for long I; the original isolated reading incorrectly used long E."
+  },
+  "ugh|AH G": {
+    "text": "Ugg",
+    "note": "Homophone for the literal word instead of a nonverbal grunt."
+  },
+  "wind|W AY N D": {
+    "text": "wined",
+    "note": "Exact homophone for the winding pronunciation."
+  },
+  "wind|W IH N D": {
+    "text": "wind",
+    "note": "Short-I air pronunciation; review before publishing."
+  },
+  "wound|W AW N D": {
+    "text": "wownd",
+    "note": "Respelling for past-tense wind; review before publishing."
+  },
+  "wound|W UW N D": {
+    "text": "woond",
+    "note": "Respelling for injury; review before publishing."
+  },
+  "that|DH AH T": {
+    "text": "the tattoo",
+    "extractFrom": [
+      "the tattoo",
+      "the tab",
+      "the tablet"
+    ],
+    "note": "Weak-form DH AH T retained for explicit pronunciation compatibility; prefer the fully enunciated DH AE T citation form for standalone practice."
+  },
+  "with|W IH DH": {
+    "text": "wither",
+    "extractFrom": [
+      "wither",
+      "withering",
+      "withers"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "pump|P AH M P": {
+    "text": "pumper",
+    "extractFrom": [
+      "pumper",
+      "pumpkin",
+      "pumping"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "roof|R UH F": {
+    "text": "R\u00fcf",
+    "extractFrom": [
+      "R\u00fcf",
+      "R\u00fcff",
+      "r\u00fcffle"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "than|DH AE N": {
+    "text": "than?",
+    "extractFrom": [
+      "than?",
+      "than!",
+      "thann",
+      "thanner"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "was|W AA Z": {
+    "text": "waza",
+    "extractFrom": [
+      "waza",
+      "Wazny"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "um|AH M": {
+    "text": "uhm",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "hon|HH AH N": {
+    "text": "hunn",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "hom|HH AA M": {
+    "text": "hahm",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "howl|HH AW L": {
+    "text": "howling",
+    "extractFrom": [
+      "howling",
+      "howled"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "hull|HH AH L": {
+    "text": "hullabaloo",
+    "extractFrom": [
+      "hullabaloo",
+      "Hulbert",
+      "hulls",
+      "Hull"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "lat|L AA T": {
+    "text": "laht",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "lath|L AE TH": {
+    "text": "lathwork",
+    "extractFrom": [
+      "lathwork",
+      "lathh",
+      "laths"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "lieu|L UW": {
+    "text": "loo",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "lull|L AH L": {
+    "text": "lulling",
+    "extractFrom": [
+      "lulling",
+      "lullaby"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "lulled|L AH L D": {
+    "text": "unlulled",
+    "extractFrom": [
+      "unlulled",
+      "lulled,",
+      "luhld"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "cal|K AE L": {
+    "text": "Calvin",
+    "extractFrom": [
+      "Calvin",
+      "Callahan"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "cha|CH AA": {
+    "text": "chah",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "ching|CH IH NG": {
+    "text": "chinng",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "chock|CH AA K": {
+    "text": "chokk",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "chore|CH AO R": {
+    "text": "choar",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "chuck|CH AH K": {
+    "text": "chuhk",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "youse|Y UW Z": {
+    "text": "use",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "yep|Y EH P": {
+    "text": "yepp",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "yurt|Y UH R T": {
+    "text": "your turn",
+    "extractFrom": [
+      "your turn",
+      "yurta"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "pal|P AE L": {
+    "text": "pal?",
+    "extractFrom": [
+      "pal?",
+      "pal!",
+      "paal",
+      "p\u0103l"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "pear|P EH R": {
+    "text": "paired",
+    "extractFrom": [
+      "paired",
+      "pairing"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "pest|P EH S T": {
+    "text": "Pest",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "pep|P EH P": {
+    "text": "Pep",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "puff|P AH F": {
+    "text": "puffer",
+    "extractFrom": [
+      "puffer",
+      "puffy"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "pup|P AH P": {
+    "text": "pups",
+    "extractFrom": [
+      "pups",
+      "puppetry",
+      "puppet",
+      "puppy dog"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "mook|M UH K": {
+    "text": "mucken",
+    "extractFrom": [
+      "mucken",
+      "mookster",
+      "mooks"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "mer|M EH R": {
+    "text": "mare",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "moll|M AA L": {
+    "text": "mahl",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "mull|M AH L": {
+    "text": "mulling",
+    "extractFrom": [
+      "mulling",
+      "mullet"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "mulled|M AH L D": {
+    "text": "muhled",
+    "extractFrom": [
+      "muhled",
+      "muhhld",
+      "muhlld",
+      "muhld"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "mum|M AH M": {
+    "text": "maximum",
+    "extractFrom": [
+      "maximum",
+      "minimum",
+      "chrysanthemum"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "plaid|P L AE D": {
+    "text": "plad",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "baz|B AE Z": {
+    "text": "Basil",
+    "extractFrom": [
+      "Basil",
+      "Bazley"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "boop|B UW P": {
+    "text": "boopp",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "boor|B UH R": {
+    "text": "tambour",
+    "extractFrom": [
+      "tambour",
+      "booru",
+      "boore",
+      "booer"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "beak|B IY K": {
+    "text": "a beak",
+    "extractFrom": [
+      "a beak",
+      "the beak",
+      "a bird beak",
+      "beaks",
+      "beaky"
+    ],
+    "note": "Whole phonetic stem in the approved voice; checked before and after encoding."
+  },
+  "beep|B IY P": {
+    "text": "a beep",
+    "extractFrom": [
+      "a beep",
+      "the beep",
+      "beeps",
+      "beeped"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "bump|B AH M P": {
+    "text": "a bump",
+    "extractFrom": [
+      "a bump",
+      "the bump",
+      "bumps",
+      "bumpy"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "raab|R AA B": {
+    "text": "rob",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "rogue|R OW G": {
+    "text": "roguish",
+    "extractFrom": [
+      "roguish",
+      "rogues"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "siege|S IY JH": {
+    "text": "seej",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "seethe|S IY DH": {
+    "text": "seething",
+    "extractFrom": [
+      "seething",
+      "seethes"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "sieve|S IH V": {
+    "text": "siv",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "sol|S AA L": {
+    "text": "sahl",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "soir|S OY R": {
+    "text": "soir",
+    "spokenPhones": "S W AA R",
+    "note": "CMU source pronunciation corrected for audio only: Larousse [swar]. https://www.larousse.fr/dictionnaires/francais-anglais/soir/72408"
+  },
+  "shalt|SH AE L T": {
+    "text": "shallt",
+    "extractFrom": [
+      "shallt",
+      "sh\u00e6lter",
+      "sh\u00e6lth"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "jeep|JH IY P": {
+    "text": "Jeep",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "jeez|JH IY Z": {
+    "text": "Jeez",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "spiel|S P IY L": {
+    "text": "speeling",
+    "extractFrom": [
+      "speeling",
+      "speel"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "val|V AE L": {
+    "text": "Valley",
+    "extractFrom": [
+      "Valley",
+      "Valerie"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "vase|V AA Z": {
+    "text": "vaza",
+    "extractFrom": [
+      "vaza",
+      "vahzes"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "vie|V AY": {
+    "text": "vye",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "zing|Z IH NG": {
+    "text": "zinger",
+    "extractFrom": [
+      "zinger",
+      "zinging"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "tang|T AA NG": {
+    "text": "Tonga",
+    "extractFrom": [
+      "Tonga",
+      "tahng"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "tam|T AE M": {
+    "text": "Tammy",
+    "extractFrom": [
+      "Tammy",
+      "tammie"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "tong|T AO NG": {
+    "text": "tawng",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "des|D EH S": {
+    "text": "dess",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "dom|D AA M": {
+    "text": "dahm",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "dull|D AH L": {
+    "text": "duhll",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "gook|G UH K": {
+    "text": "gook,",
+    "extractFrom": [
+      "gook,",
+      "a gook",
+      "gookster",
+      "gooks"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "geek|G IY K": {
+    "text": "a geek",
+    "extractFrom": [
+      "a geek",
+      "the geek",
+      "geeks",
+      "geekdom"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "guild|G IH L D": {
+    "text": "a guild",
+    "extractFrom": [
+      "a guild",
+      "the guild",
+      "guilds",
+      "gilder"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "gull|G AH L": {
+    "text": "guhll",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "fifth|F IH TH": {
+    "text": "fith",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "foal|F OW L": {
+    "text": "Foley",
+    "extractFrom": [
+      "Foley",
+      "foaling"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "nel|N EH L": {
+    "text": "Nellie",
+    "extractFrom": [
+      "Nellie",
+      "Nelly"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "knoll|N OW L": {
+    "text": "Nolan",
+    "extractFrom": [
+      "Nolan",
+      "knolling"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "noir|N OY R": {
+    "text": "nwar",
+    "spokenPhones": "N W AA R",
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction. Reviewed audio phones: N W AA R; Cambridge https://dictionary.cambridge.org/us/pronunciation/english/noir",
+    "extractFrom": [
+      "nwar",
+      "nwahrr",
+      "noire"
+    ]
+  },
+  "null|N AH L": {
+    "text": "nullified",
+    "reviewedRecording": {
+      "metadata": "data/audio/repairs/null.json",
+      "sha256": "0c1836eacccc56ff50c2afdd485de2e91d013cdf441fb36b13bf2fc9789e2bb9"
+    },
+    "note": "Whole initial syllable of nullified. The isolated phoneme recognizer shifts the central vowel label before dark L; independent word recognition identifies Null. No phonetic segments are combined from other recordings."
+  },
+  "nun|N AH N": {
+    "text": "nunnery",
+    "extractFrom": [
+      "nunnery",
+      "nunnish"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "nut|N AH T": {
+    "text": "nutmeg",
+    "extractFrom": [
+      "nutmeg",
+      "nutshell"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "trough|T R AO F": {
+    "text": "trawf",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "troth|T R AO TH": {
+    "text": "trawthy",
+    "extractFrom": [
+      "trawthy",
+      "trothing"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "watt|W AA T": {
+    "text": "Watt",
+    "extractFrom": [
+      "Watt",
+      "a watt",
+      "wattage"
+    ],
+    "note": "Whole word with checked final T.",
+    "requirePhoneMatch": true
+  },
+  "waned|W EY N D": {
+    "text": "waynd",
+    "note": "Pronunciation repair input; accepted only after independent acoustic screening."
+  },
+  "woof|W UW F": {
+    "text": "woooof",
+    "extractFrom": [
+      "woooof",
+      "woofoo",
+      "woo fee",
+      "wooful"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "won|W AA N": {
+    "text": "wander",
+    "extractFrom": [
+      "wander",
+      "wand"
+    ],
+    "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction."
+  },
+  "base|B EY S": {
+    "text": "Base",
+    "note": "Pronunciation repair input; checked independently against expected phones and signal quality."
+  },
+  "bitch|B IH CH": {
+    "text": "a bitch",
+    "extractFrom": [
+      "a bitch",
+      "habitual",
+      "bitchy"
+    ],
+    "note": "Whole phonetic stem in the approved voice; independently checked after extraction."
+  },
+  "chew|CH UW": {
+    "text": "choo",
+    "note": "Pronunciation repair input; checked independently against expected phones and signal quality."
+  },
+  "rec|R EH K": {
+    "text": "reck",
+    "note": "Pronunciation repair input; checked independently against expected phones and signal quality."
+  },
+  "gut|G AH T": {
+    "text": "guts",
+    "extractFrom": [
+      "guts",
+      "gutless",
+      "gutful",
+      "Guttman"
+    ],
+    "note": "Whole phonetic stem in the approved voice; independently checked after extraction."
+  },
+  "pan|P AE N": {
+    "text": "pann",
+    "note": "Pronunciation repair input; checked independently against expected phones and signal quality."
+  },
+  "thyme|TH AY M": {
+    "text": "thyme",
+    "spokenPhones": "T AY M",
+    "note": "Use the standard citation pronunciation /ta\u026am/. Cambridge: https://dictionary.cambridge.org/us/pronunciation/english/thyme"
+  },
+  "pith|P IH TH": {
+    "text": "pithy",
+    "extractFrom": [
+      "pithy",
+      "pith and",
+      "pith helmet",
+      "pithiness"
+    ],
+    "note": "Whole phonetic stem extracted from one approved-voice utterance; independently checked after extraction."
+  },
+  "git|G IH T": {
+    "text": "guitar",
+    "extractFrom": [
+      "guitar",
+      "guitars",
+      "gittern"
+    ],
+    "requirePhoneMatch": true,
+    "note": "Whole initial stem with short I, independently checked after extraction and encoding."
+  },
+  "tromp|T R AA M P": {
+    "text": "trahmp",
+    "extractFrom": [
+      "trahmp",
+      "traamp",
+      "tromped",
+      "tromp"
+    ],
+    "requirePhoneMatch": true,
+    "note": "Whole phonetic stem with checked AA vowel."
+  },
+  "that|DH AE T": {
+    "text": "that",
+    "note": "Strong citation form for standalone practice.",
+    "preferred": true
+  }
 }

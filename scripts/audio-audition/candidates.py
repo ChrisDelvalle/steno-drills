@@ -141,7 +141,7 @@ def seed_for(value):
     return (base.CONFIG["seed"] + int(base.digest(value.encode())[:8], 16)) % (2 ** 32)
 
 
-def generate_single(model, voice, word, model_path, reference=None):
+def generate_single(model, voice, word, model_path, reference=None, validator=None):
     import mlx.core as mx
     import numpy as np
 
@@ -173,7 +173,10 @@ def generate_single(model, voice, word, model_path, reference=None):
             accepted = .1 < duration < 2.5 and (temperature is None or sum(r.token_count for r in results) < options["max_tokens"])
         except ValueError:
             accepted = False
-        attempts.append({"seed": seed, "temperature": temperature, "seconds": round(time.perf_counter() - tick, 3), "duration": round(duration, 3), "accepted": accepted})
+        review = validator(audio, rate) if accepted and validator else None
+        if review is not None:
+            accepted = review['matched']
+        attempts.append({"seed": seed, "temperature": temperature, "seconds": round(time.perf_counter() - tick, 3), "duration": round(duration, 3), "accepted": accepted, **({'phonetics': review} if review is not None else {})})
         if accepted:
             return audio, rate, time.perf_counter() - start, attempts
         print(f'Retrying {voice["label"]}: {word} ({duration:.2f}s)', flush=True)

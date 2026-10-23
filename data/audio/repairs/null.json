@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "target": "null|N AH L",
+  "source": "data/audio/repairs/null-source.wav",
+  "sourceSha256": "3f4b4a54a0b59f05a8d9029f5dc653fffc94d96c338fb6d0ec3c9a848d394409",
+  "sourceText": "nullified",
+  "sourceStart": 0,
+  "sourceEnd": 7860,
+  "sampleRate": 24000,
+  "fadeSamples": 120,
+  "guardSamples": 1920,
+  "recipeHash": "951429a96e17e8b9600d7c1d0da7e98859214e057f533f90b6fce927fcd41b40",
+  "referenceSha256": "d1d800f1cac528c93060ab577670e39b56876c73b08df05ab6ea8ea4e4102ce9",
+  "review": {
+    "sourcePhones": [
+      "n",
+      "\u0259",
+      "l",
+      "\u0259",
+      "f",
+      "a\u026a",
+      "d"
+    ],
+    "isolatedPhones": [
+      "n",
+      "o\u028a",
+      "l"
+    ],
+    "transcript": "Null",
+    "transcriber": "openai/whisper-small.en",
+    "transcriberRevision": "e8727524f962ee844a7319d92be39ac1bd25655a",
+    "note": "Whole initial syllable of nullified. The isolated phoneme recognizer shifts the central vowel label before dark L; independent word recognition identifies Null. No phonetic segments are combined from other recordings."
+  },
+  "sampleSha256": "a9a9402c3e9fd932b5eff15528002d143e9ace732be2231c7281fe402b2320b0"
+}

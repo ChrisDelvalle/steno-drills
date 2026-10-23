@@ -4,6 +4,7 @@ import { PracticeSession } from './Session';
 import type { SessionConfig } from '../context';
 import type { SpeechAdapter, SpeechEvents } from '../domain/speech';
 import { createOutlineTranslator } from '../domain/translation';
+import { recordedVoice } from '../domain/recordedAudio';
 
 const pool = ['one', 'net', 'dad', 'bad', 'main', 'feet'].map((word, i) => ({ word, outline: ['WUPB', 'TPHET', 'TKAD', 'PWAD', 'PHAEUPB', 'TPAOET'][i] }));
 const config: SessionConfig = { title: 'Words', kind: 'words', ordered: true, pool, mode: 'count', duration: 30, count: 10, hints: true, questionHints: true, unrestricted: true, listening: { enabled: true, display: 'full', rate: 1 } };
@@ -19,6 +20,13 @@ function harness(overrides: Partial<SessionConfig> = {}, voices = true) {
   return { ...view, calls, adapter, type, play, start, onOptionsChange, onExit };
 }
 afterEach(() => { vi.useRealTimers(); vi.restoreAllMocks(); });
+it.each([['', true], ['local', false]] as const)('prepares recorded prompts for automatic selection while respecting %s preference', (voice, prepared) => {
+  const prepare = vi.fn();
+  const adapter: SpeechAdapter = { voices: () => [recordedVoice, { id: 'local', name: 'Device', default: true, lang: 'en-US' }], subscribe: () => () => {}, cancel: vi.fn(), speak: vi.fn(), prepare };
+  render(<PracticeSession config={{ ...config, voice }} onExit={() => {}} speechAdapter={adapter}/>);
+  if (prepared) expect(prepare).toHaveBeenCalledWith(expect.objectContaining({ text: 'one', words: [pool[0]] }), pool.slice(1));
+  else expect(prepare).not.toHaveBeenCalled();
+});
 it('waits for activation and actual speech start, then counts listening and replay time', () => {
   const h = harness();
   act(() => vi.advanceTimersByTime(5000)); expect(h.calls).toHaveLength(0);

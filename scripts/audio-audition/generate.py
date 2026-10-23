@@ -33,6 +33,17 @@ def write_json(path, value):
 def digest(data):
     return hashlib.sha256(data).hexdigest()
 
+def production_spec(recipe, item):
+    value = {'recipe': recipe, 'id': item['id'], 'text': item['text']}
+    if item.get('spokenPhones'):
+        value['spokenPhones'] = item['spokenPhones']
+    if item.get('extractFrom'):
+        value['extractionVersion'] = 1
+        value['extractFrom'] = item['extractFrom']
+    if item.get('reviewedRecording'):
+        value['reviewedRecording'] = item['reviewedRecording']
+    return digest(json.dumps(value, sort_keys=True).encode())
+
 
 def snapshot(model_id):
     from huggingface_hub import snapshot_download

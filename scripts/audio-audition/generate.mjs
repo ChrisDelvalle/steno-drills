@@ -9,10 +9,12 @@ mkdirSync(work, { recursive: true });
 const candidates = process.argv.includes('--candidates');
 const production = process.argv.includes('--production');
 const pack = process.argv.includes('--pack');
-const args = process.argv.slice(2).filter(arg => !['--candidates','--production','--pack'].includes(arg));
-const script = `scripts/audio-audition/${pack ? 'pack' : production ? 'production' : candidates ? 'candidates' : 'generate'}.py`;
+const audit = process.argv.includes('--audit');
+const quality = process.argv.includes('--quality');
+const args = process.argv.slice(2).filter(arg => !['--candidates','--production','--pack','--audit','--quality'].includes(arg));
+const script = `scripts/audio-audition/${quality ? 'quality' : audit ? 'audit' : pack ? 'pack' : production ? 'production' : candidates ? 'candidates' : 'generate'}.py`;
 const localPython = resolve(work, 'venv/bin/python');
-const direct = pack && existsSync(localPython);
+const direct = (production || pack || audit || quality) && existsSync(localPython);
 const child = spawn(direct ? localPython : 'uv', direct ? ['-u', script, ...args] : ['run', '--python', '3.12', '--project', 'scripts/audio-audition', '--locked', 'python', '-u', script, ...args], {
   cwd: root,
   stdio: 'inherit',

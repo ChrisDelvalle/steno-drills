@@ -22,7 +22,12 @@ const variants = dictionary.words.filter(w => evaluate(w, ids).eligible).flatMap
   const chordOrder = ['initial','vowel','final','brief'].map(position => requirements.filter(c => c.position === position).map(c => c.keys).join('+')).join('|');
   return [...byPhones].map(([phones, outlines]) => ({ id: `${entry.word}|${phones}`, word: entry.word, phones, outlines,
     common: entry.rank !== undefined, chordOrder, text: overrides[`${entry.word}|${phones}`]?.text || entry.word,
-    note: overrides[`${entry.word}|${phones}`]?.note || '', ...(overrides[`${entry.word}|${phones}`]?.fallback ? { fallback: overrides[`${entry.word}|${phones}`].fallback } : {}) }));
+    note: overrides[`${entry.word}|${phones}`]?.note || '',
+    ...(overrides[`${entry.word}|${phones}`]?.preferred ? { preferred: true } : {}),
+    ...(overrides[`${entry.word}|${phones}`]?.requirePhoneMatch ? { requirePhoneMatch: true } : {}),
+    ...(overrides[`${entry.word}|${phones}`]?.spokenPhones ? { spokenPhones: overrides[`${entry.word}|${phones}`].spokenPhones } : {}),
+    ...(overrides[`${entry.word}|${phones}`]?.reviewedRecording ? { reviewedRecording: overrides[`${entry.word}|${phones}`].reviewedRecording } : {}),
+    ...(overrides[`${entry.word}|${phones}`]?.extractFrom ? { extractFrom: overrides[`${entry.word}|${phones}`].extractFrom } : {}) }));
 }).sort((a,b) => Number(b.common) - Number(a.common) || a.chordOrder.localeCompare(b.chordOrder, 'en') || a.word.localeCompare(b.word,'en') || a.phones.localeCompare(b.phones,'en'));
 const data = JSON.stringify({ version: 1, dictionarySha256: createHash('sha256').update(dictionaryBytes).digest('hex'), source: JSON.parse(await readFile(new URL('data/sources/sources.lock.json', root),'utf8')).plover,
   words: new Set(variants.map(v => v.word)).size, common: new Set(variants.filter(v => v.common).map(v => v.word)).size, variants }, null, 2) + '\n';

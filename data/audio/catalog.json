@@ -55,8 +55,14 @@
       ],
       "common": true,
       "chordOrder": "|||-T",
-      "text": "the",
-      "note": ""
+      "text": "thuh",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "thuh",
+        "the bus",
+        "the cup",
+        "another"
+      ]
     },
     {
       "id": "the|DH IY",
@@ -67,8 +73,9 @@
       ],
       "common": true,
       "chordOrder": "|||-T",
-      "text": "the",
-      "note": ""
+      "text": "thee",
+      "note": "Prefer the clearly enunciated citation form for standalone practice; the reduced variant remains recorded.",
+      "preferred": true
     },
     {
       "id": "a|AH",
@@ -79,8 +86,8 @@
       ],
       "common": true,
       "chordOrder": "|||AEU",
-      "text": "uh",
-      "note": "Reduced vowel pronunciation for the brief."
+      "text": "uhh",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "a|EY",
@@ -91,9 +98,8 @@
       ],
       "common": true,
       "chordOrder": "|||AEU",
-      "text": "A",
-      "note": "Letter-name variant remains unverified; the reduced AH variant is available.",
-      "fallback": "Letter-name pronunciation not verified"
+      "text": "eigh",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "he|HH IY",
@@ -141,7 +147,8 @@
       "common": true,
       "chordOrder": "|||THA",
       "text": "that",
-      "note": ""
+      "note": "Strong citation form for standalone practice.",
+      "preferred": true
     },
     {
       "id": "that|DH AH T",
@@ -152,8 +159,13 @@
       ],
       "common": true,
       "chordOrder": "|||THA",
-      "text": "that",
-      "note": ""
+      "text": "the tattoo",
+      "note": "Weak-form DH AH T retained for explicit pronunciation compatibility; prefer the fully enunciated DH AE T citation form for standalone practice.",
+      "extractFrom": [
+        "the tattoo",
+        "the tab",
+        "the tablet"
+      ]
     },
     {
       "id": "to|T AH",
@@ -176,9 +188,12 @@
       ],
       "common": true,
       "chordOrder": "|||TO",
-      "text": "tih",
-      "note": "The rare reduced short-I form did not yield a usable recording.",
-      "fallback": "Reduced short-I recording unavailable"
+      "text": "tip",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "tip",
+        "tin"
+      ]
     },
     {
       "id": "to|T UW",
@@ -213,8 +228,13 @@
       ],
       "common": true,
       "chordOrder": "|||W",
-      "text": "with",
-      "note": ""
+      "text": "wither",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "wither",
+        "withering",
+        "withers"
+      ]
     },
     {
       "id": "with|W IH TH",
@@ -634,8 +654,8 @@
       ],
       "common": true,
       "chordOrder": "|OE|-PBD|",
-      "text": "owned",
-      "note": ""
+      "text": "ohnd",
+      "note": "Phonetic respelling; independent recognizers found the original reading used the ow vowel."
     },
     {
       "id": "owes|OW Z",
@@ -646,8 +666,8 @@
       ],
       "common": true,
       "chordOrder": "|OE|-Z|",
-      "text": "owes",
-      "note": ""
+      "text": "ohz",
+      "note": "Phonetic respelling; independent recognizers found the original reading used the ow vowel."
     },
     {
       "id": "owe|OW",
@@ -658,8 +678,8 @@
       ],
       "common": true,
       "chordOrder": "|OE||",
-      "text": "owe",
-      "note": ""
+      "text": "oh",
+      "note": "Exact homophone; independent recognizers found the original reading used the ow vowel."
     },
     {
       "id": "oil|OY L",
@@ -3086,8 +3106,13 @@
       ],
       "common": true,
       "chordOrder": "P|U|-FRP|",
-      "text": "pump",
-      "note": ""
+      "text": "pumper",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "pumper",
+        "pumpkin",
+        "pumping"
+      ]
     },
     {
       "id": "pull|P UH L",
@@ -3866,8 +3891,8 @@
       ],
       "common": true,
       "chordOrder": "PW|AEU|-S|",
-      "text": "base",
-      "note": ""
+      "text": "Base",
+      "note": "Pronunciation repair input; checked independently against expected phones and signal quality."
     },
     {
       "id": "book|B UH K",
@@ -4805,8 +4830,13 @@
       ],
       "common": true,
       "chordOrder": "R|AO|-F|",
-      "text": "roof",
-      "note": ""
+      "text": "Rüf",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "Rüf",
+        "Rüff",
+        "rüffle"
+      ]
     },
     {
       "id": "roof|R UW F",
@@ -7485,8 +7515,8 @@
       ],
       "common": true,
       "chordOrder": "T|AOEU|-Z|",
-      "text": "ties",
-      "note": ""
+      "text": "tyes",
+      "note": "Phonetic respelling for long I; the original isolated reading incorrectly used long E."
     },
     {
       "id": "tie|T AY",
@@ -7798,8 +7828,14 @@
       ],
       "common": true,
       "chordOrder": "TH|A|-PB|",
-      "text": "than",
-      "note": ""
+      "text": "than?",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "than?",
+        "than!",
+        "thann",
+        "thanner"
+      ]
     },
     {
       "id": "thank|TH AE NG K",
@@ -8077,8 +8113,8 @@
       ],
       "common": true,
       "chordOrder": "TK|AOEU|-Z|",
-      "text": "dies",
-      "note": ""
+      "text": "dyes",
+      "note": "Exact homophone; the original isolated reading incorrectly used long E."
     },
     {
       "id": "die|D AY",
@@ -10402,8 +10438,12 @@
       ],
       "common": true,
       "chordOrder": "W|A|-S|",
-      "text": "was",
-      "note": ""
+      "text": "waza",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "waza",
+        "Wazny"
+      ]
     },
     {
       "id": "was|W AH Z",
@@ -10907,8 +10947,13 @@
       ],
       "common": false,
       "chordOrder": "|A|-L|",
-      "text": "Al",
-      "note": "Capitalization for the spoken name; lowercase repeatedly produced silence."
+      "text": "Alvin",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "Alvin",
+        "Albert",
+        "gal"
+      ]
     },
     {
       "id": "app|AE P",
@@ -11315,8 +11360,8 @@
       ],
       "common": false,
       "chordOrder": "|U|-PL|",
-      "text": "um",
-      "note": ""
+      "text": "uhm",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "hack|HH AE K",
@@ -11939,8 +11984,8 @@
       ],
       "common": false,
       "chordOrder": "H|O|-PB|",
-      "text": "hon",
-      "note": ""
+      "text": "hunn",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "hom|HH AA M",
@@ -11951,8 +11996,8 @@
       ],
       "common": false,
       "chordOrder": "H|O|-PL|",
-      "text": "hom",
-      "note": ""
+      "text": "hahm",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "hone|HH OW N",
@@ -12047,8 +12092,12 @@
       ],
       "common": false,
       "chordOrder": "H|OU|-L|",
-      "text": "howl",
-      "note": ""
+      "text": "howling",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "howling",
+        "howled"
+      ]
     },
     {
       "id": "hound|HH AW N D",
@@ -12143,8 +12192,14 @@
       ],
       "common": false,
       "chordOrder": "H|U|-L|",
-      "text": "hull",
-      "note": ""
+      "text": "hullabaloo",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "hullabaloo",
+        "Hulbert",
+        "hulls",
+        "Hull"
+      ]
     },
     {
       "id": "hum|HH AH M",
@@ -12311,8 +12366,8 @@
       ],
       "common": false,
       "chordOrder": "HR|A|-T|",
-      "text": "lat",
-      "note": ""
+      "text": "laht",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "lat|L AE T",
@@ -12335,8 +12390,13 @@
       ],
       "common": false,
       "chordOrder": "HR|A|*T|",
-      "text": "lath",
-      "note": ""
+      "text": "lathwork",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "lathwork",
+        "lathh",
+        "laths"
+      ]
     },
     {
       "id": "la|L AA",
@@ -12539,8 +12599,8 @@
       ],
       "common": false,
       "chordOrder": "HR|AOEU|-S|",
-      "text": "lice",
-      "note": ""
+      "text": "lyce",
+      "note": "Phonetic respelling; independent recognizers found the original reading used short I."
     },
     {
       "id": "lube|L UW B",
@@ -12599,8 +12659,8 @@
       ],
       "common": false,
       "chordOrder": "HR|AOU||",
-      "text": "lieu",
-      "note": ""
+      "text": "loo",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "laud|L AO D",
@@ -12947,8 +13007,12 @@
       ],
       "common": false,
       "chordOrder": "HR|U|-L|",
-      "text": "lull",
-      "note": ""
+      "text": "lulling",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "lulling",
+        "lullaby"
+      ]
     },
     {
       "id": "lulled|L AH L D",
@@ -12959,8 +13023,13 @@
       ],
       "common": false,
       "chordOrder": "HR|U|-LD|",
-      "text": "lulled",
-      "note": ""
+      "text": "unlulled",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "unlulled",
+        "lulled,",
+        "luhld"
+      ]
     },
     {
       "id": "lung|L AH NG",
@@ -13031,8 +13100,12 @@
       ],
       "common": false,
       "chordOrder": "K|A|-L|",
-      "text": "cal",
-      "note": ""
+      "text": "Calvin",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "Calvin",
+        "Callahan"
+      ]
     },
     {
       "id": "canned|K AE N D",
@@ -13607,8 +13680,8 @@
       ],
       "common": false,
       "chordOrder": "KH|A||",
-      "text": "cha",
-      "note": ""
+      "text": "chah",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "chafe|CH EY F",
@@ -13703,8 +13776,8 @@
       ],
       "common": false,
       "chordOrder": "KH|AOU||",
-      "text": "chew",
-      "note": ""
+      "text": "choo",
+      "note": "Pronunciation repair input; checked independently against expected phones and signal quality."
     },
     {
       "id": "chalk|CH AO K",
@@ -13811,8 +13884,8 @@
       ],
       "common": false,
       "chordOrder": "KH|EU|-PBG|",
-      "text": "ching",
-      "note": ""
+      "text": "chinng",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "chit|CH IH T",
@@ -13835,8 +13908,8 @@
       ],
       "common": false,
       "chordOrder": "KH|O|-BG|",
-      "text": "chock",
-      "note": ""
+      "text": "chokk",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "chomp|CH AA M P",
@@ -13883,8 +13956,8 @@
       ],
       "common": false,
       "chordOrder": "KH|O|-R|",
-      "text": "chore",
-      "note": ""
+      "text": "choar",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "choke|CH OW K",
@@ -13931,8 +14004,8 @@
       ],
       "common": false,
       "chordOrder": "KH|U|-BG|",
-      "text": "chuck",
-      "note": ""
+      "text": "chuhk",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "chump|CH AH M P",
@@ -14303,8 +14376,8 @@
       ],
       "common": false,
       "chordOrder": "KWR|AOU|-S|",
-      "text": "youse",
-      "note": ""
+      "text": "use",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "yew|Y UW",
@@ -14387,8 +14460,8 @@
       ],
       "common": false,
       "chordOrder": "KWR|E|-P|",
-      "text": "yep",
-      "note": ""
+      "text": "yepp",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "yen|Y EH N",
@@ -14483,8 +14556,12 @@
       ],
       "common": false,
       "chordOrder": "KWR|U|-RT|",
-      "text": "yurt",
-      "note": ""
+      "text": "your turn",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "your turn",
+        "yurta"
+      ]
     },
     {
       "id": "pad|P AE D",
@@ -14519,8 +14596,14 @@
       ],
       "common": false,
       "chordOrder": "P|A|-L|",
-      "text": "pal",
-      "note": ""
+      "text": "pal?",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "pal?",
+        "pal!",
+        "paal",
+        "păl"
+      ]
     },
     {
       "id": "pap|P AE P",
@@ -14543,8 +14626,8 @@
       ],
       "common": false,
       "chordOrder": "P|A|-PB|",
-      "text": "pan",
-      "note": ""
+      "text": "pann",
+      "note": "Pronunciation repair input; checked independently against expected phones and signal quality."
     },
     {
       "id": "panned|P AE N D",
@@ -14627,8 +14710,12 @@
       ],
       "common": false,
       "chordOrder": "P|AE|-R|",
-      "text": "pear",
-      "note": ""
+      "text": "paired",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "paired",
+        "pairing"
+      ]
     },
     {
       "id": "pave|P EY V",
@@ -14951,8 +15038,8 @@
       ],
       "common": false,
       "chordOrder": "P|E|-FT|",
-      "text": "pest",
-      "note": ""
+      "text": "Pest",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "peg|P EH G",
@@ -14987,8 +15074,8 @@
       ],
       "common": false,
       "chordOrder": "P|E|-P|",
-      "text": "pep",
-      "note": ""
+      "text": "Pep",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "pent|P EH N T",
@@ -15119,8 +15206,14 @@
       ],
       "common": false,
       "chordOrder": "P|EU|*T|",
-      "text": "pith",
-      "note": ""
+      "text": "pithy",
+      "note": "Whole phonetic stem extracted from one approved-voice utterance; independently checked after extraction.",
+      "extractFrom": [
+        "pithy",
+        "pith and",
+        "pith helmet",
+        "pithiness"
+      ]
     },
     {
       "id": "pock|P AA K",
@@ -15348,8 +15441,12 @@
       ],
       "common": false,
       "chordOrder": "P|U|-F|",
-      "text": "puff",
-      "note": ""
+      "text": "puffer",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "puffer",
+        "puffy"
+      ]
     },
     {
       "id": "pug|P AH G",
@@ -15372,8 +15469,14 @@
       ],
       "common": false,
       "chordOrder": "P|U|-P|",
-      "text": "pup",
-      "note": ""
+      "text": "pups",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "pups",
+        "puppetry",
+        "puppet",
+        "puppy dog"
+      ]
     },
     {
       "id": "pun|P AH N",
@@ -15564,8 +15667,13 @@
       ],
       "common": false,
       "chordOrder": "PH|AO|-BG|",
-      "text": "mook",
-      "note": ""
+      "text": "mucken",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "mucken",
+        "mookster",
+        "mooks"
+      ]
     },
     {
       "id": "moose|M UW S",
@@ -15756,8 +15864,8 @@
       ],
       "common": false,
       "chordOrder": "PH|E|-R|",
-      "text": "mer",
-      "note": ""
+      "text": "mare",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "mesh|M EH SH",
@@ -15936,8 +16044,8 @@
       ],
       "common": false,
       "chordOrder": "PH|O|-L|",
-      "text": "moll",
-      "note": ""
+      "text": "mahl",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "mop|M AA P",
@@ -16164,8 +16272,12 @@
       ],
       "common": false,
       "chordOrder": "PH|U|-L|",
-      "text": "mull",
-      "note": ""
+      "text": "mulling",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "mulling",
+        "mullet"
+      ]
     },
     {
       "id": "mulled|M AH L D",
@@ -16176,8 +16288,14 @@
       ],
       "common": false,
       "chordOrder": "PH|U|-LD|",
-      "text": "mulled",
-      "note": ""
+      "text": "muhled",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "muhled",
+        "muhhld",
+        "muhlld",
+        "muhld"
+      ]
     },
     {
       "id": "mum|M AH M",
@@ -16188,8 +16306,13 @@
       ],
       "common": false,
       "chordOrder": "PH|U|-PL|",
-      "text": "mum",
-      "note": ""
+      "text": "maximum",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "maximum",
+        "minimum",
+        "chrysanthemum"
+      ]
     },
     {
       "id": "mush|M AH SH",
@@ -16236,8 +16359,8 @@
       ],
       "common": false,
       "chordOrder": "PHR|A|-D|",
-      "text": "plaid",
-      "note": ""
+      "text": "plad",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "plead|P L IY D",
@@ -16572,8 +16695,12 @@
       ],
       "common": false,
       "chordOrder": "PW|A|-Z|",
-      "text": "baz",
-      "note": ""
+      "text": "Basil",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "Basil",
+        "Bazley"
+      ]
     },
     {
       "id": "babe|B EY B",
@@ -16704,8 +16831,8 @@
       ],
       "common": false,
       "chordOrder": "PW|AO|-P|",
-      "text": "boop",
-      "note": ""
+      "text": "boopp",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "boon|B UW N",
@@ -16728,8 +16855,14 @@
       ],
       "common": false,
       "chordOrder": "PW|AO|-R|",
-      "text": "boor",
-      "note": ""
+      "text": "tambour",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "tambour",
+        "booru",
+        "boore",
+        "booer"
+      ]
     },
     {
       "id": "booze|B UW Z",
@@ -16776,8 +16909,15 @@
       ],
       "common": false,
       "chordOrder": "PW|AOE|-BG|",
-      "text": "beak",
-      "note": ""
+      "text": "a beak",
+      "note": "Whole phonetic stem in the approved voice; checked before and after encoding.",
+      "extractFrom": [
+        "a beak",
+        "the beak",
+        "a bird beak",
+        "beaks",
+        "beaky"
+      ]
     },
     {
       "id": "bead|B IY D",
@@ -16836,8 +16976,14 @@
       ],
       "common": false,
       "chordOrder": "PW|AOE|-P|",
-      "text": "beep",
-      "note": ""
+      "text": "a beep",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "a beep",
+        "the beep",
+        "beeps",
+        "beeped"
+      ]
     },
     {
       "id": "bean|B IY N",
@@ -17040,8 +17186,13 @@
       ],
       "common": false,
       "chordOrder": "PW|EU|-FP|",
-      "text": "bitch",
-      "note": ""
+      "text": "a bitch",
+      "note": "Whole phonetic stem in the approved voice; independently checked after extraction.",
+      "extractFrom": [
+        "a bitch",
+        "habitual",
+        "bitchy"
+      ]
     },
     {
       "id": "bing|B IH NG",
@@ -17364,8 +17515,14 @@
       ],
       "common": false,
       "chordOrder": "PW|U|-FRP|",
-      "text": "bump",
-      "note": ""
+      "text": "a bump",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "a bump",
+        "the bump",
+        "bumps",
+        "bumpy"
+      ]
     },
     {
       "id": "bust|B AH S T",
@@ -18289,8 +18446,8 @@
       ],
       "common": false,
       "chordOrder": "R|A|-B|",
-      "text": "raab",
-      "note": ""
+      "text": "rob",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "rack|R AE K",
@@ -18722,8 +18879,8 @@
       ],
       "common": false,
       "chordOrder": "R|E|-BG|",
-      "text": "rec",
-      "note": ""
+      "text": "reck",
+      "note": "Pronunciation repair input; checked independently against expected phones and signal quality."
     },
     {
       "id": "rev|R EH V",
@@ -18986,8 +19143,12 @@
       ],
       "common": false,
       "chordOrder": "R|OE|-G|",
-      "text": "rogue",
-      "note": ""
+      "text": "roguish",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "roguish",
+        "rogues"
+      ]
     },
     {
       "id": "rope|R OW P",
@@ -19310,8 +19471,8 @@
       ],
       "common": false,
       "chordOrder": "S|AOE|-PBLG|",
-      "text": "siege",
-      "note": ""
+      "text": "seej",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "seer|S IY R",
@@ -19358,8 +19519,12 @@
       ],
       "common": false,
       "chordOrder": "S|AOE|*T|",
-      "text": "seethe",
-      "note": ""
+      "text": "seething",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "seething",
+        "seethes"
+      ]
     },
     {
       "id": "sued|S UW D",
@@ -19466,8 +19631,8 @@
       ],
       "common": false,
       "chordOrder": "S|EU|-F|",
-      "text": "sieve",
-      "note": ""
+      "text": "siv",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "sift|S IH F T",
@@ -19586,8 +19751,8 @@
       ],
       "common": false,
       "chordOrder": "S|O|-L|",
-      "text": "sol",
-      "note": ""
+      "text": "sahl",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "sop|S AA P",
@@ -19683,7 +19848,8 @@
       "common": false,
       "chordOrder": "S|OEU|-R|",
       "text": "soir",
-      "note": ""
+      "note": "CMU source pronunciation corrected for audio only: Larousse [swar]. https://www.larousse.fr/dictionnaires/francais-anglais/soir/72408",
+      "spokenPhones": "S W AA R"
     },
     {
       "id": "soy|S OY",
@@ -19814,8 +19980,13 @@
       ],
       "common": false,
       "chordOrder": "SH|A|-LT|",
-      "text": "shalt",
-      "note": ""
+      "text": "shallt",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "shallt",
+        "shælter",
+        "shælth"
+      ]
     },
     {
       "id": "sham|SH AE M",
@@ -21148,8 +21319,8 @@
       ],
       "common": false,
       "chordOrder": "SKWR|AOE|-P|",
-      "text": "jeep",
-      "note": ""
+      "text": "Jeep",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "jeez|JH IY Z",
@@ -21160,8 +21331,8 @@
       ],
       "common": false,
       "chordOrder": "SKWR|AOE|-Z|",
-      "text": "jeez",
-      "note": ""
+      "text": "Jeez",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "gee|JH IY",
@@ -21724,8 +21895,12 @@
       ],
       "common": false,
       "chordOrder": "SP|AOE|-L|",
-      "text": "spiel",
-      "note": ""
+      "text": "speeling",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "speeling",
+        "speel"
+      ]
     },
     {
       "id": "spike|S P AY K",
@@ -21976,8 +22151,12 @@
       ],
       "common": false,
       "chordOrder": "SR|A|-L|",
-      "text": "val",
-      "note": ""
+      "text": "Valley",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "Valley",
+        "Valerie"
+      ]
     },
     {
       "id": "vase|V AA Z",
@@ -21988,8 +22167,12 @@
       ],
       "common": false,
       "chordOrder": "SR|A|-S|",
-      "text": "vase",
-      "note": ""
+      "text": "vaza",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "vaza",
+        "vahzes"
+      ]
     },
     {
       "id": "vase|V EY S",
@@ -22156,8 +22339,8 @@
       ],
       "common": false,
       "chordOrder": "SR|AOEU||",
-      "text": "vie",
-      "note": ""
+      "text": "vye",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "vault|V AO L T",
@@ -22840,8 +23023,12 @@
       ],
       "common": false,
       "chordOrder": "STKPW|EU|-PBG|",
-      "text": "zing",
-      "note": ""
+      "text": "zinger",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "zinger",
+        "zinging"
+      ]
     },
     {
       "id": "tab|T AE B",
@@ -22936,8 +23123,12 @@
       ],
       "common": false,
       "chordOrder": "T|A|-PBG|",
-      "text": "tang",
-      "note": ""
+      "text": "Tonga",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "Tonga",
+        "tahng"
+      ]
     },
     {
       "id": "tang|T AE NG",
@@ -22960,8 +23151,12 @@
       ],
       "common": false,
       "chordOrder": "T|A|-PL|",
-      "text": "tam",
-      "note": ""
+      "text": "Tammy",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "Tammy",
+        "tammie"
+      ]
     },
     {
       "id": "tar|T AA R",
@@ -23380,8 +23575,8 @@
       ],
       "common": false,
       "chordOrder": "T|O|-PBG|",
-      "text": "tong",
-      "note": ""
+      "text": "tawng",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "tort|T AO R T",
@@ -23621,7 +23816,8 @@
       "common": false,
       "chordOrder": "TH|AOEU|-PL|",
       "text": "thyme",
-      "note": ""
+      "note": "Use the standard citation pronunciation /taɪm/. Cambridge: https://dictionary.cambridge.org/us/pronunciation/english/thyme",
+      "spokenPhones": "T AY M"
     },
     {
       "id": "thighs|TH AY Z",
@@ -24221,8 +24417,8 @@
       ],
       "common": false,
       "chordOrder": "TK|E|-S|",
-      "text": "des",
-      "note": ""
+      "text": "dess",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "dick|D IH K",
@@ -24401,8 +24597,8 @@
       ],
       "common": false,
       "chordOrder": "TK|O|-PL|",
-      "text": "dom",
-      "note": ""
+      "text": "dahm",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "dosh|D AA SH",
@@ -24593,8 +24789,8 @@
       ],
       "common": false,
       "chordOrder": "TK|U|-L|",
-      "text": "dull",
-      "note": ""
+      "text": "duhll",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "dun|D AH N",
@@ -24761,8 +24957,14 @@
       ],
       "common": false,
       "chordOrder": "TKPW|AO|-BG|",
-      "text": "gook",
-      "note": ""
+      "text": "gook,",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "gook,",
+        "a gook",
+        "gookster",
+        "gooks"
+      ]
     },
     {
       "id": "goof|G UW F",
@@ -24833,8 +25035,14 @@
       ],
       "common": false,
       "chordOrder": "TKPW|AOE|-BG|",
-      "text": "geek",
-      "note": ""
+      "text": "a geek",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "a geek",
+        "the geek",
+        "geeks",
+        "geekdom"
+      ]
     },
     {
       "id": "geese|G IY S",
@@ -24965,8 +25173,14 @@
       ],
       "common": false,
       "chordOrder": "TKPW|EU|-LD|",
-      "text": "guild",
-      "note": ""
+      "text": "a guild",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "a guild",
+        "the guild",
+        "guilds",
+        "gilder"
+      ]
     },
     {
       "id": "guilt|G IH L T",
@@ -24989,8 +25203,14 @@
       ],
       "common": false,
       "chordOrder": "TKPW|EU|-T|",
-      "text": "git",
-      "note": ""
+      "text": "guitar",
+      "note": "Whole initial stem with short I, independently checked after extraction and encoding.",
+      "requirePhoneMatch": true,
+      "extractFrom": [
+        "guitar",
+        "guitars",
+        "gittern"
+      ]
     },
     {
       "id": "gob|G AA B",
@@ -25193,8 +25413,8 @@
       ],
       "common": false,
       "chordOrder": "TKPW|U|-L|",
-      "text": "gull",
-      "note": ""
+      "text": "guhll",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "gum|G AH M",
@@ -25229,8 +25449,14 @@
       ],
       "common": false,
       "chordOrder": "TKPW|U|-T|",
-      "text": "gut",
-      "note": ""
+      "text": "guts",
+      "note": "Whole phonetic stem in the approved voice; independently checked after extraction.",
+      "extractFrom": [
+        "guts",
+        "gutless",
+        "gutful",
+        "Guttman"
+      ]
     },
     {
       "id": "grad|G R AE D",
@@ -26357,8 +26583,8 @@
       ],
       "common": false,
       "chordOrder": "TP|EU|*T|",
-      "text": "fifth",
-      "note": ""
+      "text": "fith",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "fob|F AO B",
@@ -26453,8 +26679,12 @@
       ],
       "common": false,
       "chordOrder": "TP|OE|-L|",
-      "text": "foal",
-      "note": ""
+      "text": "Foley",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "Foley",
+        "foaling"
+      ]
     },
     {
       "id": "foam|F OW M",
@@ -26885,8 +27115,12 @@
       ],
       "common": false,
       "chordOrder": "TPH|E|-L|",
-      "text": "nel",
-      "note": ""
+      "text": "Nellie",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "Nellie",
+        "Nelly"
+      ]
     },
     {
       "id": "knelt|N EH L T",
@@ -27029,8 +27263,12 @@
       ],
       "common": false,
       "chordOrder": "TPH|OE|-L|",
-      "text": "knoll",
-      "note": ""
+      "text": "Nolan",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "Nolan",
+        "knolling"
+      ]
     },
     {
       "id": "nope|N OW P",
@@ -27065,8 +27303,14 @@
       ],
       "common": false,
       "chordOrder": "TPH|OEU|-R|",
-      "text": "noir",
-      "note": ""
+      "text": "nwar",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction. Reviewed audio phones: N W AA R; Cambridge https://dictionary.cambridge.org/us/pronunciation/english/noir",
+      "spokenPhones": "N W AA R",
+      "extractFrom": [
+        "nwar",
+        "nwahrr",
+        "noire"
+      ]
     },
     {
       "id": "nub|N AH B",
@@ -27089,8 +27333,12 @@
       ],
       "common": false,
       "chordOrder": "TPH|U|-L|",
-      "text": "null",
-      "note": ""
+      "text": "nullified",
+      "note": "Whole initial syllable of nullified. The isolated phoneme recognizer shifts the central vowel label before dark L; independent word recognition identifies Null. No phonetic segments are combined from other recordings.",
+      "reviewedRecording": {
+        "metadata": "data/audio/repairs/null.json",
+        "sha256": "0c1836eacccc56ff50c2afdd485de2e91d013cdf441fb36b13bf2fc9789e2bb9"
+      }
     },
     {
       "id": "nun|N AH N",
@@ -27101,8 +27349,12 @@
       ],
       "common": false,
       "chordOrder": "TPH|U|-PB|",
-      "text": "nun",
-      "note": ""
+      "text": "nunnery",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "nunnery",
+        "nunnish"
+      ]
     },
     {
       "id": "nudge|N AH JH",
@@ -27125,8 +27377,12 @@
       ],
       "common": false,
       "chordOrder": "TPH|U|-T|",
-      "text": "nut",
-      "note": ""
+      "text": "nutmeg",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "nutmeg",
+        "nutshell"
+      ]
     },
     {
       "id": "flab|F L AE B",
@@ -28147,8 +28403,8 @@
       ],
       "common": false,
       "chordOrder": "TR|O|-F|",
-      "text": "trough",
-      "note": ""
+      "text": "trawf",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "tromp|T R AA M P",
@@ -28159,8 +28415,15 @@
       ],
       "common": false,
       "chordOrder": "TR|O|-FRP|",
-      "text": "tromp",
-      "note": ""
+      "text": "trahmp",
+      "note": "Whole phonetic stem with checked AA vowel.",
+      "requirePhoneMatch": true,
+      "extractFrom": [
+        "trahmp",
+        "traamp",
+        "tromped",
+        "tromp"
+      ]
     },
     {
       "id": "tron|T R AA N",
@@ -28195,8 +28458,12 @@
       ],
       "common": false,
       "chordOrder": "TR|O|*T|",
-      "text": "troth",
-      "note": ""
+      "text": "trawthy",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "trawthy",
+        "trothing"
+      ]
     },
     {
       "id": "troth|T R OW TH",
@@ -28351,8 +28618,14 @@
       ],
       "common": false,
       "chordOrder": "W|A|-T|",
-      "text": "watt",
-      "note": ""
+      "text": "Watt",
+      "note": "Whole word with checked final T.",
+      "requirePhoneMatch": true,
+      "extractFrom": [
+        "Watt",
+        "a watt",
+        "wattage"
+      ]
     },
     {
       "id": "wang|W AE NG",
@@ -28423,8 +28696,8 @@
       ],
       "common": false,
       "chordOrder": "W|AEU|-PBD|",
-      "text": "waned",
-      "note": ""
+      "text": "waynd",
+      "note": "Pronunciation repair input; accepted only after independent acoustic screening."
     },
     {
       "id": "woof|W UW F",
@@ -28435,8 +28708,14 @@
       ],
       "common": false,
       "chordOrder": "W|AO|-F|",
-      "text": "woof",
-      "note": ""
+      "text": "woooof",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "woooof",
+        "woofoo",
+        "woo fee",
+        "wooful"
+      ]
     },
     {
       "id": "wool|W UH L",
@@ -28747,8 +29026,12 @@
       ],
       "common": false,
       "chordOrder": "W|O|-PB|",
-      "text": "won",
-      "note": ""
+      "text": "wander",
+      "note": "Whole phonetic stem extracted from one utterance in the approved voice; independently screened after extraction.",
+      "extractFrom": [
+        "wander",
+        "wand"
+      ]
     },
     {
       "id": "won|W AH N",
