@@ -3,6 +3,12 @@ import type { PracticeWord, WordEntry } from './types';
 import { parseStroke } from './classifier';
 import { shuffled } from './practice';
 
+export const builtInExercises = [
+  ['bank', 'Words'], ['drills', 'Word drills'], ['chords', 'Keys / chords'], ['fingers', 'Finger drills'],
+  ['sentences', 'Sentences'], ['two-key', 'Two-key sentences'], ['quotes', 'Quotes'],
+  ['numbers', 'Numbers'], ['number-sentences', 'Number sentences'], ['symbols', 'Symbols'], ['text', 'Custom text'],
+] as const;
+
 const labels: Record<string, string> = {
   'd-/b-': 'D / B', '-ld/-lt': 'LD / LT', nch: 'NCH', '-nj': 'NJ', 'ite/ight': 'ITE / IGHT',
   'st/sp': 'ST / SP', 'AI/OE/EE': 'Long vowels', shortAndLongA: 'Short / long A',

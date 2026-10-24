@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { useApp } from '../context';
 import { concepts } from '../domain/concepts';
 import { eligibleWords, evaluateForFocus, selectedConcepts } from '../domain/vocabulary';
-import { fingerSections, fingerSequence, invalidStrokes, keyboardSets, numberPassage, quotePassage, sentencePassage, symbolPool, techniqueSections, textWords, twoKeyText, wordDrills } from '../domain/exercises';
+import { builtInExercises as builtins, fingerSections, fingerSequence, invalidStrokes, keyboardSets, numberPassage, quotePassage, sentencePassage, symbolPool, techniqueSections, textWords, twoKeyText, wordDrills } from '../domain/exercises';
 import type { Filter, HintSize, PracticePreferences, PracticeWord } from '../domain/types';
 import { ConceptPicker, Empty, FilterControls, Icon, Brand } from '../components';
 
@@ -18,12 +18,6 @@ import { defaultProfile } from '../domain/profile';
 import { PracticeSession } from './Session';
 import { TestSettings } from './TestSettings';
 import { ShareControls } from './ShareControls';
-
-const builtins = [
-  ['bank', 'Words'], ['drills', 'Word drills'], ['chords', 'Keys / chords'], ['fingers', 'Finger drills'],
-  ['sentences', 'Sentences'], ['two-key', 'Two-key sentences'], ['quotes', 'Quotes'],
-  ['numbers', 'Numbers'], ['number-sentences', 'Number sentences'], ['symbols', 'Symbols'], ['text', 'Custom text'],
-];
 
 export function PracticeView({ settingsOpen, onSettings, onClose, navigation, settingsContent, warning }: {
   settingsOpen: boolean; onSettings: () => void; onClose: () => void;

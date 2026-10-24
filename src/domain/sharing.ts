@@ -6,6 +6,7 @@ import { shareCatalog as v1 } from './shareCatalog';
 import { wordPracticeDefaults, assistedPractice } from './wordPractice';
 import { listeningDefaults, speechRates, validateListening } from './listening';
 import { BitReader, BitWriter, readSet, writeSet } from './shareBits';
+import { maxReadableFragmentBytes, parseReadableProfile, readableParameters } from './readableTests';
 
 export type ShareResult<T> = { ok: true; value: T } | { ok: false; error: string };
 type SharedConcepts = { concepts: string[]; focus: string };
@@ -278,12 +279,21 @@ export function sharedHash(route: string, token?: string) {
 interface TestLocation { route: string; query?: string; token: string | undefined; shared: SharedTest | null; error: string }
 export function parseTestLocation(hash: string): TestLocation {
   const short = hash.startsWith('#t=');
-  const query = short ? hash.slice(1) : hash.split('?')[1] || '';
+  const requested = short ? 'practice' : hash.slice(2).split('?')[0];
+  const query = short ? hash.slice(1) : hash.includes('?') ? hash.slice(hash.indexOf('?') + 1) : '';
+  if (requested === 'practice' && new TextEncoder().encode(hash).length > maxReadableFragmentBytes) return { route: 'practice', token: undefined, shared: null, error: 'Test link exceeds 16 KiB.' };
   const params = new URLSearchParams(query), values = params.getAll('t');
   params.delete('t');
   const extra = params.toString();
-  const requested = short ? 'practice' : hash.slice(2).split('?')[0];
   const route = ['practice', 'test-settings', 'skills', 'words', 'exercises', 'settings'].includes(requested) ? requested : 'practice';
+  if (requested === 'practice' && params.size) {
+    if (values.length && [...params.keys()].some(key => Object.hasOwn(readableParameters, key))) return { route, token: undefined, shared: null, error: 'Use readable parameters or a compact token, not both.' };
+    if (!values.length) {
+      const parsed = parseReadableProfile(params);
+      const result = parsed.ok ? normalizeSharedTest(parsed.value) : parsed;
+      return result.ok ? { route, token: encodeSharedTest(result.value), shared: result.value, error: '' } : { route, token: undefined, shared: null, error: result.error };
+    }
+  }
   if (!values.length) return { route, query: extra, token: undefined, shared: null, error: '' };
   if (values.length !== 1) return { route, token: undefined, shared: null, error: 'Invalid test link.' };
   const result = decodeSharedTest(values[0]);

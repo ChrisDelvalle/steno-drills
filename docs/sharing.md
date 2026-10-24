@@ -6,6 +6,12 @@ Reset defaults in a shared test changes the temporary test to Words, Common voca
 
 Custom word lists, custom text, and custom finger patterns cannot be shared. Saved filters can be shared because their criteria and selected concepts are resolved into the link, without their local IDs or names. Links preserve constraints rather than a fixed word sequence or vocabulary snapshot.
 
+## Readable links
+
+Agents can construct `#/practice?concepts=all&focus=initial.l&seconds=60` using the public parameters documented in [the agent guide](https://steno.chrisdelvalle.com/agents.html). The practice route validates these parameters and resolves them into the same shared-test model before rendering. It replaces the address with the canonical compact token through the existing location-state mechanism, without reloading or adding a history entry.
+
+Readable links use explicit concepts and bundled content, never the recipient's Skills. Unsupported or incompatible options, duplicate/unknown parameters, mixed compact/readable settings, and practice fragments over 16 KiB show an error. Other routes retain their existing behavior. The authored guide is `docs/agents.md`; `npm run agents:build` generates its published forms and the catalog from existing definitions, and `npm run agents:check` verifies those files and all guide examples.
+
 ## V1 wire format
 
 The canonical practice fragment is `#t=<token>`; settings use `#/test-settings?t=<token>`. Other hash screens preserve `t` alongside their ordinary parameters. The token uses `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_`, with bits written most-significant first into six-bit groups. Only the last group receives zero padding. This is a direct bitstream using the Base64url alphabet, not a byte-aligned Base64 encoding.
@@ -64,4 +70,4 @@ V4 retains the v1 source payload and six v2 word-option bits, followed by a 4-bi
 
 V5 preserves the v1 source payload and all v4 word fields (six v2 bits, four recovery bits, four group bits), then appends two display bits and four speed bits. Version 5 enables audio; no extra enable bit is needed. Display IDs are Full=0, Current=1, Hidden=2; 3 is reserved. Speed IDs 0–15 are 0.5× through 2× in 0.1 steps, frozen in `speechRates`. Only Words and word drills support v5; saved filters resolve to Words. Voice IDs remain personal and are never encoded.
 
-With starter concepts, 60 seconds and ordinary word options, fixed fixtures are `oCCAAAo` (Full), `oCCAACo` (Current), and `oCCAAEo` (Hidden), all at 1× with hints off. Audio-off links continue to emit the existing v1–v4 formats, regardless of inactive listening preferences. All old links explicitly disable audio. Editing, reload, Save settings and Exit preserve the same shared-profile isolation. A shared audio test is ready immediately: Space or Play starts audio, and visible typing also starts it without dropping input. Hidden text shows “Press space to start.” Enter restarts and plays immediately. Timing begins when the first utterance starts.
+With starter concepts, 60 seconds and ordinary word options, fixed fixtures are `oCCAAAo` (Full), `oCCAACo` (Current), and `oCCAAEo` (Hidden), all at 1× with hints off. Audio-off links continue to emit the existing v1–v4 formats, regardless of inactive listening preferences. All old links explicitly disable audio. Editing, reload, Save settings and Exit preserve the same shared-profile isolation. A shared audio test is ready immediately: Space or Play starts audio, and visible typing also starts it without dropping input. Hidden text shows “Press space to start.” Enter restarts and queues playback after half a second. Timing begins when the first utterance starts.

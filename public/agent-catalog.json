@@ -1,0 +1,3929 @@
+{
+  "version": 1,
+  "origin": "https://steno.chrisdelvalle.com",
+  "route": "/#/practice",
+  "maximumFragmentBytes": 16384,
+  "documentation": {
+    "html": "https://steno.chrisdelvalle.com/agents.html",
+    "markdown": "https://steno.chrisdelvalle.com/agents.md",
+    "llms": "https://steno.chrisdelvalle.com/llms.txt"
+  },
+  "parameters": {
+    "exercise": {
+      "type": "string",
+      "default": "bank",
+      "values": [
+        "bank",
+        "drills",
+        "chords",
+        "fingers",
+        "sentences",
+        "two-key",
+        "quotes",
+        "numbers",
+        "number-sentences",
+        "symbols"
+      ],
+      "description": "Built-in exercise ID."
+    },
+    "seconds": {
+      "type": "number",
+      "default": 60,
+      "values": [
+        30,
+        60,
+        90,
+        120,
+        300
+      ],
+      "integer": true,
+      "description": "Timed session duration. Cannot be combined with count."
+    },
+    "count": {
+      "type": "number",
+      "default": 25,
+      "values": [
+        10,
+        25,
+        50,
+        100,
+        250,
+        500
+      ],
+      "integer": true,
+      "description": "Count session. Without seconds or count, use 60 seconds. For fingers, quotes, and two-key, use 25 to select the complete passage."
+    },
+    "hints": {
+      "type": "boolean",
+      "default": false,
+      "description": "Enable chord hints. Hidden audio text still requires explicit reveal."
+    },
+    "pool": {
+      "type": "string",
+      "default": "common",
+      "values": [
+        "common",
+        "all"
+      ],
+      "sources": [
+        "bank"
+      ],
+      "description": "Common vocabulary or the eligible dictionary."
+    },
+    "concepts": {
+      "type": "concepts",
+      "default": "starter",
+      "sources": [
+        "bank",
+        "drills",
+        "chords"
+      ],
+      "description": "none, single, starter, all, or comma-separated concept IDs. Requires restricted=true for drills and keyboardSet=selected for chords. Chord exercises omit briefs."
+    },
+    "focus": {
+      "type": "string",
+      "default": "",
+      "values": [
+        "",
+        "initial.s",
+        "initial.t",
+        "initial.k",
+        "initial.p",
+        "initial.w",
+        "initial.h",
+        "initial.r",
+        "initial.d",
+        "initial.b",
+        "initial.l",
+        "initial.f",
+        "initial.m",
+        "initial.n",
+        "initial.j",
+        "initial.g",
+        "initial.v",
+        "initial.y",
+        "initial.z",
+        "initial.qu",
+        "initial.sh",
+        "initial.ch",
+        "initial.th",
+        "initial.th-voiced",
+        "initial.st",
+        "initial.sp",
+        "initial.sk",
+        "initial.br",
+        "initial.fr",
+        "initial.gr",
+        "initial.pl",
+        "initial.bl",
+        "initial.sl",
+        "initial.tr",
+        "initial.dr",
+        "initial.fl",
+        "vowel.a",
+        "vowel.o",
+        "vowel.e",
+        "vowel.u",
+        "vowel.short-i",
+        "vowel.long-a",
+        "vowel.long-e",
+        "vowel.long-i",
+        "vowel.long-o",
+        "vowel.long-u",
+        "vowel.aw",
+        "vowel.ow",
+        "vowel.oy",
+        "vowel.oo",
+        "vowel.ae",
+        "final.f",
+        "final.r",
+        "final.p",
+        "final.b",
+        "final.l",
+        "final.g",
+        "final.t",
+        "final.s",
+        "final.d",
+        "final.z",
+        "final.m",
+        "final.n",
+        "final.k",
+        "final.j",
+        "final.sh",
+        "final.ch",
+        "final.ng",
+        "final.nk",
+        "final.ld",
+        "final.lt",
+        "final.rt",
+        "final.nt",
+        "final.nd",
+        "final.mp",
+        "final.ft",
+        "special.final-v",
+        "special.final-st",
+        "special.final-st-f",
+        "special.final-z-s",
+        "special.final-th",
+        "special.final-th-voiced",
+        "brief.the",
+        "brief.of",
+        "brief.to",
+        "brief.in",
+        "brief.a",
+        "brief.is",
+        "brief.that",
+        "brief.with",
+        "brief.be",
+        "brief.by",
+        "brief.he"
+      ],
+      "sources": [
+        "bank",
+        "drills"
+      ],
+      "description": "Require this concept in a qualifying outline. Requires restricted=true for drills. Does not unlock missing concepts."
+    },
+    "minLength": {
+      "type": "number",
+      "default": 1,
+      "min": 1,
+      "max": 100,
+      "integer": true,
+      "sources": [
+        "bank"
+      ],
+      "description": "Minimum word length; must not exceed maxLength."
+    },
+    "maxLength": {
+      "type": "number",
+      "default": 30,
+      "min": 1,
+      "max": 100,
+      "integer": true,
+      "sources": [
+        "bank"
+      ],
+      "description": "Maximum word length."
+    },
+    "inputMode": {
+      "type": "string",
+      "default": "text",
+      "values": [
+        "text",
+        "steno"
+      ],
+      "sources": [
+        "bank",
+        "drills"
+      ],
+      "description": "Translated text or raw outline input."
+    },
+    "groupSize": {
+      "type": "number",
+      "default": 1,
+      "min": 1,
+      "max": 10,
+      "integer": true,
+      "sources": [
+        "bank",
+        "drills"
+      ],
+      "description": "Words per practice group."
+    },
+    "repetitions": {
+      "type": "number",
+      "default": 1,
+      "min": 1,
+      "max": 10,
+      "integer": true,
+      "sources": [
+        "bank",
+        "drills"
+      ],
+      "description": "Correct passes per group."
+    },
+    "requireCorrect": {
+      "type": "boolean",
+      "default": false,
+      "sources": [
+        "bank",
+        "drills"
+      ],
+      "description": "Require correction of submitted mistakes."
+    },
+    "repeatOnError": {
+      "type": "boolean",
+      "default": false,
+      "sources": [
+        "bank",
+        "drills"
+      ],
+      "description": "Enable recovery repetitions after a mistake."
+    },
+    "errorRepetitions": {
+      "type": "number",
+      "default": 3,
+      "min": 1,
+      "max": 10,
+      "integer": true,
+      "sources": [
+        "bank",
+        "drills"
+      ],
+      "description": "Recovery passes; requires repeatOnError=true. Recovery uses the larger of this and repetitions."
+    },
+    "audio": {
+      "type": "boolean",
+      "default": false,
+      "sources": [
+        "bank",
+        "drills"
+      ],
+      "description": "Enable self-paced audio. Voice selection stays personal."
+    },
+    "display": {
+      "type": "string",
+      "default": "full",
+      "values": [
+        "full",
+        "current",
+        "hidden"
+      ],
+      "sources": [
+        "bank",
+        "drills"
+      ],
+      "description": "Audio text presentation; requires audio=true."
+    },
+    "rate": {
+      "type": "number",
+      "default": 1,
+      "values": [
+        0.5,
+        0.6,
+        0.7,
+        0.8,
+        0.9,
+        1,
+        1.1,
+        1.2,
+        1.3,
+        1.4,
+        1.5,
+        1.6,
+        1.7,
+        1.8,
+        1.9,
+        2
+      ],
+      "sources": [
+        "bank",
+        "drills"
+      ],
+      "description": "Audio speed multiplier; requires audio=true."
+    },
+    "drills": {
+      "type": "list",
+      "default": [
+        "d-/b-"
+      ],
+      "values": [
+        "d-/b-",
+        "-ld/-lt",
+        "nch",
+        "-nj",
+        "ite/ight",
+        "st/sp",
+        "AI/OE/EE",
+        "shortAndLongA",
+        "oneAndTwoKey",
+        "oneOrTwoKeys",
+        "singleStrokeCVC",
+        "multiStrokeCVC",
+        "D_SingleSyllable",
+        "B_SingleSyllable",
+        "L_SingleSyllable",
+        "F_SingleSyllable",
+        "M_SingleSyllable",
+        "N_SingleSyllable",
+        "Q_SingleSyllable",
+        "Y_SingleSyllable",
+        "J_SingleSyllable",
+        "V_SingleSyllable",
+        "SingleSyllable_N",
+        "SingleSyllable_M",
+        "CommonBriefs_1_20",
+        "CommonBriefs_21_40",
+        "CommonBriefs_41_60",
+        "CommonBriefs_61_80",
+        "CommonBriefs_81_100",
+        "ST words",
+        "CH words",
+        "SH words",
+        "-LD words",
+        "+LD words",
+        "-LT words",
+        "+LT words",
+        "-RT words",
+        "+RT words",
+        "Learn Plover: One Syllable Words",
+        "Learn Plover: Consonant Clusters",
+        "Learn Plover: Where's the TRUFT?",
+        "Learn Plover: Dropping Unstressed Vowels",
+        "Learn Plover: Inversion",
+        "Learn Plover: The Fifth Vowel Key",
+        "Learn Plover: Long Vowel Chords",
+        "Learn Plover: Diphthong Chords",
+        "Learn Plover: Vowel Disambiguator Chords",
+        "Learn Plover: The Missing Keys",
+        "Learn Plover: The Remaining Missing Letters",
+        "Learn Plover: Review Through Missing Letters",
+        "Learn Plover: Digraphs",
+        "Learn Plover: Review Through Digraphs",
+        "Learn Plover: Common Compound Clusters",
+        "Learn Plover: Review Through Common Compound Clusters",
+        "Learn Plover: Common Briefs 1-20",
+        "Learn Plover: Common Briefs 21-40",
+        "Learn Plover: Common Briefs 41-60",
+        "Learn Plover: Common Briefs 61-80",
+        "Learn Plover: Common Briefs 81-100",
+        "Intro: LeftIndex",
+        "Intro: LeftMiddle",
+        "Intro: LeftIndexMiddle",
+        "Intro: LeftRingPinky",
+        "Intro: Left"
+      ],
+      "sources": [
+        "drills"
+      ],
+      "description": "Comma-separated built-in drill IDs. An empty value selects an empty mix."
+    },
+    "restricted": {
+      "type": "boolean",
+      "default": true,
+      "sources": [
+        "drills"
+      ],
+      "description": "Filter built-in word drills by selected concepts."
+    },
+    "keyboardSet": {
+      "type": "string",
+      "default": "selected",
+      "values": [
+        "selected",
+        "Left hand",
+        "Right hand",
+        "Vowels",
+        "Left bottom row",
+        "Left top row",
+        "Right bottom row",
+        "Right top row"
+      ],
+      "sources": [
+        "chords"
+      ],
+      "description": "selected uses concepts; otherwise choose a catalog keyboard set."
+    },
+    "fingerBook": {
+      "type": "string",
+      "default": "duo",
+      "values": [
+        "duo",
+        "technique"
+      ],
+      "sources": [
+        "fingers"
+      ],
+      "description": "Built-in finger pattern book."
+    },
+    "section": {
+      "type": "number",
+      "default": 0,
+      "min": 0,
+      "max": 26,
+      "integer": true,
+      "sources": [
+        "fingers"
+      ],
+      "description": "Zero-based Duo section. Omit for technique."
+    },
+    "pattern": {
+      "type": "number",
+      "default": 0,
+      "min": -1,
+      "max": 25,
+      "integer": true,
+      "sources": [
+        "fingers"
+      ],
+      "description": "Zero-based pattern in the selected section/book; -1 selects all."
+    },
+    "repeats": {
+      "type": "number",
+      "default": 20,
+      "min": 1,
+      "max": 50,
+      "integer": true,
+      "sources": [
+        "fingers"
+      ],
+      "description": "Finger pattern repetitions."
+    },
+    "quoteLength": {
+      "type": "string",
+      "default": "medium",
+      "values": [
+        "short",
+        "medium",
+        "long"
+      ],
+      "sources": [
+        "quotes"
+      ],
+      "description": "Quote length category."
+    },
+    "symbolVariants": {
+      "type": "boolean",
+      "default": false,
+      "sources": [
+        "symbols"
+      ],
+      "description": "Include symbol variants."
+    }
+  },
+  "exercises": [
+    {
+      "id": "bank",
+      "label": "Words"
+    },
+    {
+      "id": "drills",
+      "label": "Word drills"
+    },
+    {
+      "id": "chords",
+      "label": "Keys / chords"
+    },
+    {
+      "id": "fingers",
+      "label": "Finger drills"
+    },
+    {
+      "id": "sentences",
+      "label": "Sentences"
+    },
+    {
+      "id": "two-key",
+      "label": "Two-key sentences"
+    },
+    {
+      "id": "quotes",
+      "label": "Quotes"
+    },
+    {
+      "id": "numbers",
+      "label": "Numbers"
+    },
+    {
+      "id": "number-sentences",
+      "label": "Number sentences"
+    },
+    {
+      "id": "symbols",
+      "label": "Symbols"
+    }
+  ],
+  "concepts": [
+    {
+      "id": "initial.s",
+      "label": "S",
+      "keys": "S",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "S"
+      ],
+      "description": "initial S: S; sounds S."
+    },
+    {
+      "id": "initial.t",
+      "label": "T",
+      "keys": "T",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "T"
+      ],
+      "description": "initial T: T; sounds T."
+    },
+    {
+      "id": "initial.k",
+      "label": "K / hard C",
+      "keys": "K",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "K"
+      ],
+      "description": "initial K / hard C: K; sounds K."
+    },
+    {
+      "id": "initial.p",
+      "label": "P",
+      "keys": "P",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "P"
+      ],
+      "description": "initial P: P; sounds P."
+    },
+    {
+      "id": "initial.w",
+      "label": "W",
+      "keys": "W",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "W"
+      ],
+      "description": "initial W: W; sounds W."
+    },
+    {
+      "id": "initial.h",
+      "label": "H",
+      "keys": "H",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "HH"
+      ],
+      "description": "initial H: H; sounds HH."
+    },
+    {
+      "id": "initial.r",
+      "label": "R",
+      "keys": "R",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "R"
+      ],
+      "description": "initial R: R; sounds R."
+    },
+    {
+      "id": "initial.d",
+      "label": "D",
+      "keys": "TK",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "D"
+      ],
+      "description": "initial D: TK; sounds D."
+    },
+    {
+      "id": "initial.b",
+      "label": "B",
+      "keys": "PW",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "B"
+      ],
+      "description": "initial B: PW; sounds B."
+    },
+    {
+      "id": "initial.l",
+      "label": "L",
+      "keys": "HR",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "L"
+      ],
+      "description": "initial L: HR; sounds L."
+    },
+    {
+      "id": "initial.f",
+      "label": "F",
+      "keys": "TP",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "F"
+      ],
+      "description": "initial F: TP; sounds F."
+    },
+    {
+      "id": "initial.m",
+      "label": "M",
+      "keys": "PH",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "M"
+      ],
+      "description": "initial M: PH; sounds M."
+    },
+    {
+      "id": "initial.n",
+      "label": "N",
+      "keys": "TPH",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "N"
+      ],
+      "description": "initial N: TPH; sounds N."
+    },
+    {
+      "id": "initial.j",
+      "label": "J / soft G",
+      "keys": "SKWR",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "JH"
+      ],
+      "description": "initial J / soft G: SKWR; sounds JH."
+    },
+    {
+      "id": "initial.g",
+      "label": "G",
+      "keys": "TKPW",
+      "position": "initial",
+      "bank": "initial",
+      "starter": true,
+      "phones": [
+        "G"
+      ],
+      "description": "initial G: TKPW; sounds G."
+    },
+    {
+      "id": "initial.v",
+      "label": "V",
+      "keys": "SR",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "V"
+      ],
+      "description": "initial V: SR; sounds V."
+    },
+    {
+      "id": "initial.y",
+      "label": "Y",
+      "keys": "KWR",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "Y"
+      ],
+      "description": "initial Y: KWR; sounds Y."
+    },
+    {
+      "id": "initial.z",
+      "label": "Z",
+      "keys": "STKPW",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "Z"
+      ],
+      "description": "initial Z: STKPW; sounds Z."
+    },
+    {
+      "id": "initial.qu",
+      "label": "QU",
+      "keys": "KW",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "K W"
+      ],
+      "description": "initial QU: KW; sounds K W."
+    },
+    {
+      "id": "initial.sh",
+      "label": "SH",
+      "keys": "SH",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "SH"
+      ],
+      "description": "initial SH: SH; sounds SH."
+    },
+    {
+      "id": "initial.ch",
+      "label": "CH",
+      "keys": "KH",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "CH"
+      ],
+      "description": "initial CH: KH; sounds CH."
+    },
+    {
+      "id": "initial.th",
+      "label": "TH (thin)",
+      "keys": "TH",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "TH"
+      ],
+      "description": "initial TH (thin): TH; sounds TH."
+    },
+    {
+      "id": "initial.th-voiced",
+      "label": "TH (then)",
+      "keys": "TH",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "DH"
+      ],
+      "description": "initial TH (then): TH; sounds DH."
+    },
+    {
+      "id": "initial.st",
+      "label": "ST",
+      "keys": "ST",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "S T"
+      ],
+      "description": "initial ST: ST; sounds S T."
+    },
+    {
+      "id": "initial.sp",
+      "label": "SP",
+      "keys": "SP",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "S P"
+      ],
+      "description": "initial SP: SP; sounds S P."
+    },
+    {
+      "id": "initial.sk",
+      "label": "SK",
+      "keys": "SK",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "S K"
+      ],
+      "description": "initial SK: SK; sounds S K."
+    },
+    {
+      "id": "initial.br",
+      "label": "BR",
+      "keys": "PWR",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "B R"
+      ],
+      "description": "initial BR: PWR; sounds B R."
+    },
+    {
+      "id": "initial.fr",
+      "label": "FR",
+      "keys": "TPR",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "F R"
+      ],
+      "description": "initial FR: TPR; sounds F R."
+    },
+    {
+      "id": "initial.gr",
+      "label": "GR",
+      "keys": "TKPWR",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "G R"
+      ],
+      "description": "initial GR: TKPWR; sounds G R."
+    },
+    {
+      "id": "initial.pl",
+      "label": "PL",
+      "keys": "PHR",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "P L"
+      ],
+      "description": "initial PL: PHR; sounds P L."
+    },
+    {
+      "id": "initial.bl",
+      "label": "BL",
+      "keys": "PWHR",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "B L"
+      ],
+      "description": "initial BL: PWHR; sounds B L."
+    },
+    {
+      "id": "initial.sl",
+      "label": "SL",
+      "keys": "SHR",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "S L"
+      ],
+      "description": "initial SL: SHR; sounds S L."
+    },
+    {
+      "id": "initial.tr",
+      "label": "TR",
+      "keys": "TR",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "T R"
+      ],
+      "description": "initial TR: TR; sounds T R."
+    },
+    {
+      "id": "initial.dr",
+      "label": "DR",
+      "keys": "TKR",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "D R"
+      ],
+      "description": "initial DR: TKR; sounds D R."
+    },
+    {
+      "id": "initial.fl",
+      "label": "FL",
+      "keys": "TPHR",
+      "position": "initial",
+      "bank": "initial",
+      "starter": false,
+      "phones": [
+        "F L"
+      ],
+      "description": "initial FL: TPHR; sounds F L."
+    },
+    {
+      "id": "vowel.a",
+      "label": "Short A",
+      "keys": "A",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": true,
+      "phones": [
+        "AE",
+        "AA"
+      ],
+      "description": "vowel Short A: A; sounds AE or AA."
+    },
+    {
+      "id": "vowel.o",
+      "label": "Short O",
+      "keys": "O",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": true,
+      "phones": [
+        "AA",
+        "AO",
+        "AH"
+      ],
+      "description": "vowel Short O: O; sounds AA or AO or AH."
+    },
+    {
+      "id": "vowel.e",
+      "label": "Short E",
+      "keys": "E",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": true,
+      "phones": [
+        "EH"
+      ],
+      "description": "vowel Short E: E; sounds EH."
+    },
+    {
+      "id": "vowel.u",
+      "label": "Short U",
+      "keys": "U",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": true,
+      "phones": [
+        "AH",
+        "UH"
+      ],
+      "description": "vowel Short U: U; sounds AH or UH."
+    },
+    {
+      "id": "vowel.short-i",
+      "label": "Short I",
+      "keys": "EU",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": true,
+      "phones": [
+        "IH"
+      ],
+      "description": "vowel Short I: EU; sounds IH."
+    },
+    {
+      "id": "vowel.long-a",
+      "label": "Long A",
+      "keys": "AEU",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": true,
+      "phones": [
+        "EY"
+      ],
+      "description": "vowel Long A: AEU; sounds EY."
+    },
+    {
+      "id": "vowel.long-e",
+      "label": "Long E",
+      "keys": "AOE",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": true,
+      "phones": [
+        "IY"
+      ],
+      "description": "vowel Long E: AOE; sounds IY."
+    },
+    {
+      "id": "vowel.long-i",
+      "label": "Long I",
+      "keys": "AOEU",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": true,
+      "phones": [
+        "AY"
+      ],
+      "description": "vowel Long I: AOEU; sounds AY."
+    },
+    {
+      "id": "vowel.long-o",
+      "label": "Long O",
+      "keys": "OE",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": false,
+      "phones": [
+        "OW"
+      ],
+      "description": "vowel Long O: OE; sounds OW."
+    },
+    {
+      "id": "vowel.long-u",
+      "label": "Long U",
+      "keys": "AOU",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": false,
+      "phones": [
+        "UW"
+      ],
+      "description": "vowel Long U: AOU; sounds UW."
+    },
+    {
+      "id": "vowel.aw",
+      "label": "AW",
+      "keys": "AU",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": false,
+      "phones": [
+        "AO"
+      ],
+      "description": "vowel AW: AU; sounds AO."
+    },
+    {
+      "id": "vowel.ow",
+      "label": "OW",
+      "keys": "OU",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": false,
+      "phones": [
+        "AW"
+      ],
+      "description": "vowel OW: OU; sounds AW."
+    },
+    {
+      "id": "vowel.oy",
+      "label": "OY",
+      "keys": "OEU",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": false,
+      "phones": [
+        "OY"
+      ],
+      "description": "vowel OY: OEU; sounds OY."
+    },
+    {
+      "id": "vowel.oo",
+      "label": "OO",
+      "keys": "AO",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": false,
+      "phones": [
+        "UH",
+        "UW"
+      ],
+      "description": "vowel OO: AO; sounds UH or UW."
+    },
+    {
+      "id": "vowel.ae",
+      "label": "AE disambiguator",
+      "keys": "AE",
+      "position": "vowel",
+      "bank": "vowel",
+      "starter": false,
+      "phones": [
+        "AE",
+        "EH"
+      ],
+      "description": "vowel AE disambiguator: AE; sounds AE or EH."
+    },
+    {
+      "id": "final.f",
+      "label": "F",
+      "keys": "-F",
+      "position": "final",
+      "bank": "final",
+      "starter": true,
+      "phones": [
+        "F"
+      ],
+      "description": "final F: -F; sounds F."
+    },
+    {
+      "id": "final.r",
+      "label": "R",
+      "keys": "-R",
+      "position": "final",
+      "bank": "final",
+      "starter": true,
+      "phones": [
+        "R"
+      ],
+      "description": "final R: -R; sounds R."
+    },
+    {
+      "id": "final.p",
+      "label": "P",
+      "keys": "-P",
+      "position": "final",
+      "bank": "final",
+      "starter": true,
+      "phones": [
+        "P"
+      ],
+      "description": "final P: -P; sounds P."
+    },
+    {
+      "id": "final.b",
+      "label": "B",
+      "keys": "-B",
+      "position": "final",
+      "bank": "final",
+      "starter": true,
+      "phones": [
+        "B"
+      ],
+      "description": "final B: -B; sounds B."
+    },
+    {
+      "id": "final.l",
+      "label": "L",
+      "keys": "-L",
+      "position": "final",
+      "bank": "final",
+      "starter": true,
+      "phones": [
+        "L"
+      ],
+      "description": "final L: -L; sounds L."
+    },
+    {
+      "id": "final.g",
+      "label": "G",
+      "keys": "-G",
+      "position": "final",
+      "bank": "final",
+      "starter": true,
+      "phones": [
+        "G"
+      ],
+      "description": "final G: -G; sounds G."
+    },
+    {
+      "id": "final.t",
+      "label": "T",
+      "keys": "-T",
+      "position": "final",
+      "bank": "final",
+      "starter": true,
+      "phones": [
+        "T"
+      ],
+      "description": "final T: -T; sounds T."
+    },
+    {
+      "id": "final.s",
+      "label": "S",
+      "keys": "-S",
+      "position": "final",
+      "bank": "final",
+      "starter": true,
+      "phones": [
+        "S"
+      ],
+      "description": "final S: -S; sounds S."
+    },
+    {
+      "id": "final.d",
+      "label": "D",
+      "keys": "-D",
+      "position": "final",
+      "bank": "final",
+      "starter": true,
+      "phones": [
+        "D"
+      ],
+      "description": "final D: -D; sounds D."
+    },
+    {
+      "id": "final.z",
+      "label": "Z",
+      "keys": "-Z",
+      "position": "final",
+      "bank": "final",
+      "starter": true,
+      "phones": [
+        "Z"
+      ],
+      "description": "final Z: -Z; sounds Z."
+    },
+    {
+      "id": "final.m",
+      "label": "M",
+      "keys": "-PL",
+      "position": "final",
+      "bank": "final",
+      "starter": true,
+      "phones": [
+        "M"
+      ],
+      "description": "final M: -PL; sounds M."
+    },
+    {
+      "id": "final.n",
+      "label": "N",
+      "keys": "-PB",
+      "position": "final",
+      "bank": "final",
+      "starter": true,
+      "phones": [
+        "N"
+      ],
+      "description": "final N: -PB; sounds N."
+    },
+    {
+      "id": "final.k",
+      "label": "K",
+      "keys": "-BG",
+      "position": "final",
+      "bank": "final",
+      "starter": true,
+      "phones": [
+        "K"
+      ],
+      "description": "final K: -BG; sounds K."
+    },
+    {
+      "id": "final.j",
+      "label": "J",
+      "keys": "-PBLG",
+      "position": "final",
+      "bank": "final",
+      "starter": true,
+      "phones": [
+        "JH"
+      ],
+      "description": "final J: -PBLG; sounds JH."
+    },
+    {
+      "id": "final.sh",
+      "label": "SH",
+      "keys": "-RB",
+      "position": "final",
+      "bank": "final",
+      "starter": false,
+      "phones": [
+        "SH"
+      ],
+      "description": "final SH: -RB; sounds SH."
+    },
+    {
+      "id": "final.ch",
+      "label": "CH",
+      "keys": "-FP",
+      "position": "final",
+      "bank": "final",
+      "starter": false,
+      "phones": [
+        "CH"
+      ],
+      "description": "final CH: -FP; sounds CH."
+    },
+    {
+      "id": "final.ng",
+      "label": "NG",
+      "keys": "-PBG",
+      "position": "final",
+      "bank": "final",
+      "starter": false,
+      "phones": [
+        "NG"
+      ],
+      "description": "final NG: -PBG; sounds NG."
+    },
+    {
+      "id": "final.nk",
+      "label": "NK",
+      "keys": "-PBG",
+      "position": "final",
+      "bank": "final",
+      "starter": false,
+      "phones": [
+        "NG K"
+      ],
+      "description": "final NK: -PBG; sounds NG K."
+    },
+    {
+      "id": "final.ld",
+      "label": "LD",
+      "keys": "-LD",
+      "position": "final",
+      "bank": "final",
+      "starter": false,
+      "phones": [
+        "L D"
+      ],
+      "description": "final LD: -LD; sounds L D."
+    },
+    {
+      "id": "final.lt",
+      "label": "LT",
+      "keys": "-LT",
+      "position": "final",
+      "bank": "final",
+      "starter": false,
+      "phones": [
+        "L T"
+      ],
+      "description": "final LT: -LT; sounds L T."
+    },
+    {
+      "id": "final.rt",
+      "label": "RT",
+      "keys": "-RT",
+      "position": "final",
+      "bank": "final",
+      "starter": false,
+      "phones": [
+        "R T"
+      ],
+      "description": "final RT: -RT; sounds R T."
+    },
+    {
+      "id": "final.nt",
+      "label": "NT",
+      "keys": "-PBT",
+      "position": "final",
+      "bank": "final",
+      "starter": false,
+      "phones": [
+        "N T"
+      ],
+      "description": "final NT: -PBT; sounds N T."
+    },
+    {
+      "id": "final.nd",
+      "label": "ND",
+      "keys": "-PBD",
+      "position": "final",
+      "bank": "final",
+      "starter": false,
+      "phones": [
+        "N D"
+      ],
+      "description": "final ND: -PBD; sounds N D."
+    },
+    {
+      "id": "final.mp",
+      "label": "MP",
+      "keys": "-FRP",
+      "position": "final",
+      "bank": "final",
+      "starter": false,
+      "phones": [
+        "M P"
+      ],
+      "description": "final MP: -FRP; sounds M P."
+    },
+    {
+      "id": "final.ft",
+      "label": "FT",
+      "keys": "-FT",
+      "position": "final",
+      "bank": "final",
+      "starter": false,
+      "phones": [
+        "F T"
+      ],
+      "description": "final FT: -FT; sounds F T."
+    },
+    {
+      "id": "special.final-v",
+      "label": "Final V using -F",
+      "keys": "-F",
+      "position": "final",
+      "bank": "special",
+      "starter": false,
+      "phones": [
+        "V"
+      ],
+      "description": "final Final V using -F: -F; sounds V."
+    },
+    {
+      "id": "special.final-st",
+      "label": "Final ST using -FT",
+      "keys": "-FT",
+      "position": "final",
+      "bank": "special",
+      "starter": false,
+      "phones": [
+        "S T"
+      ],
+      "description": "final Final ST using -FT: -FT; sounds S T."
+    },
+    {
+      "id": "special.final-st-f",
+      "label": "Final ST using -F",
+      "keys": "-F",
+      "position": "final",
+      "bank": "special",
+      "starter": false,
+      "phones": [
+        "S T"
+      ],
+      "description": "final Final ST using -F: -F; sounds S T."
+    },
+    {
+      "id": "special.final-z-s",
+      "label": "Voiced S using -S",
+      "keys": "-S",
+      "position": "final",
+      "bank": "special",
+      "starter": false,
+      "phones": [
+        "Z"
+      ],
+      "description": "final Voiced S using -S: -S; sounds Z."
+    },
+    {
+      "id": "special.final-th",
+      "label": "Final TH using *T",
+      "keys": "*T",
+      "position": "final",
+      "bank": "special",
+      "starter": false,
+      "phones": [
+        "TH"
+      ],
+      "description": "final Final TH using *T: *T; sounds TH."
+    },
+    {
+      "id": "special.final-th-voiced",
+      "label": "Final TH (voiced)",
+      "keys": "*T",
+      "position": "final",
+      "bank": "special",
+      "starter": false,
+      "phones": [
+        "DH"
+      ],
+      "description": "final Final TH (voiced): *T; sounds DH."
+    },
+    {
+      "id": "brief.the",
+      "label": "the",
+      "keys": "-T",
+      "position": "brief",
+      "bank": "brief",
+      "starter": false,
+      "phones": [
+        ""
+      ],
+      "description": "Memorized outline for “the”."
+    },
+    {
+      "id": "brief.of",
+      "label": "of",
+      "keys": "-F",
+      "position": "brief",
+      "bank": "brief",
+      "starter": false,
+      "phones": [
+        ""
+      ],
+      "description": "Memorized outline for “of”."
+    },
+    {
+      "id": "brief.to",
+      "label": "to",
+      "keys": "TO",
+      "position": "brief",
+      "bank": "brief",
+      "starter": false,
+      "phones": [
+        ""
+      ],
+      "description": "Memorized outline for “to”."
+    },
+    {
+      "id": "brief.in",
+      "label": "in",
+      "keys": "TPH",
+      "position": "brief",
+      "bank": "brief",
+      "starter": false,
+      "phones": [
+        ""
+      ],
+      "description": "Memorized outline for “in”."
+    },
+    {
+      "id": "brief.a",
+      "label": "a",
+      "keys": "AEU",
+      "position": "brief",
+      "bank": "brief",
+      "starter": false,
+      "phones": [
+        ""
+      ],
+      "description": "Memorized outline for “a”."
+    },
+    {
+      "id": "brief.is",
+      "label": "is",
+      "keys": "S",
+      "position": "brief",
+      "bank": "brief",
+      "starter": false,
+      "phones": [
+        ""
+      ],
+      "description": "Memorized outline for “is”."
+    },
+    {
+      "id": "brief.that",
+      "label": "that",
+      "keys": "THA",
+      "position": "brief",
+      "bank": "brief",
+      "starter": false,
+      "phones": [
+        ""
+      ],
+      "description": "Memorized outline for “that”."
+    },
+    {
+      "id": "brief.with",
+      "label": "with",
+      "keys": "W",
+      "position": "brief",
+      "bank": "brief",
+      "starter": false,
+      "phones": [
+        ""
+      ],
+      "description": "Memorized outline for “with”."
+    },
+    {
+      "id": "brief.be",
+      "label": "be",
+      "keys": "-B",
+      "position": "brief",
+      "bank": "brief",
+      "starter": false,
+      "phones": [
+        ""
+      ],
+      "description": "Memorized outline for “be”."
+    },
+    {
+      "id": "brief.by",
+      "label": "by",
+      "keys": "PWEU",
+      "position": "brief",
+      "bank": "brief",
+      "starter": false,
+      "phones": [
+        ""
+      ],
+      "description": "Memorized outline for “by”."
+    },
+    {
+      "id": "brief.he",
+      "label": "he",
+      "keys": "E",
+      "position": "brief",
+      "bank": "brief",
+      "starter": false,
+      "phones": [
+        ""
+      ],
+      "description": "Memorized outline for “he”."
+    }
+  ],
+  "presets": {
+    "none": [],
+    "single": [
+      "initial.s",
+      "initial.t",
+      "initial.k",
+      "initial.p",
+      "initial.w",
+      "initial.h",
+      "initial.r",
+      "vowel.a",
+      "vowel.o",
+      "vowel.e",
+      "vowel.u",
+      "final.f",
+      "final.r",
+      "final.p",
+      "final.b",
+      "final.l",
+      "final.g",
+      "final.t",
+      "final.s",
+      "final.d",
+      "final.z"
+    ],
+    "starter": [
+      "initial.s",
+      "initial.t",
+      "initial.k",
+      "initial.p",
+      "initial.w",
+      "initial.h",
+      "initial.r",
+      "initial.d",
+      "initial.b",
+      "initial.l",
+      "initial.f",
+      "initial.m",
+      "initial.n",
+      "initial.j",
+      "initial.g",
+      "vowel.a",
+      "vowel.o",
+      "vowel.e",
+      "vowel.u",
+      "vowel.short-i",
+      "vowel.long-a",
+      "vowel.long-e",
+      "vowel.long-i",
+      "final.f",
+      "final.r",
+      "final.p",
+      "final.b",
+      "final.l",
+      "final.g",
+      "final.t",
+      "final.s",
+      "final.d",
+      "final.z",
+      "final.m",
+      "final.n",
+      "final.k",
+      "final.j"
+    ],
+    "all": [
+      "initial.s",
+      "initial.t",
+      "initial.k",
+      "initial.p",
+      "initial.w",
+      "initial.h",
+      "initial.r",
+      "initial.d",
+      "initial.b",
+      "initial.l",
+      "initial.f",
+      "initial.m",
+      "initial.n",
+      "initial.j",
+      "initial.g",
+      "initial.v",
+      "initial.y",
+      "initial.z",
+      "initial.qu",
+      "initial.sh",
+      "initial.ch",
+      "initial.th",
+      "initial.th-voiced",
+      "initial.st",
+      "initial.sp",
+      "initial.sk",
+      "initial.br",
+      "initial.fr",
+      "initial.gr",
+      "initial.pl",
+      "initial.bl",
+      "initial.sl",
+      "initial.tr",
+      "initial.dr",
+      "initial.fl",
+      "vowel.a",
+      "vowel.o",
+      "vowel.e",
+      "vowel.u",
+      "vowel.short-i",
+      "vowel.long-a",
+      "vowel.long-e",
+      "vowel.long-i",
+      "vowel.long-o",
+      "vowel.long-u",
+      "vowel.aw",
+      "vowel.ow",
+      "vowel.oy",
+      "vowel.oo",
+      "vowel.ae",
+      "final.f",
+      "final.r",
+      "final.p",
+      "final.b",
+      "final.l",
+      "final.g",
+      "final.t",
+      "final.s",
+      "final.d",
+      "final.z",
+      "final.m",
+      "final.n",
+      "final.k",
+      "final.j",
+      "final.sh",
+      "final.ch",
+      "final.ng",
+      "final.nk",
+      "final.ld",
+      "final.lt",
+      "final.rt",
+      "final.nt",
+      "final.nd",
+      "final.mp",
+      "final.ft",
+      "special.final-v",
+      "special.final-st",
+      "special.final-st-f",
+      "special.final-z-s",
+      "special.final-th",
+      "special.final-th-voiced",
+      "brief.the",
+      "brief.of",
+      "brief.to",
+      "brief.in",
+      "brief.a",
+      "brief.is",
+      "brief.that",
+      "brief.with",
+      "brief.be",
+      "brief.by",
+      "brief.he"
+    ]
+  },
+  "drills": [
+    {
+      "id": "d-/b-",
+      "label": "D / B",
+      "group": "Word drills"
+    },
+    {
+      "id": "-ld/-lt",
+      "label": "LD / LT",
+      "group": "Word drills"
+    },
+    {
+      "id": "nch",
+      "label": "NCH",
+      "group": "Word drills"
+    },
+    {
+      "id": "-nj",
+      "label": "NJ",
+      "group": "Word drills"
+    },
+    {
+      "id": "ite/ight",
+      "label": "ITE / IGHT",
+      "group": "Word drills"
+    },
+    {
+      "id": "st/sp",
+      "label": "ST / SP",
+      "group": "Word drills"
+    },
+    {
+      "id": "AI/OE/EE",
+      "label": "Long vowels",
+      "group": "Word drills"
+    },
+    {
+      "id": "shortAndLongA",
+      "label": "Short / long A",
+      "group": "Word drills"
+    },
+    {
+      "id": "oneAndTwoKey",
+      "label": "One / two keys",
+      "group": "Word drills"
+    },
+    {
+      "id": "oneOrTwoKeys",
+      "label": "One / two keys (review)",
+      "group": "Word drills"
+    },
+    {
+      "id": "singleStrokeCVC",
+      "label": "Single-key CVC",
+      "group": "Word drills"
+    },
+    {
+      "id": "multiStrokeCVC",
+      "label": "Multi-stroke CVC",
+      "group": "Word drills"
+    },
+    {
+      "id": "D_SingleSyllable",
+      "label": "D words",
+      "group": "Word drills"
+    },
+    {
+      "id": "B_SingleSyllable",
+      "label": "B words",
+      "group": "Word drills"
+    },
+    {
+      "id": "L_SingleSyllable",
+      "label": "L words",
+      "group": "Word drills"
+    },
+    {
+      "id": "F_SingleSyllable",
+      "label": "F words",
+      "group": "Word drills"
+    },
+    {
+      "id": "M_SingleSyllable",
+      "label": "M words",
+      "group": "Word drills"
+    },
+    {
+      "id": "N_SingleSyllable",
+      "label": "N words",
+      "group": "Word drills"
+    },
+    {
+      "id": "Q_SingleSyllable",
+      "label": "Q words",
+      "group": "Word drills"
+    },
+    {
+      "id": "Y_SingleSyllable",
+      "label": "Y words",
+      "group": "Word drills"
+    },
+    {
+      "id": "J_SingleSyllable",
+      "label": "J words",
+      "group": "Word drills"
+    },
+    {
+      "id": "V_SingleSyllable",
+      "label": "V words",
+      "group": "Word drills"
+    },
+    {
+      "id": "SingleSyllable_N",
+      "label": "Final N",
+      "group": "Word drills"
+    },
+    {
+      "id": "SingleSyllable_M",
+      "label": "Final M",
+      "group": "Word drills"
+    },
+    {
+      "id": "CommonBriefs_1_20",
+      "label": "Briefs 1 20",
+      "group": "Word drills"
+    },
+    {
+      "id": "CommonBriefs_21_40",
+      "label": "Briefs 21 40",
+      "group": "Word drills"
+    },
+    {
+      "id": "CommonBriefs_41_60",
+      "label": "Briefs 41 60",
+      "group": "Word drills"
+    },
+    {
+      "id": "CommonBriefs_61_80",
+      "label": "Briefs 61 80",
+      "group": "Word drills"
+    },
+    {
+      "id": "CommonBriefs_81_100",
+      "label": "Briefs 81 100",
+      "group": "Word drills"
+    },
+    {
+      "id": "ST words",
+      "label": "ST words",
+      "group": "Word drills"
+    },
+    {
+      "id": "CH words",
+      "label": "CH words",
+      "group": "Word drills"
+    },
+    {
+      "id": "SH words",
+      "label": "SH words",
+      "group": "Word drills"
+    },
+    {
+      "id": "-LD words",
+      "label": "-LD words",
+      "group": "Word drills"
+    },
+    {
+      "id": "+LD words",
+      "label": "+LD words",
+      "group": "Word drills"
+    },
+    {
+      "id": "-LT words",
+      "label": "-LT words",
+      "group": "Word drills"
+    },
+    {
+      "id": "+LT words",
+      "label": "+LT words",
+      "group": "Word drills"
+    },
+    {
+      "id": "-RT words",
+      "label": "-RT words",
+      "group": "Word drills"
+    },
+    {
+      "id": "+RT words",
+      "label": "+RT words",
+      "group": "Word drills"
+    },
+    {
+      "id": "Learn Plover: One Syllable Words",
+      "label": "One Syllable Words",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Consonant Clusters",
+      "label": "Consonant Clusters",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Where's the TRUFT?",
+      "label": "Where's the TRUFT?",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Dropping Unstressed Vowels",
+      "label": "Dropping Unstressed Vowels",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Inversion",
+      "label": "Inversion",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: The Fifth Vowel Key",
+      "label": "The Fifth Vowel Key",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Long Vowel Chords",
+      "label": "Long Vowel Chords",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Diphthong Chords",
+      "label": "Diphthong Chords",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Vowel Disambiguator Chords",
+      "label": "Vowel Disambiguator Chords",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: The Missing Keys",
+      "label": "The Missing Keys",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: The Remaining Missing Letters",
+      "label": "The Remaining Missing Letters",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Review Through Missing Letters",
+      "label": "Review Through Missing Letters",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Digraphs",
+      "label": "Digraphs",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Review Through Digraphs",
+      "label": "Review Through Digraphs",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Common Compound Clusters",
+      "label": "Common Compound Clusters",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Review Through Common Compound Clusters",
+      "label": "Review Through Common Compound Clusters",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Common Briefs 1-20",
+      "label": "Common Briefs 1-20",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Common Briefs 21-40",
+      "label": "Common Briefs 21-40",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Common Briefs 41-60",
+      "label": "Common Briefs 41-60",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Common Briefs 61-80",
+      "label": "Common Briefs 61-80",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Learn Plover: Common Briefs 81-100",
+      "label": "Common Briefs 81-100",
+      "group": "Learn Plover"
+    },
+    {
+      "id": "Intro: LeftIndex",
+      "label": "LeftIndex",
+      "group": "Intro"
+    },
+    {
+      "id": "Intro: LeftMiddle",
+      "label": "LeftMiddle",
+      "group": "Intro"
+    },
+    {
+      "id": "Intro: LeftIndexMiddle",
+      "label": "LeftIndexMiddle",
+      "group": "Intro"
+    },
+    {
+      "id": "Intro: LeftRingPinky",
+      "label": "LeftRingPinky",
+      "group": "Intro"
+    },
+    {
+      "id": "Intro: Left",
+      "label": "Left",
+      "group": "Intro"
+    }
+  ],
+  "keyboardSets": [
+    {
+      "id": "selected",
+      "description": "Use the supplied concepts, without briefs."
+    },
+    {
+      "id": "Left hand",
+      "strokes": [
+        "S",
+        "T",
+        "K",
+        "P",
+        "W",
+        "H",
+        "R"
+      ]
+    },
+    {
+      "id": "Right hand",
+      "strokes": [
+        "-F",
+        "-R",
+        "-P",
+        "-B",
+        "-L",
+        "-G",
+        "-T",
+        "-S",
+        "-D",
+        "-Z"
+      ]
+    },
+    {
+      "id": "Vowels",
+      "strokes": [
+        "A",
+        "O",
+        "E",
+        "U"
+      ]
+    },
+    {
+      "id": "Left bottom row",
+      "strokes": [
+        "S",
+        "K",
+        "W",
+        "R"
+      ]
+    },
+    {
+      "id": "Left top row",
+      "strokes": [
+        "S",
+        "T",
+        "P",
+        "H"
+      ]
+    },
+    {
+      "id": "Right bottom row",
+      "strokes": [
+        "-R",
+        "-B",
+        "-G",
+        "-S",
+        "-Z"
+      ]
+    },
+    {
+      "id": "Right top row",
+      "strokes": [
+        "-F",
+        "-P",
+        "-L",
+        "-T",
+        "-D"
+      ]
+    }
+  ],
+  "fingerBooks": [
+    {
+      "id": "duo",
+      "sections": [
+        {
+          "section": 0,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "EFB/URP"
+            },
+            {
+              "pattern": 1,
+              "outline": "UFB/ERP"
+            },
+            {
+              "pattern": 2,
+              "outline": "EPG/UBL"
+            },
+            {
+              "pattern": 3,
+              "outline": "UPG/EBL"
+            },
+            {
+              "pattern": 4,
+              "outline": "UPG/EBLS"
+            },
+            {
+              "pattern": 5,
+              "outline": "UBLS/EPG"
+            },
+            {
+              "pattern": 6,
+              "outline": "EBL/UGT"
+            },
+            {
+              "pattern": 7,
+              "outline": "UBL/-BGT"
+            }
+          ]
+        },
+        {
+          "section": 1,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "PRO/WHA"
+            },
+            {
+              "pattern": 1,
+              "outline": "PRA/WHO"
+            },
+            {
+              "pattern": 2,
+              "outline": "TWO/KPO"
+            },
+            {
+              "pattern": 3,
+              "outline": "TWA/KPA"
+            },
+            {
+              "pattern": 4,
+              "outline": "TWO/KPA"
+            },
+            {
+              "pattern": 5,
+              "outline": "TWA/KPO"
+            },
+            {
+              "pattern": 6,
+              "outline": "PRO/WHO"
+            },
+            {
+              "pattern": 7,
+              "outline": "PRA/WHA"
+            }
+          ]
+        },
+        {
+          "section": 2,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "UG/ELS"
+            },
+            {
+              "pattern": 1,
+              "outline": "EG/ULS"
+            },
+            {
+              "pattern": 2,
+              "outline": "EL/URB"
+            },
+            {
+              "pattern": 3,
+              "outline": "UL/ERB"
+            },
+            {
+              "pattern": 4,
+              "outline": "ELS/UPBD"
+            },
+            {
+              "pattern": 5,
+              "outline": "ULS/EPBD"
+            },
+            {
+              "pattern": 6,
+              "outline": "UF/ERBD"
+            },
+            {
+              "pattern": 7,
+              "outline": "EF/URBD"
+            },
+            {
+              "pattern": 8,
+              "outline": "UF/EPD"
+            },
+            {
+              "pattern": 9,
+              "outline": "EF/UPD"
+            },
+            {
+              "pattern": 10,
+              "outline": "ULS/EFP"
+            },
+            {
+              "pattern": 11,
+              "outline": "ELS/UFP"
+            },
+            {
+              "pattern": 12,
+              "outline": "UBG/EPD"
+            },
+            {
+              "pattern": 13,
+              "outline": "URPD/EFGS"
+            },
+            {
+              "pattern": 14,
+              "outline": "ERPD/UFGS"
+            },
+            {
+              "pattern": 15,
+              "outline": "UPBD/ELS"
+            },
+            {
+              "pattern": 16,
+              "outline": "EPBD/ULS"
+            },
+            {
+              "pattern": 17,
+              "outline": "ED/UFPD"
+            },
+            {
+              "pattern": 18,
+              "outline": "UPB/EFP"
+            },
+            {
+              "pattern": 19,
+              "outline": "URLS/ERBD"
+            },
+            {
+              "pattern": 20,
+              "outline": "ERLS/URBD"
+            },
+            {
+              "pattern": 21,
+              "outline": "UFGS/EPBD"
+            },
+            {
+              "pattern": 22,
+              "outline": "EFGS/UPBD"
+            },
+            {
+              "pattern": 23,
+              "outline": "UFS/EPD"
+            }
+          ]
+        },
+        {
+          "section": 3,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "STPHA/SPWO"
+            },
+            {
+              "pattern": 1,
+              "outline": "STPHO/SPWA"
+            },
+            {
+              "pattern": 2,
+              "outline": "SKWRO/SPWA"
+            },
+            {
+              "pattern": 3,
+              "outline": "SKWRA/SPWO"
+            },
+            {
+              "pattern": 4,
+              "outline": "TKWRA/KPWHRO"
+            },
+            {
+              "pattern": 5,
+              "outline": "THO/SPWRA"
+            },
+            {
+              "pattern": 6,
+              "outline": "THA/SPWRO"
+            },
+            {
+              "pattern": 7,
+              "outline": "TWRO/SPWA"
+            },
+            {
+              "pattern": 8,
+              "outline": "SPWO/TWRA"
+            },
+            {
+              "pattern": 9,
+              "outline": "TWRO/KPWHRA"
+            }
+          ]
+        },
+        {
+          "section": 4,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "URPBLG/EBS"
+            },
+            {
+              "pattern": 1,
+              "outline": "URT/ELS"
+            },
+            {
+              "pattern": 2,
+              "outline": "URS/ELS"
+            },
+            {
+              "pattern": 3,
+              "outline": "ULS/ELT"
+            },
+            {
+              "pattern": 4,
+              "outline": "UPT/ELD"
+            },
+            {
+              "pattern": 5,
+              "outline": "ULD/EPT"
+            },
+            {
+              "pattern": 6,
+              "outline": "EPS/UPD"
+            },
+            {
+              "pattern": 7,
+              "outline": "UPG/EPBT"
+            },
+            {
+              "pattern": 8,
+              "outline": "EGS/UPBD"
+            },
+            {
+              "pattern": 9,
+              "outline": "URGS/UFD"
+            },
+            {
+              "pattern": 10,
+              "outline": "URS/EFP"
+            },
+            {
+              "pattern": 11,
+              "outline": "ERS/UFP"
+            },
+            {
+              "pattern": 12,
+              "outline": "URLS/EFPD"
+            },
+            {
+              "pattern": 13,
+              "outline": "ERLS/UFPD"
+            },
+            {
+              "pattern": 14,
+              "outline": "UPG/EPBD"
+            },
+            {
+              "pattern": 15,
+              "outline": "UPGS/EPBDZ"
+            },
+            {
+              "pattern": 16,
+              "outline": "EPG/UPBT"
+            },
+            {
+              "pattern": 17,
+              "outline": "URGS/UFD"
+            }
+          ]
+        },
+        {
+          "section": 5,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "TWRO/KPHRA"
+            },
+            {
+              "pattern": 1,
+              "outline": "TWRA/KPHRO"
+            },
+            {
+              "pattern": 2,
+              "outline": "STPHO/KPHRA"
+            },
+            {
+              "pattern": 3,
+              "outline": "STPHA/KPHRO"
+            },
+            {
+              "pattern": 4,
+              "outline": "KPA/TWRO"
+            },
+            {
+              "pattern": 5,
+              "outline": "KPO/TWRA"
+            },
+            {
+              "pattern": 6,
+              "outline": "SKWRO/KPHRA"
+            },
+            {
+              "pattern": 7,
+              "outline": "SKWRA/KPHRO"
+            }
+          ]
+        },
+        {
+          "section": 6,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "EBGT/UFTS"
+            },
+            {
+              "pattern": 1,
+              "outline": "UBGT/EFTS"
+            },
+            {
+              "pattern": 2,
+              "outline": "EBGT/UFDZ"
+            },
+            {
+              "pattern": 3,
+              "outline": "UBGT/EFDZ"
+            },
+            {
+              "pattern": 4,
+              "outline": "UBGT/EUFTS"
+            },
+            {
+              "pattern": 5,
+              "outline": "EUBGT/UFTS"
+            },
+            {
+              "pattern": 6,
+              "outline": "EBGD/EUPBLS"
+            },
+            {
+              "pattern": 7,
+              "outline": "UPBD/EUFTS"
+            },
+            {
+              "pattern": 8,
+              "outline": "EUPBD/UFTS"
+            },
+            {
+              "pattern": 9,
+              "outline": "EBGT/UFDZ"
+            }
+          ]
+        },
+        {
+          "section": 7,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "PHRA/TKWO"
+            },
+            {
+              "pattern": 1,
+              "outline": "PHRO/TKWA"
+            },
+            {
+              "pattern": 2,
+              "outline": "PRA/SWO"
+            },
+            {
+              "pattern": 3,
+              "outline": "PRO/SWA"
+            },
+            {
+              "pattern": 4,
+              "outline": "PWHRO/SHA"
+            },
+            {
+              "pattern": 5,
+              "outline": "PWHRA/SHO"
+            },
+            {
+              "pattern": 6,
+              "outline": "STPHA/PWRA"
+            },
+            {
+              "pattern": 7,
+              "outline": "STPHO/PWRA"
+            },
+            {
+              "pattern": 8,
+              "outline": "SWA/THO"
+            },
+            {
+              "pattern": 9,
+              "outline": "SWO/THA"
+            },
+            {
+              "pattern": 10,
+              "outline": "TKRA/TWO"
+            },
+            {
+              "pattern": 11,
+              "outline": "TKRO/TWA"
+            },
+            {
+              "pattern": 12,
+              "outline": "THRO/KPA"
+            },
+            {
+              "pattern": 13,
+              "outline": "TRO/SWA"
+            },
+            {
+              "pattern": 14,
+              "outline": "TRA/SWO"
+            },
+            {
+              "pattern": 15,
+              "outline": "STRO/KHRA"
+            },
+            {
+              "pattern": 16,
+              "outline": "SRA/KHRO"
+            },
+            {
+              "pattern": 17,
+              "outline": "KRA/SPHO"
+            },
+            {
+              "pattern": 18,
+              "outline": "KRO/SPHA"
+            },
+            {
+              "pattern": 19,
+              "outline": "SRA/TKPWHRO"
+            },
+            {
+              "pattern": 20,
+              "outline": "SRO/TKPWHRA"
+            },
+            {
+              "pattern": 21,
+              "outline": "STA/KPO"
+            },
+            {
+              "pattern": 22,
+              "outline": "STO/KPA"
+            },
+            {
+              "pattern": 23,
+              "outline": "SPA/TKO"
+            }
+          ]
+        },
+        {
+          "section": 8,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "EUGT/EULS"
+            },
+            {
+              "pattern": 1,
+              "outline": "EUGT/ULS"
+            },
+            {
+              "pattern": 2,
+              "outline": "UGT/ULS"
+            },
+            {
+              "pattern": 3,
+              "outline": "EGT/ULS"
+            },
+            {
+              "pattern": 4,
+              "outline": "UGT/EULS"
+            },
+            {
+              "pattern": 5,
+              "outline": "EGT/EULS"
+            }
+          ]
+        },
+        {
+          "section": 9,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "SKWRA/TPHRA"
+            },
+            {
+              "pattern": 1,
+              "outline": "SKWRA/TPHRO"
+            },
+            {
+              "pattern": 2,
+              "outline": "SHAO/TKO"
+            },
+            {
+              "pattern": 3,
+              "outline": "STO/SKA"
+            },
+            {
+              "pattern": 4,
+              "outline": "STA/SKO"
+            },
+            {
+              "pattern": 5,
+              "outline": "SHO/TKAO"
+            }
+          ]
+        },
+        {
+          "section": 10,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "EFPLDZ/EFPLZ"
+            },
+            {
+              "pattern": 1,
+              "outline": "EBGT/EBGS"
+            },
+            {
+              "pattern": 2,
+              "outline": "EBGTS/ERS"
+            },
+            {
+              "pattern": 3,
+              "outline": "EFPTS/EFPS"
+            },
+            {
+              "pattern": 4,
+              "outline": "EFPD/EFPZ"
+            },
+            {
+              "pattern": 5,
+              "outline": "EFPDZ/EFPZ"
+            },
+            {
+              "pattern": 6,
+              "outline": "EFPLD/EFPLZ"
+            },
+            {
+              "pattern": 7,
+              "outline": "EBGTS/EBGS"
+            },
+            {
+              "pattern": 8,
+              "outline": "EBGT/EBGTS"
+            },
+            {
+              "pattern": 9,
+              "outline": "EFPT/EFPS"
+            },
+            {
+              "pattern": 10,
+              "outline": "EFPDZ/EFPD"
+            },
+            {
+              "pattern": 11,
+              "outline": "EFPLDZ/EFPLD"
+            }
+          ]
+        },
+        {
+          "section": 11,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "KHA/TKWO"
+            },
+            {
+              "pattern": 1,
+              "outline": "KHO/TKWA"
+            },
+            {
+              "pattern": 2,
+              "outline": "SPHO/TKWA"
+            },
+            {
+              "pattern": 3,
+              "outline": "SPHA/TKWO"
+            },
+            {
+              "pattern": 4,
+              "outline": "KHA/TPWO"
+            },
+            {
+              "pattern": 5,
+              "outline": "KPHO/STRA"
+            },
+            {
+              "pattern": 6,
+              "outline": "KPHA/STRO"
+            },
+            {
+              "pattern": 7,
+              "outline": "SKWRA/TKPO"
+            },
+            {
+              "pattern": 8,
+              "outline": "SKWRO/TKPA"
+            },
+            {
+              "pattern": 9,
+              "outline": "KPO/TPWA"
+            }
+          ]
+        },
+        {
+          "section": 12,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "EBGD/UFR"
+            },
+            {
+              "pattern": 1,
+              "outline": "UBGD/EFR"
+            },
+            {
+              "pattern": 2,
+              "outline": "UPBD/EUFR"
+            },
+            {
+              "pattern": 3,
+              "outline": "UBGS/EUFL"
+            },
+            {
+              "pattern": 4,
+              "outline": "URT/EFL"
+            },
+            {
+              "pattern": 5,
+              "outline": "ERT/UFL"
+            },
+            {
+              "pattern": 6,
+              "outline": "URS/EFPB"
+            },
+            {
+              "pattern": 7,
+              "outline": "UFPB/ERS"
+            },
+            {
+              "pattern": 8,
+              "outline": "UPL/EFD"
+            },
+            {
+              "pattern": 9,
+              "outline": "EFD/UPBS"
+            },
+            {
+              "pattern": 10,
+              "outline": "EULT/EBGD"
+            },
+            {
+              "pattern": 11,
+              "outline": "URG/EPLS"
+            },
+            {
+              "pattern": 12,
+              "outline": "URG/EPLT"
+            },
+            {
+              "pattern": 13,
+              "outline": "EPLD/URB"
+            },
+            {
+              "pattern": 14,
+              "outline": "UFRT/EFLS"
+            },
+            {
+              "pattern": 15,
+              "outline": "UFLD/EPBTS"
+            },
+            {
+              "pattern": 16,
+              "outline": "URPD/EFTS"
+            },
+            {
+              "pattern": 17,
+              "outline": "ULDZ/ERPS"
+            },
+            {
+              "pattern": 18,
+              "outline": "UFT/ERDZ"
+            }
+          ]
+        },
+        {
+          "section": 13,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "TPRO/SKA"
+            },
+            {
+              "pattern": 1,
+              "outline": "TPRA/SKO"
+            },
+            {
+              "pattern": 2,
+              "outline": "PRO/SKHA"
+            },
+            {
+              "pattern": 3,
+              "outline": "TPHRA/SKWO"
+            },
+            {
+              "pattern": 4,
+              "outline": "TPHRO/SKWA"
+            },
+            {
+              "pattern": 5,
+              "outline": "SHRA/KWO"
+            },
+            {
+              "pattern": 6,
+              "outline": "SHRO/KWA"
+            },
+            {
+              "pattern": 7,
+              "outline": "THRA/KPO"
+            },
+            {
+              "pattern": 8,
+              "outline": "SPO/TKA"
+            },
+            {
+              "pattern": 9,
+              "outline": "TWO/SKRA"
+            },
+            {
+              "pattern": 10,
+              "outline": "PRA/SKHO"
+            },
+            {
+              "pattern": 11,
+              "outline": "TWA/SKRO"
+            },
+            {
+              "pattern": 12,
+              "outline": "SPRA/KHO"
+            },
+            {
+              "pattern": 13,
+              "outline": "SPRA/KHA"
+            },
+            {
+              "pattern": 14,
+              "outline": "SPHRA/TKO"
+            },
+            {
+              "pattern": 15,
+              "outline": "SPHRO/TKA"
+            }
+          ]
+        },
+        {
+          "section": 14,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "ERBGS/UFPB"
+            },
+            {
+              "pattern": 1,
+              "outline": "URBGS/EFT"
+            },
+            {
+              "pattern": 2,
+              "outline": "UPLTS/EFRB"
+            },
+            {
+              "pattern": 3,
+              "outline": "UFRB/EPLTS"
+            },
+            {
+              "pattern": 4,
+              "outline": "ULS/EFRB"
+            },
+            {
+              "pattern": 5,
+              "outline": "UFRB/ELS"
+            },
+            {
+              "pattern": 6,
+              "outline": "EFD/UFPB"
+            },
+            {
+              "pattern": 7,
+              "outline": "ERBGS/UFRP"
+            },
+            {
+              "pattern": 8,
+              "outline": "URBGS/EFRP"
+            },
+            {
+              "pattern": 9,
+              "outline": "UFPLT/EULS"
+            },
+            {
+              "pattern": 10,
+              "outline": "UFPLT/EFRB"
+            },
+            {
+              "pattern": 11,
+              "outline": "EFPLT/EFRB"
+            },
+            {
+              "pattern": 12,
+              "outline": "UFRB/-BGT"
+            },
+            {
+              "pattern": 13,
+              "outline": "UFD/EFPB"
+            }
+          ]
+        },
+        {
+          "section": 15,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "TWRO/SPHRA"
+            },
+            {
+              "pattern": 1,
+              "outline": "TWRA/TKPHO"
+            },
+            {
+              "pattern": 2,
+              "outline": "TWRO/TKPHO"
+            },
+            {
+              "pattern": 3,
+              "outline": "SKWRA/TKPHO"
+            },
+            {
+              "pattern": 4,
+              "outline": "SKWRO/TKPHA"
+            },
+            {
+              "pattern": 5,
+              "outline": "SWRO/TKPHA"
+            },
+            {
+              "pattern": 6,
+              "outline": "SWRA/TKPHO"
+            }
+          ]
+        },
+        {
+          "section": 16,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "EFD/URPL"
+            },
+            {
+              "pattern": 1,
+              "outline": "UPT/ERB"
+            },
+            {
+              "pattern": 2,
+              "outline": "UFPLT/ERPB"
+            },
+            {
+              "pattern": 3,
+              "outline": "UFGS/ERL"
+            },
+            {
+              "pattern": 4,
+              "outline": "UPT/EFG"
+            },
+            {
+              "pattern": 5,
+              "outline": "URL/EFPT"
+            },
+            {
+              "pattern": 6,
+              "outline": "URG/EPBS"
+            },
+            {
+              "pattern": 7,
+              "outline": "URPL/EBL"
+            },
+            {
+              "pattern": 8,
+              "outline": "UFT/EBD"
+            },
+            {
+              "pattern": 9,
+              "outline": "UFT/ERBG"
+            },
+            {
+              "pattern": 10,
+              "outline": "URTS/EUPBDZ"
+            },
+            {
+              "pattern": 11,
+              "outline": "UPLTS/EURBD"
+            },
+            {
+              "pattern": 12,
+              "outline": "ET/ULS"
+            },
+            {
+              "pattern": 13,
+              "outline": "EL/UFD"
+            },
+            {
+              "pattern": 14,
+              "outline": "UL/EFT"
+            },
+            {
+              "pattern": 15,
+              "outline": "UFS/ERPD"
+            },
+            {
+              "pattern": 16,
+              "outline": "URPBS/ERLD"
+            },
+            {
+              "pattern": 17,
+              "outline": "EPG/UPBT"
+            },
+            {
+              "pattern": 18,
+              "outline": "UR/EFS"
+            },
+            {
+              "pattern": 19,
+              "outline": "UF/ERS"
+            }
+          ]
+        },
+        {
+          "section": 17,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "STKPO/THA"
+            },
+            {
+              "pattern": 1,
+              "outline": "STKPA/THO"
+            },
+            {
+              "pattern": 2,
+              "outline": "SHA/TKPWRO"
+            },
+            {
+              "pattern": 3,
+              "outline": "SKWRA/STKPO"
+            },
+            {
+              "pattern": 4,
+              "outline": "SKWRO/STKPA"
+            },
+            {
+              "pattern": 5,
+              "outline": "PRO/STKA"
+            },
+            {
+              "pattern": 6,
+              "outline": "PRA/STKO"
+            },
+            {
+              "pattern": 7,
+              "outline": "SHO/TKPWRA"
+            },
+            {
+              "pattern": 8,
+              "outline": "THA/SWRO"
+            },
+            {
+              "pattern": 9,
+              "outline": "THO/SWRA"
+            },
+            {
+              "pattern": 10,
+              "outline": "TWRO/STKPA"
+            },
+            {
+              "pattern": 11,
+              "outline": "TWRA/STKPO"
+            },
+            {
+              "pattern": 12,
+              "outline": "PHO/STKA"
+            },
+            {
+              "pattern": 13,
+              "outline": "PHA/STKO"
+            }
+          ]
+        },
+        {
+          "section": 18,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "EFRPS/ERBTS"
+            },
+            {
+              "pattern": 1,
+              "outline": "EFRPS/ERBDZ"
+            },
+            {
+              "pattern": 2,
+              "outline": "EUFRP/EURBD"
+            },
+            {
+              "pattern": 3,
+              "outline": "EFRPS/ERBT"
+            },
+            {
+              "pattern": 4,
+              "outline": "EFRPS/URBT"
+            },
+            {
+              "pattern": 5,
+              "outline": "EUFRP/EURBT"
+            },
+            {
+              "pattern": 6,
+              "outline": "EFRPS/URBTS"
+            },
+            {
+              "pattern": 7,
+              "outline": "EUFRP/URBT"
+            },
+            {
+              "pattern": 8,
+              "outline": "UFRPS/ERBTS"
+            },
+            {
+              "pattern": 9,
+              "outline": "UFRPS/ERBT"
+            },
+            {
+              "pattern": 10,
+              "outline": "EFRPS/EBLTS"
+            },
+            {
+              "pattern": 11,
+              "outline": "UFD/EPBG"
+            },
+            {
+              "pattern": 12,
+              "outline": "UGT/EFRPS"
+            },
+            {
+              "pattern": 13,
+              "outline": "UFT/EPBG"
+            },
+            {
+              "pattern": 14,
+              "outline": "EFD/UPBG"
+            },
+            {
+              "pattern": 15,
+              "outline": "EFT/UPBG"
+            },
+            {
+              "pattern": 16,
+              "outline": "EUGT/UFRP"
+            },
+            {
+              "pattern": 17,
+              "outline": "UFRPS/EBGTS"
+            },
+            {
+              "pattern": 18,
+              "outline": "UFRPS/EGT"
+            },
+            {
+              "pattern": 19,
+              "outline": "UFRPS/EBLTS"
+            },
+            {
+              "pattern": 20,
+              "outline": "EFRPS/UBLTS"
+            },
+            {
+              "pattern": 21,
+              "outline": "EFRPS/UBGTS"
+            }
+          ]
+        },
+        {
+          "section": 19,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "TWRO/TKPHA"
+            },
+            {
+              "pattern": 1,
+              "outline": "TWRA/TKPHO"
+            },
+            {
+              "pattern": 2,
+              "outline": "TKPHO/PRA"
+            },
+            {
+              "pattern": 3,
+              "outline": "TKPHA/PRO"
+            },
+            {
+              "pattern": 4,
+              "outline": "TKPO/WHO"
+            },
+            {
+              "pattern": 5,
+              "outline": "TKPA/WHO"
+            },
+            {
+              "pattern": 6,
+              "outline": "SWRO/TKPA"
+            },
+            {
+              "pattern": 7,
+              "outline": "SWRA/TKPO"
+            }
+          ]
+        },
+        {
+          "section": 20,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "EBGT/EPBS"
+            },
+            {
+              "pattern": 1,
+              "outline": "UBGT/EPBS"
+            },
+            {
+              "pattern": 2,
+              "outline": "UPLZ/EBGD"
+            },
+            {
+              "pattern": 3,
+              "outline": "UBGD/EPLZ"
+            },
+            {
+              "pattern": 4,
+              "outline": "EBGT/UPLS"
+            },
+            {
+              "pattern": 5,
+              "outline": "EFS/UPBT"
+            },
+            {
+              "pattern": 6,
+              "outline": "EPBT/UPS"
+            },
+            {
+              "pattern": 7,
+              "outline": "UFG/EUPBTS"
+            },
+            {
+              "pattern": 8,
+              "outline": "UFG/EPBD"
+            },
+            {
+              "pattern": 9,
+              "outline": "UFS/EPBT"
+            },
+            {
+              "pattern": 10,
+              "outline": "UPBT/EPS"
+            },
+            {
+              "pattern": 11,
+              "outline": "EFD/EUPBT"
+            },
+            {
+              "pattern": 12,
+              "outline": "EFGS/UPBD"
+            },
+            {
+              "pattern": 13,
+              "outline": "EFZ/EPBT"
+            },
+            {
+              "pattern": 14,
+              "outline": "EFG/UPBT"
+            },
+            {
+              "pattern": 15,
+              "outline": "EFD/UPBT"
+            },
+            {
+              "pattern": 16,
+              "outline": "UFGS/EPBDZ"
+            },
+            {
+              "pattern": 17,
+              "outline": "EFZ/UPBT"
+            },
+            {
+              "pattern": 18,
+              "outline": "UFG/EPBT"
+            },
+            {
+              "pattern": 19,
+              "outline": "UFD/EUPBT"
+            },
+            {
+              "pattern": 20,
+              "outline": "UFZ/EPBT"
+            },
+            {
+              "pattern": 21,
+              "outline": "UFZ/EPBT"
+            },
+            {
+              "pattern": 22,
+              "outline": "EPG/EUPBTS"
+            },
+            {
+              "pattern": 23,
+              "outline": "EFG/UPBD"
+            }
+          ]
+        },
+        {
+          "section": 21,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "THO/KHO"
+            },
+            {
+              "pattern": 1,
+              "outline": "THO/TKHO"
+            },
+            {
+              "pattern": 2,
+              "outline": "TKHO/KHO"
+            },
+            {
+              "pattern": 3,
+              "outline": "SHAO/TKA"
+            },
+            {
+              "pattern": 4,
+              "outline": "SKRO/TPHRA"
+            },
+            {
+              "pattern": 5,
+              "outline": "SHA/TKAO"
+            },
+            {
+              "pattern": 6,
+              "outline": "SKRA/TKHRO"
+            },
+            {
+              "pattern": 7,
+              "outline": "THO/KHA"
+            },
+            {
+              "pattern": 8,
+              "outline": "KHO/SHA"
+            },
+            {
+              "pattern": 9,
+              "outline": "SPHO/SHA"
+            },
+            {
+              "pattern": 10,
+              "outline": "SHO/KHA"
+            },
+            {
+              "pattern": 11,
+              "outline": "KHR/SPRO"
+            },
+            {
+              "pattern": 12,
+              "outline": "SHO/SPRA"
+            },
+            {
+              "pattern": 13,
+              "outline": "KPHA/SHO"
+            }
+          ]
+        },
+        {
+          "section": 22,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "URD/EPLGS"
+            },
+            {
+              "pattern": 1,
+              "outline": "URBGS/EPBGS"
+            },
+            {
+              "pattern": 2,
+              "outline": "EBGT/UPLGS"
+            },
+            {
+              "pattern": 3,
+              "outline": "EFG/UPBLS"
+            },
+            {
+              "pattern": 4,
+              "outline": "UFPLT/ERBTS"
+            },
+            {
+              "pattern": 5,
+              "outline": "UFG/EPBL"
+            },
+            {
+              "pattern": 6,
+              "outline": "EPG/EPBLS"
+            },
+            {
+              "pattern": 7,
+              "outline": "ERD/UPLGS"
+            },
+            {
+              "pattern": 8,
+              "outline": "ERBGS/UPLGS"
+            },
+            {
+              "pattern": 9,
+              "outline": "URPS/ERBD"
+            },
+            {
+              "pattern": 10,
+              "outline": "UFS/EPBL"
+            },
+            {
+              "pattern": 11,
+              "outline": "UFG/EUPBLS"
+            },
+            {
+              "pattern": 12,
+              "outline": "URBTS/EFPLT"
+            },
+            {
+              "pattern": 13,
+              "outline": "EFG/UPBL"
+            }
+          ]
+        },
+        {
+          "section": 23,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "TRO/SPWA"
+            },
+            {
+              "pattern": 1,
+              "outline": "TRA/SPWO"
+            },
+            {
+              "pattern": 2,
+              "outline": "TKPRO/SPWA"
+            },
+            {
+              "pattern": 3,
+              "outline": "KPRA/SPWO"
+            },
+            {
+              "pattern": 4,
+              "outline": "STRA/SPWO"
+            },
+            {
+              "pattern": 5,
+              "outline": "STRO/SPWA"
+            },
+            {
+              "pattern": 6,
+              "outline": "THA/SPWO"
+            },
+            {
+              "pattern": 7,
+              "outline": "THA/SPWA"
+            }
+          ]
+        },
+        {
+          "section": 24,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "UBLS/ERPBT"
+            },
+            {
+              "pattern": 1,
+              "outline": "URLS/EBLD"
+            },
+            {
+              "pattern": 2,
+              "outline": "EFPLT/URGS"
+            },
+            {
+              "pattern": 3,
+              "outline": "EULTS/ERBGS"
+            },
+            {
+              "pattern": 4,
+              "outline": "UFS/EPBLGD"
+            },
+            {
+              "pattern": 5,
+              "outline": "UG/ELD"
+            },
+            {
+              "pattern": 6,
+              "outline": "EG/ULD"
+            },
+            {
+              "pattern": 7,
+              "outline": "EPGS/UPBDZ"
+            },
+            {
+              "pattern": 8,
+              "outline": "UPBDZ/EPLS"
+            },
+            {
+              "pattern": 9,
+              "outline": "EPLD/URPLS"
+            },
+            {
+              "pattern": 10,
+              "outline": "EPS/UPBLGD"
+            },
+            {
+              "pattern": 11,
+              "outline": "UPL/EPS"
+            },
+            {
+              "pattern": 12,
+              "outline": "EPL/UPS"
+            },
+            {
+              "pattern": 13,
+              "outline": "EBG/UPS"
+            }
+          ]
+        },
+        {
+          "section": 25,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "TWRO/KPWA"
+            },
+            {
+              "pattern": 1,
+              "outline": "TWRA/KPWO"
+            },
+            {
+              "pattern": 2,
+              "outline": "STPHA/KPWO"
+            },
+            {
+              "pattern": 3,
+              "outline": "STPHO/KPWA"
+            },
+            {
+              "pattern": 4,
+              "outline": "SKWRO/KPWA"
+            },
+            {
+              "pattern": 5,
+              "outline": "SKWRA/KPWO"
+            }
+          ]
+        },
+        {
+          "section": 26,
+          "patterns": [
+            {
+              "pattern": 0,
+              "outline": "ERBGS/EFT"
+            },
+            {
+              "pattern": 1,
+              "outline": "ERBGS/EFD"
+            },
+            {
+              "pattern": 2,
+              "outline": "URBGS/EFT"
+            },
+            {
+              "pattern": 3,
+              "outline": "ERBGS/UFT"
+            },
+            {
+              "pattern": 4,
+              "outline": "URBGS/EFD"
+            },
+            {
+              "pattern": 5,
+              "outline": "EFPT/UBLS"
+            },
+            {
+              "pattern": 6,
+              "outline": "EFPLD/UFRB"
+            },
+            {
+              "pattern": 7,
+              "outline": "UFPLD/EFRB"
+            },
+            {
+              "pattern": 8,
+              "outline": "EFPLT/URS"
+            },
+            {
+              "pattern": 9,
+              "outline": "UFPLT/ERS"
+            },
+            {
+              "pattern": 10,
+              "outline": "EFPLT/ERS"
+            },
+            {
+              "pattern": 11,
+              "outline": "UFPLT/URS"
+            },
+            {
+              "pattern": 12,
+              "outline": "EFPLD/URS"
+            },
+            {
+              "pattern": 13,
+              "outline": "UFPT/EBLS"
+            },
+            {
+              "pattern": 14,
+              "outline": "EFLD/EFRBS"
+            },
+            {
+              "pattern": 15,
+              "outline": "UFLD/UFRBS"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "technique",
+      "patterns": [
+        {
+          "pattern": 0,
+          "outline": "EBGD/UFR"
+        },
+        {
+          "pattern": 1,
+          "outline": "UBGD/EFR"
+        },
+        {
+          "pattern": 2,
+          "outline": "UPBD/EUFR"
+        },
+        {
+          "pattern": 3,
+          "outline": "UBGS/EUFL"
+        },
+        {
+          "pattern": 4,
+          "outline": "EBGS/UFL"
+        },
+        {
+          "pattern": 5,
+          "outline": "URT/EFL"
+        },
+        {
+          "pattern": 6,
+          "outline": "ERT/UFL"
+        },
+        {
+          "pattern": 7,
+          "outline": "URS/EFPB"
+        },
+        {
+          "pattern": 8,
+          "outline": "UFPB/ERS"
+        },
+        {
+          "pattern": 9,
+          "outline": "UPL/EFD"
+        },
+        {
+          "pattern": 10,
+          "outline": "EFS/UPBD"
+        },
+        {
+          "pattern": 11,
+          "outline": "URS/UPD"
+        },
+        {
+          "pattern": 12,
+          "outline": "EPD/URS"
+        },
+        {
+          "pattern": 13,
+          "outline": "EFD/UPBS"
+        },
+        {
+          "pattern": 14,
+          "outline": "EULT/EBGD"
+        },
+        {
+          "pattern": 15,
+          "outline": "URG/EPLS"
+        },
+        {
+          "pattern": 16,
+          "outline": "URG/EPLT"
+        },
+        {
+          "pattern": 17,
+          "outline": "EPLD/URB"
+        },
+        {
+          "pattern": 18,
+          "outline": "UFRT/EFLS"
+        },
+        {
+          "pattern": 19,
+          "outline": "UFLD/EPBTS"
+        },
+        {
+          "pattern": 20,
+          "outline": "URPD/EFTS"
+        },
+        {
+          "pattern": 21,
+          "outline": "ULDZ/ERPS"
+        },
+        {
+          "pattern": 22,
+          "outline": "UFT/ERDZ"
+        },
+        {
+          "pattern": 23,
+          "outline": "EUFS/UPD"
+        },
+        {
+          "pattern": 24,
+          "outline": "EUFGS/UPD"
+        },
+        {
+          "pattern": 25,
+          "outline": "URD/EPLGS"
+        }
+      ]
+    }
+  ],
+  "defaults": {
+    "exercise": "bank",
+    "seconds": 60,
+    "hints": false,
+    "pool": "common",
+    "concepts": "starter",
+    "minLength": 1,
+    "maxLength": 30,
+    "inputMode": "text",
+    "groupSize": 1,
+    "repetitions": 1,
+    "requireCorrect": false,
+    "repeatOnError": false,
+    "audio": false
+  },
+  "examples": [
+    "https://steno.chrisdelvalle.com/#/practice?concepts=all&focus=initial.l&seconds=60",
+    "https://steno.chrisdelvalle.com/#/practice?concepts=starter&count=50&hints=true",
+    "https://steno.chrisdelvalle.com/#/practice?concepts=all&groupSize=3&repetitions=2&repeatOnError=true&errorRepetitions=3",
+    "https://steno.chrisdelvalle.com/#/practice?concepts=all&audio=true&display=hidden&rate=1.2",
+    "https://steno.chrisdelvalle.com/#/practice?concepts=starter&inputMode=steno&requireCorrect=true",
+    "https://steno.chrisdelvalle.com/#/practice?exercise=drills&drills=d-%2Fb-%2CshortAndLongA&restricted=false",
+    "https://steno.chrisdelvalle.com/#/practice?exercise=chords&keyboardSet=Vowels&count=25",
+    "https://steno.chrisdelvalle.com/#/practice?exercise=fingers&fingerBook=duo&section=0&pattern=-1&repeats=20&count=25",
+    "https://steno.chrisdelvalle.com/#/practice?exercise=quotes&quoteLength=short&count=25",
+    "https://steno.chrisdelvalle.com/#/practice?exercise=symbols&symbolVariants=true&count=25",
+    "https://steno.chrisdelvalle.com/#/practice?concepts=initial.l%2Cvowel.a%2Cfinal.d&focus=initial.l&hints=true"
+  ]
+}

@@ -166,6 +166,73 @@ it('opens a fresh shared test immediately without saving its concepts', async ()
   expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   expect(JSON.parse(localStorage.getItem(profileKey)!).learned).toEqual(defaultProfile().learned);
 });
+
+it('opens a readable link directly into isolated practice and replaces its URL without adding history', async () => {
+  const personal = defaultProfile(); personal.learned = []; personal.theme = 'light'; personal.voice = 'saved-local';
+  personal.session.lines = 5; personal.session.hintKeyboardSize = 'small'; personal.excluded = ['bad'];
+  personal.corrections = [{ word: 'bad', outlines: ['SKP/PWAD'], syllables: 1, pronunciation: 'B AE1 D' }];
+  localStorage.setItem(profileKey, JSON.stringify(personal));
+  window.history.replaceState(null, '', '#/practice?concepts=all&focus=initial.b&seconds=90&hints=true');
+  const entries = history.length, replace = vi.spyOn(window.history, 'replaceState');
+  const app = render(<App/>);
+  const input = await screen.findByRole('textbox', { name: 'Practice input' });
+  await waitFor(() => expect(input).toHaveFocus());
+  expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  expect(screen.getByLabelText('Practice passage')).toHaveTextContent('bad');
+  expect(screen.getByLabelText('Practice passage')).not.toHaveTextContent('dim');
+  expect(screen.getByRole('group', { name: 'Hints' })).toHaveTextContent('PWAD');
+  expect(screen.getByLabelText('Time left')).toHaveTextContent('90');
+  expect(screen.getByLabelText('Practice passage')).toHaveStyle({ height: 'calc(var(--line-height) * 5)' });
+  expect(window.location.hash).toMatch(/^#t=/); expect(replace).toHaveBeenCalled(); expect(history.length).toBe(entries);
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
+  fireEvent.change(input, { target: { value: 'ba' } }); expect(input).toHaveValue('ba');
+  fireEvent.click(screen.getByRole('button', { name: 'Test settings' }));
+  await screen.findByRole('dialog'); expect(screen.getByLabelText('Concepts')).toHaveValue('all');
+  const settingsHash = window.location.hash;
+  await navigate(sharedHash('skills', settingsHash.split('t=')[1]));
+  expect(screen.getAllByRole('checkbox').every(box => !(box as HTMLInputElement).checked)).toBe(true);
+  await navigate(settingsHash); app.unmount(); render(<App/>);
+  expect(await screen.findByLabelText('Duration')).toHaveValue('90');
+  fireEvent.click(screen.getByRole('button', { name: 'Exit' }));
+  await screen.findByText('No matching words.');
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
+});
+
+it('retains readable audio/raw/group options through reload and saves only supported test settings', async () => {
+  const personal = defaultProfile(); personal.learned = []; personal.voice = 'saved-local'; personal.session.hintTextSize = 'small';
+  localStorage.setItem(profileKey, JSON.stringify(personal));
+  window.history.replaceState(null, '', '#/practice?concepts=all&inputMode=steno&groupSize=3&repetitions=2&requireCorrect=true&repeatOnError=true&errorRepetitions=4&audio=true&display=hidden&rate=1.2&count=50');
+  const app = render(<App/>);
+  await screen.findByRole('textbox', { name: 'Practice input' });
+  expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument();
+  expect(screen.getByText('Press space to start')).toBeInTheDocument();
+  expect(screen.getByLabelText('Practice passage')).not.toHaveTextContent('bad');
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
+  fireEvent.click(screen.getByRole('button', { name: 'Test settings' }));
+  await screen.findByRole('dialog'); app.unmount(); render(<App/>);
+  expect(await screen.findByLabelText('Group size')).toHaveValue('3');
+  expect(screen.getByLabelText('Raw steno input')).toBeChecked(); expect(screen.getByLabelText('Repetitions')).toHaveValue('2');
+  expect(screen.getByLabelText('Speed')).toHaveValue('1.2'); expect(screen.getByLabelText('Text display')).toHaveValue('hidden');
+  fireEvent.change(screen.getByLabelText('Length'), { target: { value: '100' } });
+  expect(JSON.parse(localStorage.getItem(profileKey)!)).toEqual(personal);
+  fireEvent.click(screen.getByRole('button', { name: 'Save settings' }));
+  const saved = JSON.parse(localStorage.getItem(profileKey)!);
+  expect(saved.session).toMatchObject({ count: 100, groupSize: 3, repetitions: 2, inputMode: 'steno', requireCorrect: true, repeatOnError: true, errorRepetitions: 4, listening: { enabled: true, display: 'hidden', rate: 1.2 }, hintTextSize: 'small' });
+  expect(saved.learned).toEqual([]); expect(saved.voice).toBe('saved-local');
+});
+
+it('shows specific readable-link errors and retains the normal empty-pool experience', async () => {
+  window.history.replaceState(null, '', '#/practice?seconds=999');
+  const app = render(<App/>);
+  expect(await screen.findByRole('alert')).toHaveTextContent('Unsupported seconds');
+  expect(screen.queryByRole('textbox', { name: 'Practice input' })).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole('button', { name: 'Open practice' }));
+  await screen.findByRole('textbox', { name: 'Practice input' });
+  app.unmount(); window.history.replaceState(null, '', '#/practice?concepts=none'); render(<App/>);
+  expect(await screen.findByText('No matching words.')).toBeInTheDocument();
+  expect(window.location.hash).toMatch(/^#t=/);
+  expect(screen.queryByRole('textbox', { name: 'Practice input' })).not.toBeInTheDocument();
+});
 it('uses bundled words while preserving personal skills, corrections, exclusions, and visuals', async () => {
   const personal = defaultProfile(); personal.learned = []; personal.theme = 'light'; personal.session.lines = 5; personal.session.hintPosition = 'below';
   personal.session.mode = 'count'; personal.session.count = 100; personal.excluded = ['bad'];
